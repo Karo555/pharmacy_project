@@ -28,16 +28,17 @@ public class AuthService {
     public RegisterResponseDto register(RegisterDto dto){
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(dto.getEmail());
-        UserEntity createdUser = userRepository.save(userEntity);
+        userRepository.save(userEntity);
 
         AuthEntity authEntity = new AuthEntity();
         authEntity.setUsername(dto.getUsername());
         authEntity.setPassword(dto.getPassword());
         authEntity.setRole(dto.getRole());
-        authEntity.setUser(createdUser);
-        AuthEntity createdAuth = authRepository.save(authEntity);
+        authEntity.setUser(userEntity);
 
-        return new RegisterResponseDto(createdAuth.getUsername(), createdAuth.getRole());
+        authRepository.save(authEntity);
+
+        return new RegisterResponseDto(authEntity.getId(), authEntity.getUsername(), authEntity.getRole());
     }
 
     public LoginResponseDto login(LoginDto dto){

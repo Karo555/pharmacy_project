@@ -1,6 +1,9 @@
 package org.example.pharmacyproject.controller.dto;
 
+import jakarta.validation.constraints.Size;
+
 public class CreateDrugDto {
+    @Size(min = 1, max = 255)
     private String name;
     private String manufacturer;
     private String description;

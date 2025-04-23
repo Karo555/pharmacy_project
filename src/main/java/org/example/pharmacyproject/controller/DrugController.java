@@ -8,6 +8,7 @@ import org.example.pharmacyproject.service.DrugService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class DrugController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateDrugResponseDto> create(@RequestBody CreateDrugDto drug){
+    public ResponseEntity<CreateDrugResponseDto> create(@Validated @RequestBody CreateDrugDto drug){
         var newDrug = drugService.create(drug);
         return new ResponseEntity<>(newDrug, HttpStatus.CREATED);
     }

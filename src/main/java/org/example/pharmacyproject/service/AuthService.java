@@ -10,6 +10,9 @@ import org.example.pharmacyproject.infrastructure.entity.UserEntity;
 import org.example.pharmacyproject.infrastructure.repository.AuthRepository;
 import org.example.pharmacyproject.infrastructure.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,12 +20,16 @@ public class AuthService {
     private final AuthRepository authRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public AuthService(AuthRepository authRepository, UserRepository userRepository, JwtService jwtService) {
+    public AuthService(AuthRepository authRepository, UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
         this.authRepository = authRepository;
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
     public RegisterResponseDto register(RegisterDto dto){
@@ -32,7 +39,7 @@ public class AuthService {
 
         AuthEntity authEntity = new AuthEntity();
         authEntity.setUsername(dto.getUsername());
-        authEntity.setPassword(dto.getPassword());
+        authEntity.setPassword(passwordEncoder.encode(dto.getPassword()));
         authEntity.setRole(dto.getRole());
         authEntity.setUser(userEntity);
 
@@ -48,11 +55,16 @@ public class AuthService {
             throw new RuntimeException("User not found");
         }
 
-        if (!authEntity.getPassword().equals(dto.getPassword())) {
+        if (!passwordEncoder.matches(dto.getPassword(), authEntity.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
+
         String token = jwtService.generateToken(authEntity);
 
         return new LoginResponseDto(token);
+    }
+
+    public AuthenticationManager getAuthenticationManager() {
+        return authenticationManager;
     }
 }

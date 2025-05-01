@@ -8,12 +8,14 @@ import org.example.pharmacyproject.service.DrugService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/drugs")
+@PreAuthorize("hasRole('ADMIN')")
 public class DrugController {
 
     private final DrugService drugService;
@@ -24,11 +26,13 @@ public class DrugController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('READER')")
     public List<GetDrugDto> getAllDrugs(){
         return drugService.getAll();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('READER')")
     public GetDrugDto getOne(@PathVariable long id){
         return drugService.getOne(id);
     }

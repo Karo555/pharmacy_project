@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
-@PreAuthorize("permitAll()")
+@PreAuthorize("hasRole('ADMIN')")
 public class AuthController {
     @Autowired
     public AuthController(AuthService authService) {
@@ -32,6 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginDto requestBody){
         LoginResponseDto dto = authService.login(requestBody);
         return new ResponseEntity<>(dto, HttpStatus.CREATED);

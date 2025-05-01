@@ -3,10 +3,12 @@ package org.example.pharmacyproject.controller.dto;
 import org.example.pharmacyproject.commonTypes.UserRole;
 
 public class RegisterResponseDto {
+    private long userId;
     private String username;
     private UserRole role;
 
-    public RegisterResponseDto(String username, UserRole role) {
+    public RegisterResponseDto(long userId, String username, UserRole role) {
+        this.userId = userId;
         this.username = username;
         this.role = role;
     }
@@ -25,5 +27,13 @@ public class RegisterResponseDto {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }

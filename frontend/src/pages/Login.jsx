@@ -4,41 +4,52 @@ import api from '../api/axios';
 import { useAuth } from '../auth/AuthProvider';
 
 export default function Login() {
-  const [credentials, setCreds] = useState({ email: '', password: '' });
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  const handleChange = e => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
+    setError('');
     try {
-      const { data } = await api.post('/auth/login', credentials);
+      const { data } = await api.post('/auth/login', credentials); // { token }
       login(data.token);
-      navigate('/');
+      navigate('/me');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError('Invalid credentials');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm mx-auto p-4 space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4 max-w-sm mx-auto mt-10">
+      <h2 className="text-xl font-bold">Log in</h2>
       <input
-        className="input input-bordered w-full"
+        name="email"
+        type="email"
         placeholder="Email"
         value={credentials.email}
-        onChange={e => setCreds({ ...credentials, email: e.target.value })}
+        onChange={handleChange}
         required
+        className="block w-full p-2 border rounded"
       />
       <input
-        className="input input-bordered w-full"
+        name="password"
         type="password"
         placeholder="Password"
         value={credentials.password}
-        onChange={e => setCreds({ ...credentials, password: e.target.value })}
+        onChange={handleChange}
         required
+        className="block w-full p-2 border rounded"
       />
-      {error && <p className="text-red-500">{error}</p>}
-      <button className="btn btn-primary w-full">Login</button>
+      <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
+        Log in
+      </button>
+      {error && <p className="text-red-600">{error}</p>}
     </form>
   );
 }

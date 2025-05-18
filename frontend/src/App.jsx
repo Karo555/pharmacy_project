@@ -1,38 +1,42 @@
-export default function App() 
-  {
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import { AuthProvider } from './auth/AuthProvider';
+import PrivateRoute from './routes/PrivateRoute';
+import Profile from './pages/Profile';
+import Login from './pages/Login';
+
+export default function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-3xl font-bold">
-        Hello, frontend is alive! 🎉
-      </h1>
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* public route */}
+          <Route path="/login" element={<Login />} />
+
+          {/* protected route */}
+          <Route
+            path="/me"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+
+          {/* fallback / default */}
+          <Route
+            path="/"
+            element={
+              <div className="min-h-screen flex items-center justify-center">
+                <h1 className="text-3xl font-bold">
+                  Hello, frontend is alive! 🎉
+                </h1>
+              </div>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
-
-// export default function App() {
-//   return (
-//     <AuthProvider>
-//       <BrowserRouter>
-//         <Routes>
-//           <Route path="/login" element={<Login />} />
-//           <Route
-//             path="/"
-//             element={
-//               <PrivateRoute>
-//                 <Dashboard />
-//               </PrivateRoute>
-//             }
-//           />
-//           <Route
-//             path="/me"
-//             element={
-//               <PrivateRoute>
-//                 <Me />
-//               </PrivateRoute>
-//             }
-//           />
-//         </Routes>
-//       </BrowserRouter>
-//     </AuthProvider>
-//   );
-// }

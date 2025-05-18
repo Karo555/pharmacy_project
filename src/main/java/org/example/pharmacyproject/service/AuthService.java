@@ -1,6 +1,5 @@
 package org.example.pharmacyproject.service;
 
-import org.example.pharmacyproject.commonTypes.UserRole;
 import org.example.pharmacyproject.controller.dto.LoginDto;
 import org.example.pharmacyproject.controller.dto.LoginResponseDto;
 import org.example.pharmacyproject.controller.dto.RegisterDto;
@@ -10,9 +9,6 @@ import org.example.pharmacyproject.infrastructure.entity.UserEntity;
 import org.example.pharmacyproject.infrastructure.repository.AuthRepository;
 import org.example.pharmacyproject.infrastructure.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

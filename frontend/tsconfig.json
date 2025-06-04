@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    // 1. Target a modern ECMAScript version (you can raise or lower this as needed)
+    "target": "ES2020",
+
+    // 2. Which JS module system to emit
+    "module": "ESNext",
+
+    // 3. Where to find type declarations for libraries
+    "moduleResolution": "Node",
+
+    // 4. If you use JSX (e.g. React), emit “react-jsx” (for React 17+). Otherwise, remove/adjust.
+    "jsx": "react-jsx",
+
+    // 5. Where to output compiled .js files (not strictly necessary in CRA or next.js, but good if you run `tsc` yourself)
+    "outDir": "dist",
+
+    // 6. Root of your source files (so imports like "@/components/Button" can map to “src/components/Button”)
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"]
+    },
+
+    // 7. Enable all strict type‐checking options
+    "strict": true,
+
+    // 8. Allow default imports from CommonJS modules (“import express from 'express'”)
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    // 9. Emit source maps so your browser debugger can map back to .tsx/.ts
+    "sourceMap": true,
+
+    // 10. Include the following “lib” so you can target browser+ESNext features
+    "lib": ["DOM", "DOM.Iterable", "ESNext"]
+  },
+
+  // 11. Only compile files under “src/” (you can add other folders if needed)
+  "include": ["src"],
+
+  // 12. Don’t compile dependencies, build artifacts, or test folders
+  "exclude": ["node_modules", "dist", "build", "coverage", "**/*.spec.ts", "**/*.test.ts"]
+}

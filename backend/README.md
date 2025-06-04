@@ -1,3 +1,15 @@
+## running the backend
+`cd backend`
+`mvn clean package`
+`java -jar target/pharmacy-project-0.0.1-SNAPSHOT.jar`
+
+if you prefer using Spring Boot directly:
+`mvn spring-boot:run`
+
+
+
+
+
 ## pharmacy project for network technologies lab summer semester medical informatics @wust
 
 # Pharmacy Project

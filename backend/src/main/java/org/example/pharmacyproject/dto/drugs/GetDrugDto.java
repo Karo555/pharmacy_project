@@ -1,4 +1,4 @@
-package org.example.pharmacyproject.controller.dto;
+package org.example.pharmacyproject.dto.drugs;
 
 public class GetDrugDto {
 

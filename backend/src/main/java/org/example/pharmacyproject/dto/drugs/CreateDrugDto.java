@@ -1,7 +1,13 @@
-package org.example.pharmacyproject.controller.dto;
+package org.example.pharmacyproject.dto.drugs;
 
-public class CreateDrugResponseDto {
-    private long id;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+@Data
+public class CreateDrugDto {
     private String name;
     private String manufacturer;
     private String description;
@@ -9,8 +15,7 @@ public class CreateDrugResponseDto {
     private String type;
     private boolean prescriptionRequired;
 
-    public CreateDrugResponseDto(long id, String name, String manufacturer, String description, String dosage, String type, boolean prescriptionRequired) {
-        this.id = id;
+    public CreateDrugDto(String name, String manufacturer, String description, String dosage, String type, boolean prescriptionRequired) {
         this.name = name;
         this.manufacturer = manufacturer;
         this.description = description;
@@ -19,15 +24,7 @@ public class CreateDrugResponseDto {
         this.prescriptionRequired = prescriptionRequired;
     }
 
-    public CreateDrugResponseDto() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+    public CreateDrugDto() {
     }
 
     public String getName() {

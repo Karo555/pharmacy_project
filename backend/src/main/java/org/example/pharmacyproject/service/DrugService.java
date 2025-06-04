@@ -1,8 +1,8 @@
 package org.example.pharmacyproject.service;
 
-import org.example.pharmacyproject.controller.dto.CreateDrugDto;
-import org.example.pharmacyproject.controller.dto.CreateDrugResponseDto;
-import org.example.pharmacyproject.controller.dto.GetDrugDto;
+import org.example.pharmacyproject.dto.drugs.CreateDrugDto;
+import org.example.pharmacyproject.dto.drugs.CreateDrugResponseDto;
+import org.example.pharmacyproject.dto.drugs.GetDrugDto;
 import org.example.pharmacyproject.infrastructure.entity.DrugEntity;
 import org.example.pharmacyproject.infrastructure.repository.DrugRepository;
 import org.springframework.beans.factory.annotation.Autowired;

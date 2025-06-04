@@ -1,9 +1,9 @@
 package org.example.pharmacyproject.service;
 
-import org.example.pharmacyproject.controller.dto.LoginDto;
-import org.example.pharmacyproject.controller.dto.LoginResponseDto;
-import org.example.pharmacyproject.controller.dto.RegisterDto;
-import org.example.pharmacyproject.controller.dto.RegisterResponseDto;
+import org.example.pharmacyproject.dto.userLogin.LoginDto;
+import org.example.pharmacyproject.dto.userLogin.LoginResponseDto;
+import org.example.pharmacyproject.dto.userRegister.RegisterDto;
+import org.example.pharmacyproject.dto.userRegister.RegisterResponseDto;
 import org.example.pharmacyproject.infrastructure.entity.AuthEntity;
 import org.example.pharmacyproject.infrastructure.entity.UserEntity;
 import org.example.pharmacyproject.infrastructure.repository.AuthRepository;

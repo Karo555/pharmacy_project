@@ -1,4 +1,4 @@
-package org.example.pharmacyproject.controller.dto;
+package org.example.pharmacyproject.dto.userLogin;
 
 public class LoginResponseDto {
     private String token;

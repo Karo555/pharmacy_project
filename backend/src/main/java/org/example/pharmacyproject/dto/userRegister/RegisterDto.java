@@ -1,4 +1,4 @@
-package org.example.pharmacyproject.controller.dto;
+package org.example.pharmacyproject.dto.userRegister;
 
 import org.example.pharmacyproject.commonTypes.UserRole;
 

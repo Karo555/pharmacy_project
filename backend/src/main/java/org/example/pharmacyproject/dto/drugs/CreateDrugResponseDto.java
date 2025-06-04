@@ -1,6 +1,7 @@
-package org.example.pharmacyproject.controller.dto;
+package org.example.pharmacyproject.dto.drugs;
 
-public class CreateDrugDto {
+public class CreateDrugResponseDto {
+    private long id;
     private String name;
     private String manufacturer;
     private String description;
@@ -8,7 +9,8 @@ public class CreateDrugDto {
     private String type;
     private boolean prescriptionRequired;
 
-    public CreateDrugDto(String name, String manufacturer, String description, String dosage, String type, boolean prescriptionRequired) {
+    public CreateDrugResponseDto(long id, String name, String manufacturer, String description, String dosage, String type, boolean prescriptionRequired) {
+        this.id = id;
         this.name = name;
         this.manufacturer = manufacturer;
         this.description = description;
@@ -17,7 +19,15 @@ public class CreateDrugDto {
         this.prescriptionRequired = prescriptionRequired;
     }
 
-    public CreateDrugDto() {
+    public CreateDrugResponseDto() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {

@@ -16,13 +16,30 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import CakeOutlinedIcon from "@mui/icons-material/CakeOutlined";
-import { useState } from "react";
+import React, { useState } from 'react';
 import { Link as RouterLink } from "react-router-dom";
 import Link from "@mui/material/Link";
 
-const rolesList = ["USER", "ADMIN", "PHARMACIST"];
+const rolesList = ["USER", "ADMIN", "PHARMACIST"] as const;
 
-const initialForm = {
+type Role = typeof rolesList[number];
+
+interface FormState {
+    firstName: string;
+    lastName: string;
+    address: string;
+    age: string;
+    email: string;
+    password: string;
+    phoneNumber: string;
+    roles: Role[];
+}
+
+interface FormErrors {
+    [key: string]: string;
+}
+
+const initialForm: FormState = {
     firstName: "",
     lastName: "",
     address: "",
@@ -30,7 +47,7 @@ const initialForm = {
     email: "",
     password: "",
     phoneNumber: "",
-    roles: [] as string[],
+    roles: [],
 };
 
 const nameRegex = /^[\p{L} '-]+$/u;
@@ -38,11 +55,11 @@ const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,100}$/;
 const phoneRegex = /^\+?[0-9]{7,15}$/;
 
-export default function RegisterPage() {
-    const [form, setForm] = useState(initialForm);
-    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+const RegisterPage: React.FC = () => {
+    const [form, setForm] = useState<FormState>(initialForm);
+    const [errors, setErrors] = useState<FormErrors>({});
 
-    const validateField = (name: string, value: string) => {
+    const validateField = (name: string, value: string): string => {
         let error = "";
 
         if (name === "firstName" || name === "lastName") {
@@ -107,16 +124,16 @@ export default function RegisterPage() {
         return error;
     };
 
-    const validate = () => {
-        const newErrors: { [key: string]: string } = {};
-
-        newErrors.firstName = validateField("firstName", form.firstName);
-        newErrors.lastName = validateField("lastName", form.lastName);
-        newErrors.address = validateField("address", form.address);
-        newErrors.age = validateField("age", form.age);
-        newErrors.email = validateField("email", form.email);
-        newErrors.password = validateField("password", form.password);
-        newErrors.phoneNumber = validateField("phoneNumber", form.phoneNumber);
+    const validate = (): boolean => {
+        const newErrors: FormErrors = {
+            firstName: validateField("firstName", form.firstName),
+            lastName: validateField("lastName", form.lastName),
+            address: validateField("address", form.address),
+            age: validateField("age", form.age),
+            email: validateField("email", form.email),
+            password: validateField("password", form.password),
+            phoneNumber: validateField("phoneNumber", form.phoneNumber),
+        };
 
         if (!form.roles || form.roles.length === 0) {
             newErrors.roles = "User must have at least one role";
@@ -143,7 +160,7 @@ export default function RegisterPage() {
         }));
     };
 
-    const handleRoleToggle = (role: string) => {
+    const handleRoleToggle = (role: Role) => {
         setForm((prev) => ({
             ...prev,
             roles: prev.roles.includes(role) ? prev.roles.filter((r) => r !== role) : [role],
@@ -154,10 +171,9 @@ export default function RegisterPage() {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent): void => {
         e.preventDefault();
         if (validate()) {
-            // Submit logic here
             alert("Registration successful!");
         }
     };
@@ -431,4 +447,6 @@ export default function RegisterPage() {
             </Container>
         </Box>
     );
-}
+};
+
+export default RegisterPage;

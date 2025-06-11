@@ -12,16 +12,25 @@ import {
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
-import { useState } from "react";
+import React, { useState } from 'react';
 import { Link as RouterLink } from "react-router-dom";
 import MuiLink from "@mui/material/Link";
 
-export default function LoginPage() {
-    const [form, setForm] = useState({ email: "", password: "" });
-    const [errors, setErrors] = useState<{ [key: string]: string }>({});
-    const [submitting, setSubmitting] = useState(false);
+interface FormState {
+    email: string;
+    password: string;
+}
 
-    const validateField = (name: string, value: string) => {
+interface FormErrors {
+    [key: string]: string;
+}
+
+const LoginPage: React.FC = () => {
+    const [form, setForm] = useState<FormState>({ email: "", password: "" });
+    const [errors, setErrors] = useState<FormErrors>({});
+    const [submitting, setSubmitting] = useState<boolean>(false);
+
+    const validateField = (name: string, value: string): string => {
         let error = "";
         if (name === "email") {
             if (!value.trim()) error = "Email is required";
@@ -44,10 +53,11 @@ export default function LoginPage() {
         }));
     };
 
-    const validate = () => {
-        const newErrors: { [key: string]: string } = {};
-        newErrors.email = validateField("email", form.email);
-        newErrors.password = validateField("password", form.password);
+    const validate = (): boolean => {
+        const newErrors: FormErrors = {
+            email: validateField("email", form.email),
+            password: validateField("password", form.password),
+        };
         Object.keys(newErrors).forEach((key) => {
             if (!newErrors[key]) delete newErrors[key];
         });
@@ -55,11 +65,10 @@ export default function LoginPage() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent): void => {
         e.preventDefault();
         if (!validate()) return;
         setSubmitting(true);
-        // Simulate login
         setTimeout(() => {
             setSubmitting(false);
             alert("Logged in successfully!");
@@ -180,4 +189,6 @@ export default function LoginPage() {
             </Container>
         </Box>
     );
-}
+};
+
+export default LoginPage;

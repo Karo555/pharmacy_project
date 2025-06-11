@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     // 1. Target a modern ECMAScript version (you can raise or lower this as needed)
-    "target": "ES2020",
+    "target": "ESNext",
 
     // 2. Which JS module system to emit
     "module": "ESNext",
@@ -26,6 +26,7 @@
 
     // 8. Allow default imports from CommonJS modules (“import express from 'express'”)
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
 

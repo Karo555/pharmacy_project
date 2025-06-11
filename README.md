@@ -131,10 +131,10 @@ pharmacy_project/
 
 2. **Port & Profile**
 
-    * By default, Spring Boot runs on port **8080**. You can override in `application.properties`:
+    * By default, Spring Boot runs on port **8000**. You can override in `application.properties`:
 
       ```properties
-      server.port=8080
+      server.port=8000
       spring.profiles.active=dev
       ```
     * To use a different profile (e.g., `prod`), run with `-Dspring.profiles.active=prod`.
@@ -188,10 +188,10 @@ pharmacy_project/
       ```bash
       docker build -t pharmacy-backend:latest .
       ```
-    * Run the container (mapping port 8080):
+    * Run the container (mapping port 8000):
 
       ````bash
-      docker run -d --name pharmacy-backend -p 8080:8080 \
+      docker run -d --name pharmacy-backend -p 8000:8000 \
         -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/pharmacy_db \
         -e SPRING_DATASOURCE_USERNAME=pharmacy_user \
         -e SPRING_DATASOURCE_PASSWORD=securepassword \
@@ -238,7 +238,7 @@ Below is a non-exhaustive list of REST endpoints provided by the backend. Adjust
     * Create a `.env.development` file in `frontend/` containing:
 
       ````env
-      REACT_APP_API_URL=http://localhost:8080/api
+      REACT_APP_API_URL=http://localhost:8000/api
       ``` :contentReference[oaicite:17]{index=17}  
       ````
     * For production builds, set `REACT_APP_API_URL` to your deployed backend’s domain.
@@ -250,12 +250,11 @@ Below is a non-exhaustive list of REST endpoints provided by the backend. Adjust
       ```jsonc
       {
         // ...
-        "proxy": "http://localhost:8080"
+        "proxy": "http://localhost:8000"
       }
       ```
 
-      This tells the dev server to forward unknown requests (e.g., `/api/drugs`) to `http://localhost:8080`. 
-
+      This tells the dev server to forward unknown requests (e.g., `/api/drugs`) to `http://localhost:8000`
 ### Install & Run
 
 1. **Navigate to the Frontend Folder**
@@ -284,7 +283,7 @@ Below is a non-exhaustive list of REST endpoints provided by the backend. Adjust
    npm start
    ```
 
-   This will launch the React app at `http://localhost:3000`. Thanks to the proxy setting, API calls to `/api/**` will be forwarded automatically to `http://localhost:8080`.
+   This will launch the React app at `http://localhost:3000`. Thanks to the proxy setting, API calls to `/api/**` will be forwarded automatically to `http://localhost:8000`.
 
 4. **Build for Production**
 
@@ -356,8 +355,8 @@ Use the following environment variables (either in `.env` files or Docker Compos
 ### Frontend (`.env.development`, `.env.production`):
 
 | Variable            | Purpose                                         | Example                     |
-| ------------------- | ----------------------------------------------- | --------------------------- |
-| `REACT_APP_API_URL` | Base URL of the backend API                     | `http://localhost:8080/api` |
+| ------------------- | ----------------------------------------------- |-----------------------------|
+| `REACT_APP_API_URL` | Base URL of the backend API                     | `http://localhost:8000/api` |
 | `NODE_ENV`          | React environment (`development`, `production`) | `development`               |
 
 ---

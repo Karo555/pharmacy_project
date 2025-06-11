@@ -38,4 +38,4 @@ Before running the project, ensure you have the following installed:
 
 3. Run the application:
 `mvn spring-boot:run`
-The application will start on http://localhost:8080.
+The application will start on http://localhost:8000.

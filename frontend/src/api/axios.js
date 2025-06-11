@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api',      // adjust if your Spring port differs
+  baseURL: 'http://localhost:8000/api',      // adjust if your Spring port differs
 });
 
 api.interceptors.request.use(cfg => {

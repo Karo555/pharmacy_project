@@ -3,8 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { AuthProvider } from './auth/AuthProvider';
 import PrivateRoute from './routes/PrivateRoute';
-import Profile from './pages/Profile';
-import Login from './pages/Login';
+import Login from './pages/LoginPage';
 
 export default function App() {
   return (
@@ -19,7 +18,7 @@ export default function App() {
             path="/me"
             element={
               <PrivateRoute>
-                <Profile />
+                {/*<Profile />*/}
               </PrivateRoute>
             }
           />

@@ -78,11 +78,12 @@ public class AuthService {
     public LoginResponseDto login(LoginDto dto) {
         logger.info("Login attempt for username={}", dto.getUsername());
 
-        // 1) Lookup AuthEntity by username
+        // Try username, then email
         AuthEntity auth = authRepository.findByUsername(dto.getUsername())
+                .or(() -> authRepository.findByUser_Email(dto.getUsername()))
                 .orElseThrow(() -> {
-                    logger.warn("Login failed – user not found: {}", dto.getUsername());
-                    return new IllegalArgumentException("Invalid username or password");
+                    logger.warn("Login failed – user not found for identifier={}", dto.getUsername());
+                    return new IllegalArgumentException("Invalid username/email or password");
                 });
 
         // 2) Verify password

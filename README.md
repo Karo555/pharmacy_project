@@ -86,7 +86,7 @@ pharmacy_project/
 │   │   └── favicon.ico
 │   ├── src/
 │   │   ├── components/                  # Reusable React components (e.g., Navbar, DrugCard)
-│   │   ├── pages/                       # Page components (e.g., LoginPage, DashboardPage)
+│   │   ├── pages/                       # Page components (e.g., Login, DashboardPage)
 │   │   ├── services/                    # Axios API service wrappers (e.g., drugService.js)
 │   │   ├── App.tsx                      # Main React component
 │   │   └── index.tsx                    # React entry point

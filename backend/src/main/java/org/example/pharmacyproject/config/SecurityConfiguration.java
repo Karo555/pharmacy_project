@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfiguration {
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter) {
@@ -27,16 +28,19 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/api/medicines").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/medicines/{id}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
+                        // Public endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/register", "/api/login").permitAll()
+
+                        // Authenticated endpoint
                         .requestMatchers(HttpMethod.GET, "/api/me").authenticated()
-                        .requestMatchers("/api/medicines/**").hasAnyRole("ADMIN", "PHARMACIST")
-                        .requestMatchers("/test/public").permitAll()
+
+                        // Other API endpoints (e.g., medicines) go here...
+                        .requestMatchers("/api/medicines/**").hasAnyRole("ADMIN","PHARMACIST")
+
+                        // Everything else requires auth
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session
+                .sessionManagement(sess -> sess
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -48,5 +52,4 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

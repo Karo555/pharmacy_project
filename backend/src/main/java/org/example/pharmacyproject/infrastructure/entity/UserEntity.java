@@ -19,13 +19,17 @@ public class UserEntity {
     @Basic
     private String email;
 
+    @Column(name = "active", nullable = false)
+    private Boolean active = true;  // default to true
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private AuthEntity auth;
 
-    public UserEntity(Long id, String name, String email, AuthEntity auth) {
+    public UserEntity(Long id, String name, String email, Boolean active, AuthEntity auth) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.active = active;
         this.auth = auth;
     }
 
@@ -63,4 +67,13 @@ public class UserEntity {
     public void setAuth(AuthEntity auth) {
         this.auth = auth;
     }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
 }

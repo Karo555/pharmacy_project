@@ -1,6 +1,6 @@
 package org.example.pharmacyproject.commonTypes;
 
 public enum UserRole {
-    ROLE_READER,
+    USER,
     ROLE_ADMIN
 }

@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
     Container,
     Typography,
@@ -8,11 +9,26 @@ import {
     Stack,
     Avatar,
     InputAdornment,
+    IconButton,
+    useTheme,
+    useMediaQuery,
+    Divider,
+    Card,
+    Alert,
+    Zoom,
+    CircularProgress,
 } from "@mui/material";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
-import React, { useState } from 'react';
+import {
+    PersonOutline,
+    EmailOutlined,
+    VpnKeyOutlined,
+    Visibility,
+    VisibilityOff,
+    Login as LoginIcon,
+    Google as GoogleIcon,
+    Facebook as FacebookIcon,
+    ArrowBack
+} from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
 import MuiLink from "@mui/material/Link";
 
@@ -29,6 +45,14 @@ const Login: React.FC = () => {
     const [form, setForm] = useState<FormState>({ email: "", password: "" });
     const [errors, setErrors] = useState<FormErrors>({});
     const [submitting, setSubmitting] = useState<boolean>(false);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [loginStatus, setLoginStatus] = useState<{ type: 'success' | 'error' | null; message: string | null }>({
+        type: null,
+        message: null
+    });
+
+    const theme = useTheme();
+    const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
 
     const validateField = (name: string, value: string): string => {
         let error = "";
@@ -68,124 +92,395 @@ const Login: React.FC = () => {
     const handleSubmit = (e: React.FormEvent): void => {
         e.preventDefault();
         if (!validate()) return;
+
         setSubmitting(true);
+        setLoginStatus({ type: null, message: null });
+
+        // Simulate API call
         setTimeout(() => {
             setSubmitting(false);
-            alert("Logged in successfully!");
-        }, 1000);
+            // For demo purposes - show success message
+            setLoginStatus({
+                type: 'success',
+                message: 'Logged in successfully!'
+            });
+        }, 1500);
+    };
+
+    const handleTogglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     };
 
     return (
         <Box
             sx={{
                 minHeight: "100vh",
-                background: "linear-gradient(135deg, rgb(18, 32, 90) 0%, rgb(75, 0, 130) 100%)",
+                background: "linear-gradient(135deg, #0a6cce, #6a00ea)",
                 display: "flex",
-                alignItems: "flex-start",
+                alignItems: "center",
                 justifyContent: "center",
-                pt: 10,
-                fontFamily: '"Montserrat", sans-serif',
+                py: { xs: 4, md: 0 },
+                position: "relative",
+                overflow: "hidden",
             }}
         >
-            <Container maxWidth="sm">
-                <Paper
-                    elevation={4}
+            {/* Background pattern */}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    opacity: 0.05,
+                    background: 'url(/pattern.png) repeat',
+                    zIndex: 0,
+                }}
+            />
+
+            {/* Back to home link */}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: 20,
+                    left: 20,
+                    zIndex: 2,
+                }}
+            >
+                <Button
+                    component={RouterLink}
+                    to="/"
+                    startIcon={<ArrowBack />}
                     sx={{
-                        p: 5,
-                        borderRadius: 3,
-                        backgroundColor: "rgba(0, 0, 0, 0.7)",
-                        color: "#eee",
-                        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+                        color: 'white',
+                        fontWeight: 500,
+                        '&:hover': {
+                            backgroundColor: 'rgba(255,255,255,0.1)',
+                        },
                     }}
                 >
-                    <Stack direction="row" spacing={2} alignItems="center" mb={3}>
-                        <Avatar sx={{ bgcolor: "teal", width: 60, height: 60 }}>
-                            <PersonOutlineIcon sx={{ fontSize: 32, color: "#fff" }} />
-                        </Avatar>
-                        <Typography variant="h3" fontWeight={600} color="#fff">
-                            Welcome Back
-                        </Typography>
-                    </Stack>
-                    <Typography variant="subtitle1" color="gray" mb={4}>
-                        Enter your credentials to access your dashboard
-                    </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate>
-                        <Stack spacing={3}>
-                            <TextField
-                                label="Email Address"
-                                name="email"
-                                type="email"
-                                fullWidth
-                                variant="filled"
-                                InputLabelProps={{ style: { color: "#bbb" } }}
-                                InputProps={{
-                                    style: { backgroundColor: "rgba(255, 255, 255, 0.1)", color: "#fff" },
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <EmailOutlinedIcon style={{ color: "teal" }} />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                value={form.email}
-                                onChange={handleChange}
-                                required
-                                error={!!errors.email}
-                                helperText={errors.email}
-                            />
-                            <TextField
-                                label="Password"
-                                name="password"
-                                type="password"
-                                fullWidth
-                                variant="filled"
-                                InputLabelProps={{ style: { color: "#bbb" } }}
-                                InputProps={{
-                                    style: { backgroundColor: "rgba(255, 255, 255, 0.1)", color: "#fff" },
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <VpnKeyOutlinedIcon style={{ color: "teal" }} />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                value={form.password}
-                                onChange={handleChange}
-                                required
-                                error={!!errors.password}
-                                helperText={errors.password}
-                            />
-                            <Button
-                                fullWidth
-                                type="submit"
-                                variant="contained"
-                                size="large"
-                                disabled={submitting}
+                    Back to Home
+                </Button>
+            </Box>
+
+            <Container
+                maxWidth="lg"
+                sx={{
+                    zIndex: 1,
+                    display: 'flex',
+                    justifyContent: 'center',
+                }}
+            >
+                <Card
+                    elevation={24}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', md: 'row' },
+                        width: '100%',
+                        maxWidth: 1000,
+                        borderRadius: 4,
+                        overflow: 'hidden',
+                    }}
+                >
+                    {/* Left side - image/branding (visible only on medium screens and up) */}
+                    {isMediumScreen && (
+                        <Box
+                            sx={{
+                                flex: '1 1 50%',
+                                background: 'linear-gradient(135deg, #13294B, #01579B)',
+                                color: '#fff',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                p: 4,
+                                position: 'relative',
+                                overflow: 'hidden',
+                            }}
+                        >
+                            <Box
                                 sx={{
-                                    mt: 2,
-                                    borderRadius: 2,
-                                    fontWeight: 600,
-                                    fontSize: 16,
-                                    backgroundColor: "teal",
-                                    "&:hover": {
-                                        backgroundColor: "darkcyan",
-                                    },
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100%',
+                                    height: '100%',
+                                    opacity: 0.1,
+                                    background: 'url(/pattern.png) repeat',
+                                }}
+                            />
+
+                            <Box
+                                component="img"
+                                src="/logo.png"
+                                alt="Logo"
+                                sx={{
+                                    height: 80,
+                                    mb: 4,
+                                    position: 'relative',
+                                    zIndex: 1,
+                                }}
+                            />
+
+                            <Typography
+                                variant="h3"
+                                align="center"
+                                sx={{
+                                    fontWeight: 700,
+                                    mb: 2,
+                                    position: 'relative',
+                                    zIndex: 1,
                                 }}
                             >
-                                {submitting ? "Signing In..." : "Log In"}
-                            </Button>
-                            <Typography align="center" sx={{ mt: 2, color: "#ccc" }}>
-                                Don't have an account?{" "}
+                                Welcome Back
+                            </Typography>
+
+                            <Typography
+                                variant="h6"
+                                align="center"
+                                sx={{
+                                    opacity: 0.8,
+                                    mb: 4,
+                                    maxWidth: 400,
+                                    position: 'relative',
+                                    zIndex: 1,
+                                }}
+                            >
+                                Your health is our priority. Access your personal dashboard to manage prescriptions.
+                            </Typography>
+
+                            <Box
+                                component="img"
+                                src="/login-illustration.png"
+                                alt="Pharmacy Illustration"
+                                sx={{
+                                    maxWidth: '80%',
+                                    maxHeight: 220,
+                                    position: 'relative',
+                                    zIndex: 1,
+                                }}
+                            />
+                        </Box>
+                    )}
+
+                    {/* Right side - login form */}
+                    <Box
+                        sx={{
+                            flex: '1 1 50%',
+                            p: { xs: 3, sm: 5 },
+                            backgroundColor: '#fff',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        {/* Mobile header (only visible on small screens) */}
+                        {!isMediumScreen && (
+                            <Box sx={{ mb: 4, textAlign: 'center' }}>
+                                <Box
+                                    component="img"
+                                    src="/logo.png"
+                                    alt="Logo"
+                                    sx={{ height: 60, mb: 2 }}
+                                />
+                                <Typography variant="h4" fontWeight={700} color="primary.main">
+                                    Welcome Back
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                                    Access your personal dashboard
+                                </Typography>
+                            </Box>
+                        )}
+
+                        {/* Status messages */}
+                        {loginStatus.type && (
+                            <Zoom in={!!loginStatus.type}>
+                                <Alert
+                                    severity={loginStatus.type}
+                                    sx={{ mb: 3 }}
+                                    onClose={() => setLoginStatus({ type: null, message: null })}
+                                >
+                                    {loginStatus.message}
+                                </Alert>
+                            </Zoom>
+                        )}
+
+                        <Typography
+                            variant="h5"
+                            fontWeight={600}
+                            sx={{ mb: 4, display: { xs: 'none', md: 'block' } }}
+                        >
+                            Sign in to your account
+                        </Typography>
+
+                        <Box component="form" onSubmit={handleSubmit} noValidate>
+                            <Stack spacing={3}>
+                                <TextField
+                                    label="Email Address"
+                                    name="email"
+                                    type="email"
+                                    fullWidth
+                                    variant="outlined"
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <EmailOutlined color="primary" />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    value={form.email}
+                                    onChange={handleChange}
+                                    required
+                                    error={!!errors.email}
+                                    helperText={errors.email}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            borderRadius: 2,
+                                        }
+                                    }}
+                                />
+
+                                <TextField
+                                    label="Password"
+                                    name="password"
+                                    type={showPassword ? "text" : "password"}
+                                    fullWidth
+                                    variant="outlined"
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <VpnKeyOutlined color="primary" />
+                                            </InputAdornment>
+                                        ),
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleTogglePasswordVisibility}
+                                                    edge="end"
+                                                >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    value={form.password}
+                                    onChange={handleChange}
+                                    required
+                                    error={!!errors.password}
+                                    helperText={errors.password}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            borderRadius: 2,
+                                        }
+                                    }}
+                                />
+
                                 <MuiLink
                                     component={RouterLink}
-                                    to="/register"
+                                    to="/forgot-password"
                                     underline="hover"
-                                    sx={{ color: "teal", fontWeight: 500 }}
+                                    sx={{
+                                        alignSelf: 'flex-end',
+                                        color: 'primary.main',
+                                        fontWeight: 500,
+                                        fontSize: '0.875rem',
+                                    }}
                                 >
-                                    Create one
+                                    Forgot password?
                                 </MuiLink>
-                            </Typography>
-                        </Stack>
+
+                                <Button
+                                    fullWidth
+                                    type="submit"
+                                    variant="contained"
+                                    size="large"
+                                    disabled={submitting}
+                                    sx={{
+                                        mt: 2,
+                                        borderRadius: 28,
+                                        py: 1.5,
+                                        fontWeight: 600,
+                                        fontSize: '1rem',
+                                        boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
+                                        position: 'relative',
+                                    }}
+                                    endIcon={!submitting && <LoginIcon />}
+                                >
+                                    {submitting ? (
+                                        <CircularProgress size={24} color="inherit" />
+                                    ) : (
+                                        "Sign In"
+                                    )}
+                                </Button>
+
+                                <Stack
+                                    direction="row"
+                                    alignItems="center"
+                                    spacing={2}
+                                    sx={{ my: 2 }}
+                                >
+                                    <Divider sx={{ flex: 1 }} />
+                                    <Typography variant="body2" color="text.secondary">
+                                        or continue with
+                                    </Typography>
+                                    <Divider sx={{ flex: 1 }} />
+                                </Stack>
+
+                                <Stack
+                                    direction="row"
+                                    spacing={2}
+                                    sx={{ mb: 3 }}
+                                >
+                                    <Button
+                                        fullWidth
+                                        variant="outlined"
+                                        startIcon={<GoogleIcon />}
+                                        sx={{
+                                            borderRadius: 2,
+                                            py: 1.25,
+                                            color: 'rgb(219, 68, 55)',
+                                            borderColor: 'rgba(219, 68, 55, 0.5)',
+                                            '&:hover': {
+                                                borderColor: 'rgb(219, 68, 55)',
+                                                backgroundColor: 'rgba(219, 68, 55, 0.04)',
+                                            }
+                                        }}
+                                    >
+                                        Google
+                                    </Button>
+                                    <Button
+                                        fullWidth
+                                        variant="outlined"
+                                        startIcon={<FacebookIcon />}
+                                        sx={{
+                                            borderRadius: 2,
+                                            py: 1.25,
+                                            color: 'rgb(66, 103, 178)',
+                                            borderColor: 'rgba(66, 103, 178, 0.5)',
+                                            '&:hover': {
+                                                borderColor: 'rgb(66, 103, 178)',
+                                                backgroundColor: 'rgba(66, 103, 178, 0.04)',
+                                            }
+                                        }}
+                                    >
+                                        Facebook
+                                    </Button>
+                                </Stack>
+
+                                <Typography align="center" sx={{ color: 'text.secondary' }}>
+                                    Don't have an account?{" "}
+                                    <MuiLink
+                                        component={RouterLink}
+                                        to="/register"
+                                        underline="hover"
+                                        sx={{ color: 'primary.main', fontWeight: 600 }}
+                                    >
+                                        Sign up
+                                    </MuiLink>
+                                </Typography>
+                            </Stack>
+                        </Box>
                     </Box>
-                </Paper>
+                </Card>
             </Container>
         </Box>
     );

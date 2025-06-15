@@ -63,3 +63,9 @@ out/
 # OS files
 .DS_Store
 Thumbs.db
+
+#other
+node_modules/
+dist/
+build/
+.next/

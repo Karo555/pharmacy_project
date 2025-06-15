@@ -1,3 +1,4 @@
+// File: frontend/src/pages/Auth/Login.tsx
 import React, { useState } from 'react';
 import {
     Container,
@@ -29,8 +30,10 @@ import {
     Facebook as FacebookIcon,
     ArrowBack
 } from "@mui/icons-material";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import MuiLink from "@mui/material/Link";
+import axios from "axios";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface FormState {
     email: string;
@@ -42,6 +45,9 @@ interface FormErrors {
 }
 
 const Login: React.FC = () => {
+    const navigate = useNavigate();
+    const { login } = useAuth();
+
     const [form, setForm] = useState<FormState>({ email: "", password: "" });
     const [errors, setErrors] = useState<FormErrors>({});
     const [submitting, setSubmitting] = useState<boolean>(false);
@@ -89,22 +95,32 @@ const Login: React.FC = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e: React.FormEvent): void => {
+    const handleSubmit = async (e: React.FormEvent): Promise<void> => {
         e.preventDefault();
         if (!validate()) return;
 
         setSubmitting(true);
         setLoginStatus({ type: null, message: null });
 
-        // Simulate API call
-        setTimeout(() => {
-            setSubmitting(false);
-            // For demo purposes - show success message
-            setLoginStatus({
-                type: 'success',
-                message: 'Logged in successfully!'
+        try {
+            const response = await axios.post("/api/login", {
+                username: form.email,  // backend expects 'username' field
+                password: form.password,
             });
-        }, 1500);
+            const token = response.data.token;
+            login(token);
+            setLoginStatus({ type: 'success', message: 'Logged in successfully!' });
+            navigate("/dashboard");
+        } catch (err: any) {
+            const message =
+                err.response?.data?.message ||
+                err.response?.data?.error ||
+                err.message ||
+                "Login failed";
+            setLoginStatus({ type: 'error', message });
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     const handleTogglePasswordVisibility = () => {
@@ -180,7 +196,7 @@ const Login: React.FC = () => {
                         overflow: 'hidden',
                     }}
                 >
-                    {/* Left side - image/branding (visible only on medium screens and up) */}
+                    {/* Left side – branding */}
                     {isMediumScreen && (
                         <Box
                             sx={{
@@ -197,71 +213,35 @@ const Login: React.FC = () => {
                             }}
                         >
                             <Box
-                                sx={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    width: '100%',
-                                    height: '100%',
-                                    opacity: 0.1,
-                                    background: 'url(/pattern.png) repeat',
-                                }}
-                            />
-
-                            <Box
                                 component="img"
                                 src="/logo.png"
                                 alt="Logo"
-                                sx={{
-                                    height: 80,
-                                    mb: 4,
-                                    position: 'relative',
-                                    zIndex: 1,
-                                }}
+                                sx={{ height: 80, mb: 4, position: 'relative', zIndex: 1 }}
                             />
-
                             <Typography
                                 variant="h3"
                                 align="center"
-                                sx={{
-                                    fontWeight: 700,
-                                    mb: 2,
-                                    position: 'relative',
-                                    zIndex: 1,
-                                }}
+                                sx={{ fontWeight: 700, mb: 2, position: 'relative', zIndex: 1 }}
                             >
                                 Welcome Back
                             </Typography>
-
                             <Typography
                                 variant="h6"
                                 align="center"
-                                sx={{
-                                    opacity: 0.8,
-                                    mb: 4,
-                                    maxWidth: 400,
-                                    position: 'relative',
-                                    zIndex: 1,
-                                }}
+                                sx={{ opacity: 0.8, mb: 4, maxWidth: 400, position: 'relative', zIndex: 1 }}
                             >
-                                Your health is our priority. Access your personal dashboard to manage prescriptions.
+                                Access your personal dashboard to manage prescriptions.
                             </Typography>
-
                             <Box
                                 component="img"
                                 src="/login-illustration.png"
                                 alt="Pharmacy Illustration"
-                                sx={{
-                                    maxWidth: '80%',
-                                    maxHeight: 220,
-                                    position: 'relative',
-                                    zIndex: 1,
-                                }}
+                                sx={{ maxWidth: '80%', maxHeight: 220, position: 'relative', zIndex: 1 }}
                             />
                         </Box>
                     )}
 
-                    {/* Right side - login form */}
+                    {/* Right side – login form */}
                     <Box
                         sx={{
                             flex: '1 1 50%',
@@ -272,15 +252,9 @@ const Login: React.FC = () => {
                             justifyContent: 'center',
                         }}
                     >
-                        {/* Mobile header (only visible on small screens) */}
                         {!isMediumScreen && (
                             <Box sx={{ mb: 4, textAlign: 'center' }}>
-                                <Box
-                                    component="img"
-                                    src="/logo.png"
-                                    alt="Logo"
-                                    sx={{ height: 60, mb: 2 }}
-                                />
+                                <Box component="img" src="/logo.png" alt="Logo" sx={{ height: 60, mb: 2 }} />
                                 <Typography variant="h4" fontWeight={700} color="primary.main">
                                     Welcome Back
                                 </Typography>
@@ -290,7 +264,6 @@ const Login: React.FC = () => {
                             </Box>
                         )}
 
-                        {/* Status messages */}
                         {loginStatus.type && (
                             <Zoom in={!!loginStatus.type}>
                                 <Alert
@@ -331,11 +304,7 @@ const Login: React.FC = () => {
                                     required
                                     error={!!errors.email}
                                     helperText={errors.email}
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            borderRadius: 2,
-                                        }
-                                    }}
+                                    sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
                                 />
 
                                 <TextField
@@ -352,11 +321,7 @@ const Login: React.FC = () => {
                                         ),
                                         endAdornment: (
                                             <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={handleTogglePasswordVisibility}
-                                                    edge="end"
-                                                >
+                                                <IconButton aria-label="toggle password visibility" onClick={handleTogglePasswordVisibility} edge="end">
                                                     {showPassword ? <VisibilityOff /> : <Visibility />}
                                                 </IconButton>
                                             </InputAdornment>
@@ -367,24 +332,10 @@ const Login: React.FC = () => {
                                     required
                                     error={!!errors.password}
                                     helperText={errors.password}
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            borderRadius: 2,
-                                        }
-                                    }}
+                                    sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
                                 />
 
-                                <MuiLink
-                                    component={RouterLink}
-                                    to="/forgot-password"
-                                    underline="hover"
-                                    sx={{
-                                        alignSelf: 'flex-end',
-                                        color: 'primary.main',
-                                        fontWeight: 500,
-                                        fontSize: '0.875rem',
-                                    }}
-                                >
+                                <MuiLink component={RouterLink} to="/forgot-password" underline="hover" sx={{ alignSelf: 'flex-end', color: 'primary.main', fontWeight: 500, fontSize: '0.875rem' }}>
                                     Forgot password?
                                 </MuiLink>
 
@@ -394,86 +345,30 @@ const Login: React.FC = () => {
                                     variant="contained"
                                     size="large"
                                     disabled={submitting}
-                                    sx={{
-                                        mt: 2,
-                                        borderRadius: 28,
-                                        py: 1.5,
-                                        fontWeight: 600,
-                                        fontSize: '1rem',
-                                        boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
-                                        position: 'relative',
-                                    }}
+                                    sx={{ mt: 2, borderRadius: 28, py: 1.5, fontWeight: 600, fontSize: '1rem', boxShadow: '0 4px 10px rgba(0,0,0,0.15)', position: 'relative' }}
                                     endIcon={!submitting && <LoginIcon />}
                                 >
-                                    {submitting ? (
-                                        <CircularProgress size={24} color="inherit" />
-                                    ) : (
-                                        "Sign In"
-                                    )}
+                                    {submitting ? <CircularProgress size={24} color="inherit" /> : "Sign In"}
                                 </Button>
 
-                                <Stack
-                                    direction="row"
-                                    alignItems="center"
-                                    spacing={2}
-                                    sx={{ my: 2 }}
-                                >
+                                {/* Social buttons (no change) */}
+                                <Stack direction="row" alignItems="center" spacing={2} sx={{ my: 2 }}>
                                     <Divider sx={{ flex: 1 }} />
-                                    <Typography variant="body2" color="text.secondary">
-                                        or continue with
-                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">or continue with</Typography>
                                     <Divider sx={{ flex: 1 }} />
                                 </Stack>
-
-                                <Stack
-                                    direction="row"
-                                    spacing={2}
-                                    sx={{ mb: 3 }}
-                                >
-                                    <Button
-                                        fullWidth
-                                        variant="outlined"
-                                        startIcon={<GoogleIcon />}
-                                        sx={{
-                                            borderRadius: 2,
-                                            py: 1.25,
-                                            color: 'rgb(219, 68, 55)',
-                                            borderColor: 'rgba(219, 68, 55, 0.5)',
-                                            '&:hover': {
-                                                borderColor: 'rgb(219, 68, 55)',
-                                                backgroundColor: 'rgba(219, 68, 55, 0.04)',
-                                            }
-                                        }}
-                                    >
+                                <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
+                                    <Button fullWidth variant="outlined" startIcon={<GoogleIcon />} sx={{ borderRadius: 2, py: 1.25, color: 'rgb(219, 68, 55)', borderColor: 'rgba(219, 68, 55, 0.5)', '&:hover': { borderColor: 'rgb(219, 68, 55)', backgroundColor: 'rgba(219, 68, 55, 0.04)' } }}>
                                         Google
                                     </Button>
-                                    <Button
-                                        fullWidth
-                                        variant="outlined"
-                                        startIcon={<FacebookIcon />}
-                                        sx={{
-                                            borderRadius: 2,
-                                            py: 1.25,
-                                            color: 'rgb(66, 103, 178)',
-                                            borderColor: 'rgba(66, 103, 178, 0.5)',
-                                            '&:hover': {
-                                                borderColor: 'rgb(66, 103, 178)',
-                                                backgroundColor: 'rgba(66, 103, 178, 0.04)',
-                                            }
-                                        }}
-                                    >
+                                    <Button fullWidth variant="outlined" startIcon={<FacebookIcon />} sx={{ borderRadius: 2, py: 1.25, color: 'rgb(66, 103, 178)', borderColor: 'rgba(66, 103, 178, 0.5)', '&:hover': { borderColor: 'rgb(66, 103, 178)', backgroundColor: 'rgba(66, 103, 178, 0.04)' } }}>
                                         Facebook
                                     </Button>
                                 </Stack>
 
                                 <Typography align="center" sx={{ color: 'text.secondary' }}>
                                     Don't have an account?{" "}
-                                    <MuiLink
-                                        component={RouterLink}
-                                        to="/register"
-                                        underline="hover"
-                                        sx={{ color: 'primary.main', fontWeight: 600 }}
-                                    >
+                                    <MuiLink component={RouterLink} to="/register" underline="hover" sx={{ color: 'primary.main', fontWeight: 600 }}>
                                         Sign up
                                     </MuiLink>
                                 </Typography>

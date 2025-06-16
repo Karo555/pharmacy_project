@@ -41,6 +41,9 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { HeroSkeleton, FeaturesSkeleton, StepsSkeleton, TestimonialsSkeleton } from '../../components/SkeletonLoaders';
 import { AnimateOnScroll } from '../../utils/animationUtils';
+import avatar1 from '../../assets/avatar1.png';
+import avatar2 from '../../assets/avatar2.png';
+
 
 const features = [
     {
@@ -101,14 +104,14 @@ const testimonials = [
     {
         name: 'John Doe',
         role: 'Regular Customer',
-        avatar: '../../avatar1.png',
+        avatar: avatar1,
         quote: 'The prescription reminder feature has been a game-changer for managing my medications. Great service and fast delivery!',
         rating: 5
     },
     {
         name: 'Jane Smith',
         role: 'Monthly Subscriber',
-        avatar: '/avatar2.png',
+        avatar: avatar2,
         quote: 'As someone with chronic conditions, having a reliable pharmacy service is essential. Their pharmacists are knowledgeable and always available to answer questions.',
         rating: 5
     },

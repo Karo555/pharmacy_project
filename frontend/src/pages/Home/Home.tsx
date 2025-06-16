@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Navigate, Link as RouterLink } from 'react-router-dom';
 import {
     Box,
@@ -122,18 +122,37 @@ const Home: React.FC = () => {
     const theme = useTheme();
     const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
     const [heroLoaded, setHeroLoaded] = useState(false);
+    const [scrollY, setScrollY] = useState(0);
+    const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         // Simulating content loading
         const timer = setTimeout(() => {
             setHeroLoaded(true);
         }, 100);
-        return () => clearTimeout(timer);
+
+        // Handle scroll events for parallax effect
+        const handleScroll = () => {
+            setScrollY(window.scrollY);
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, []);
 
     if (token) {
         return <Navigate to="/dashboard" replace />;
     }
+
+    // Calculate parallax values based on scroll position
+    const heroParallaxValue = scrollY * 0.4;
+    const patternParallaxValue = scrollY * 0.2;
+    const circleParallaxValue = scrollY * 0.5;
+    const waveDividerParallaxValue = scrollY * 0.3;
 
     return (
         <Box sx={{ overflow: 'hidden' }}>
@@ -156,6 +175,7 @@ const Home: React.FC = () => {
                         height: '100%',
                         opacity: 0.1,
                         background: 'url(/pattern.png) repeat',
+                        transform: `translateY(${patternParallaxValue}px)`,
                     }}
                 />
                 <Box
@@ -165,7 +185,7 @@ const Home: React.FC = () => {
                         height: '300px',
                         borderRadius: '50%',
                         background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%)',
-                        top: '-150px',
+                        top: `calc(-150px + ${circleParallaxValue}px)`,
                         right: '10%',
                         animation: 'pulse 15s infinite',
                         '@keyframes pulse': {
@@ -182,7 +202,7 @@ const Home: React.FC = () => {
                         height: '200px',
                         borderRadius: '50%',
                         background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%)',
-                        bottom: '50px',
+                        bottom: `calc(50px + ${circleParallaxValue}px)`,
                         left: '5%',
                         animation: 'float 20s infinite ease-in-out',
                         '@keyframes float': {
@@ -390,6 +410,7 @@ const Home: React.FC = () => {
                             width: '100%',
                             height: '100%',
                             bottom: 0,
+                            transform: `translateY(${waveDividerParallaxValue}px)`,
                         }}
                     >
                         <path

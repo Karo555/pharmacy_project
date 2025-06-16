@@ -4,13 +4,13 @@ import axios from 'axios';
 import {
     Container,
     Typography,
-    Grid,
     Card,
     CardContent,
     CardActions,
     Button,
     CircularProgress,
     Alert,
+    Box,
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -29,8 +29,8 @@ interface Page<T> {
     content: T[];
     totalElements: number;
     totalPages: number;
-    number: number;     // current page (0‐based)
-    size: number;       // page size
+    number: number;
+    size: number;
 }
 
 const Drugs: React.FC = () => {
@@ -84,15 +84,39 @@ const Drugs: React.FC = () => {
                 Available Drugs
             </Typography>
 
-            <Grid container spacing={4}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: 4,
+                }}
+            >
                 {drugs.map((drug) => (
-                    <Grid item key={drug.id} xs={12} sm={6} md={4}>
+                    <Box
+                        key={drug.id}
+                        sx={{
+                            width: {
+                                xs: '100%',      // full width on extra-small screens
+                                sm: '50%',       // two columns on small screens
+                                md: '33.3333%',  // three columns on medium and up
+                            },
+                        }}
+                    >
                         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                             <CardContent sx={{ flexGrow: 1 }}>
                                 <Typography variant="h6" gutterBottom>
                                     {drug.name}
                                 </Typography>
-                                <Typography variant="body2" color="text.secondary" paragraph noWrap>
+                                <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                    paragraph
+                                    sx={{
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                    }}
+                                >
                                     {drug.description}
                                 </Typography>
                                 <Typography variant="body2">
@@ -112,9 +136,9 @@ const Drugs: React.FC = () => {
                                 </Button>
                             </CardActions>
                         </Card>
-                    </Grid>
+                    </Box>
                 ))}
-            </Grid>
+            </Box>
         </Container>
     );
 };

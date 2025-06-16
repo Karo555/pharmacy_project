@@ -4,7 +4,6 @@ import {
     Typography,
     Button,
     Box,
-    Grid,
     Paper,
     Card,
     CardContent,
@@ -27,6 +26,7 @@ import {
     useMediaQuery,
     Tab,
     Tabs,
+    Grid,
 } from '@mui/material';
 import {
     Logout as LogoutIcon,
@@ -413,8 +413,8 @@ const Dashboard: React.FC = () => {
                 </Box>
 
                 {/* Quick Stats */}
-                <Grid container spacing={3} sx={{ mb: 4 }}>
-                    <Grid item xs={12} sm={6} md={3}>
+                <Grid container spacing={3} sx={{ mb: 4 }} component="div">
+                    <Grid item xs={12} sm={6} md={3} component="div">
                         <Paper
                             elevation={2}
                             sx={{
@@ -449,7 +449,7 @@ const Dashboard: React.FC = () => {
                         </Paper>
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3} component="div">
                         <Paper
                             elevation={2}
                             sx={{
@@ -484,7 +484,7 @@ const Dashboard: React.FC = () => {
                         </Paper>
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3} component="div">
                         <Paper
                             elevation={2}
                             sx={{
@@ -519,7 +519,7 @@ const Dashboard: React.FC = () => {
                         </Paper>
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3} component="div">
                         <Paper
                             elevation={2}
                             sx={{

@@ -9,6 +9,7 @@ import Dashboard from '../pages/Dashboard/Dashboard';
 // @ts-ignore
 import ProtectedRoute from './ProtectedRoute'; // your auth-guard
 import Drugs from '../pages/Drugs/Drugs';
+import DrugDetail from '../pages/Drugs/DrugDetail';
 
 const AppRouter: React.FC = () => (
     <BrowserRouter>
@@ -42,6 +43,15 @@ const AppRouter: React.FC = () => (
                           </ProtectedRoute>
                     }
                   />
+
+            <Route
+                  path="/drugs/:id"
+                  element={
+                    <ProtectedRoute>
+                          <DrugDetail />
+                        </ProtectedRoute>
+                  }
+                />
 
             {/* any other route not matched by API or static assets */}
             <Route path="*" element={<Navigate to="/" replace />} />

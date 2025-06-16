@@ -43,6 +43,11 @@ import { HeroSkeleton, FeaturesSkeleton, StepsSkeleton, TestimonialsSkeleton } f
 import { AnimateOnScroll } from '../../utils/animationUtils';
 import avatar1 from '../../assets/avatar1.png';
 import avatar2 from '../../assets/avatar2.png';
+import partner1 from '../../assets/partner1.png';
+import partner2 from '../../assets/partner2.png';
+import partner3 from '../../assets/partner3.png';
+import pattern from '../../assets/pattern.png';
+
 
 
 const features = [
@@ -118,9 +123,9 @@ const testimonials = [
 ];
 
 const partners = [
-    { name: 'Partner A', logo: '/placeholder-logo.png' },
-    { name: 'Partner B', logo: '/placeholder-logo.png' },
-    { name: 'Partner C', logo: '/placeholder-logo.png' },
+    { name: 'Partner A', logo: partner1 },
+    { name: 'Partner B', logo: partner2 },
+    { name: 'Partner C', logo: partner3 },
 ];
 
 const Home: React.FC = () => {
@@ -216,7 +221,7 @@ const Home: React.FC = () => {
                             width: '100%',
                             height: '100%',
                             opacity: 0.1,
-                            background: 'url(/pattern.png) repeat',
+                            background: `pattern`,
                             transform: `translateY(${patternParallaxValue}px)`,
                         }}
                     />
@@ -409,7 +414,7 @@ const Home: React.FC = () => {
                                     <Zoom in={heroLoaded} style={{ transitionDelay: '800ms' }}>
                                         <Box
                                             component="img"
-                                            src="/hero-image.png"
+                                            src="../../assets/pattern.png"
                                             alt="Online Pharmacy"
                                             sx={{
                                                 width: '100%',

@@ -47,6 +47,7 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 
 
@@ -380,27 +381,23 @@ const Dashboard: React.FC = () => {
                         <Typography
                             variant="h4"
                             component="h1"
-                            sx={{
-                                fontWeight: 700,
-                                mb: 0.5,
-                            }}
+                            sx={{ fontWeight: 700, mb: 0.5 }}
                         >
                             Welcome, John
                         </Typography>
-                        <Typography
-                            variant="body1"
-                            color="text.secondary"
-                        >
+                        <Typography variant="body1" color="text.secondary">
                             {new Date().toLocaleDateString('en-US', {
                                 weekday: 'long',
                                 year: 'numeric',
                                 month: 'long',
-                                day: 'numeric'
+                                day: 'numeric',
                             })}
                         </Typography>
                     </Box>
 
                     <Button
+                        component={RouterLink}
+                        to="/drugs"
                         variant="contained"
                         startIcon={<AddIcon />}
                         sx={{
@@ -411,7 +408,7 @@ const Dashboard: React.FC = () => {
                             boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
                         }}
                     >
-                        New Prescription
+                        Browse Drugs
                     </Button>
                 </Box>
 

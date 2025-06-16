@@ -1,3 +1,4 @@
+// File: frontend/src/pages/Drugs/Drugs.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
@@ -12,6 +13,7 @@ import {
     Alert,
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface Drug {
     id: number;
@@ -32,24 +34,33 @@ interface Page<T> {
 }
 
 const Drugs: React.FC = () => {
+    const { token } = useAuth();
     const [drugs, setDrugs] = useState<Drug[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        if (!token) return;
         const fetchDrugs = async () => {
             try {
-                const resp = await axios.get<Page<Drug>>('/api/drugs?page=0&size=20&sort=name,asc');
+                const resp = await axios.get<Page<Drug>>('/api/drugs', {
+                    headers: { Authorization: `Bearer ${token}` },
+                    params: { page: 0, size: 20, sort: 'name,asc' },
+                });
                 setDrugs(resp.data.content);
             } catch (err: any) {
-                setError(err.response?.data?.message || err.message || 'Failed to load drugs');
+                setError(
+                    err.response?.data?.message ||
+                    err.message ||
+                    'Failed to load drugs'
+                );
             } finally {
                 setLoading(false);
             }
         };
 
         fetchDrugs();
-    }, []);
+    }, [token]);
 
     if (loading) {
         return (

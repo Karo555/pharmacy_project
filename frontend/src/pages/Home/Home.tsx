@@ -194,8 +194,8 @@ const Home: React.FC = () => {
                 />
 
                 <Container maxWidth="lg">
-                    <Grid container spacing={3} sx={{ py: { xs: 8, md: 12 } }} alignItems="center">
-                        <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'center', md: 'left' }, zIndex: 1 }}>
+                    <Grid container spacing={3} sx={{ py: { xs: 8, md: 12 } }}>
+                        <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'center', md: 'left' }, zIndex: 1, display: 'flex', alignItems: 'center' }}>
                             <Fade in={heroLoaded} timeout={1000}>
                                 <Box>
                                     <Box

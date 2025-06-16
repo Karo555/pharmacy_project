@@ -6,6 +6,8 @@ import org.example.pharmacyproject.dto.drugs.GetDrugDto;
 import org.example.pharmacyproject.infrastructure.entity.DrugEntity;
 import org.example.pharmacyproject.infrastructure.repository.DrugRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,9 +23,18 @@ public class DrugService {
         this.drugRepository = drugRepository;
     }
 
-    public List<GetDrugDto> getAll(){
-        var drugs = drugRepository.findAll();
-        return drugs.stream().map((drug) -> new GetDrugDto(drug.getId(), drug.getName(), drug.getManufacturer(), drug.getDescription(), drug.getDosage(), drug.getType(), drug.isPrescriptionRequired())).collect(Collectors.toList());
+    // Pagination & sorting
+    public Page<GetDrugDto> getAll(Pageable pageable) {
+        return drugRepository.findAll(pageable)
+                .map(drug -> new GetDrugDto(
+                        drug.getId(),
+                        drug.getName(),
+                        drug.getManufacturer(),
+                        drug.getDescription(),
+                        drug.getDosage(),
+                        drug.getType(),
+                        drug.isPrescriptionRequired()
+                ));
     }
 
     public GetDrugDto getOne(long id){
@@ -51,6 +62,29 @@ public class DrugService {
             throw new RuntimeException("Drug not found");
         }
         drugRepository.deleteById(id);
+    }
+
+    // Full update
+    public GetDrugDto update(long id, CreateDrugDto dto) {
+        DrugEntity drug = drugRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Drug not found"));
+        drug.setName(dto.getName());
+        drug.setManufacturer(dto.getManufacturer());
+        drug.setDescription(dto.getDescription());
+        drug.setDosage(dto.getDosage());
+        drug.setType(dto.getType());
+        drug.setPrescriptionRequired(dto.isPrescriptionRequired());
+
+        DrugEntity updated = drugRepository.save(drug);
+        return new GetDrugDto(
+                updated.getId(),
+                updated.getName(),
+                updated.getManufacturer(),
+                updated.getDescription(),
+                updated.getDosage(),
+                updated.getType(),
+                updated.isPrescriptionRequired()
+        );
     }
 
 }

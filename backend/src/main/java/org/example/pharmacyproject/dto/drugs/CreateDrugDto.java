@@ -1,6 +1,7 @@
 package org.example.pharmacyproject.dto.drugs;
 
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import java.math.BigDecimal;
@@ -8,14 +9,31 @@ import java.time.LocalDate;
 
 @Data
 public class CreateDrugDto {
+    @NotBlank(message = "Name is required")
+    @Size(max = 255, message = "Name must be at most 255 characters")
     private String name;
+
+    @NotBlank(message = "Manufacturer is required")
+    @Size(max = 255, message = "Manufacturer must be at most 255 characters")
     private String manufacturer;
+
+    @NotBlank(message = "Description is required")
     private String description;
+
+    @NotBlank(message = "Dosage is required")
     private String dosage;
+
+    @NotBlank(message = "Type is required")
     private String type;
+
     private boolean prescriptionRequired;
 
-    public CreateDrugDto(String name, String manufacturer, String description, String dosage, String type, boolean prescriptionRequired) {
+    public CreateDrugDto(String name,
+                         String manufacturer,
+                         String description,
+                         String dosage,
+                         String type,
+                         boolean prescriptionRequired) {
         this.name = name;
         this.manufacturer = manufacturer;
         this.description = description;

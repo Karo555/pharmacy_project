@@ -8,6 +8,7 @@ import Register from '../pages/Auth/Register';
 import Dashboard from '../pages/Dashboard/Dashboard';
 // @ts-ignore
 import ProtectedRoute from './ProtectedRoute'; // your auth-guard
+import Drugs from '../pages/Drugs/Drugs';
 
 const AppRouter: React.FC = () => (
     <BrowserRouter>
@@ -24,6 +25,23 @@ const AppRouter: React.FC = () => (
                     </ProtectedRoute>
                 }
             />
+            <Route
+                    path="/dashboard"
+                    element={
+                      <ProtectedRoute>
+                            <Dashboard />
+                          </ProtectedRoute>
+                    }
+                  />
+
+                  <Route
+                    path="/drugs"
+                    element={
+                      <ProtectedRoute>
+                            <Drugs />
+                          </ProtectedRoute>
+                    }
+                  />
 
             {/* any other route not matched by API or static assets */}
             <Route path="*" element={<Navigate to="/" replace />} />

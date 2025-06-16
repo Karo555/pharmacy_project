@@ -5,12 +5,13 @@ import org.example.pharmacyproject.dto.drugs.CreateDrugResponseDto;
 import org.example.pharmacyproject.dto.drugs.GetDrugDto;
 import org.example.pharmacyproject.service.DrugService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/drugs")
@@ -26,8 +27,8 @@ public class DrugController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('READER')")
-    public List<GetDrugDto> getAllDrugs(){
-        return drugService.getAll();
+    public Page<GetDrugDto> getAllDrugs(Pageable pageable) {
+        return drugService.getAll(pageable);
     }
 
     @GetMapping("/{id}")

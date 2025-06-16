@@ -21,6 +21,7 @@ import {
     IconButton,
     Zoom,
     Fade,
+    CircularProgress,
 } from '@mui/material';
 import {
     LocalShipping,
@@ -39,6 +40,7 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
 import { HeroSkeleton, FeaturesSkeleton, StepsSkeleton, TestimonialsSkeleton } from '../../components/SkeletonLoaders';
+import { AnimateOnScroll } from '../../utils/animationUtils';
 
 const features = [
     {
@@ -99,7 +101,7 @@ const testimonials = [
     {
         name: 'John Doe',
         role: 'Regular Customer',
-        avatar: '/avatar1.png',
+        avatar: '../../avatar1.png',
         quote: 'The prescription reminder feature has been a game-changer for managing my medications. Great service and fast delivery!',
         rating: 5
     },
@@ -464,758 +466,774 @@ const Home: React.FC = () => {
             {!featuresLoaded ? (
                 <FeaturesSkeleton />
             ) : (
-                <Box sx={{ py: { xs: 6, md: 10 }, position: 'relative' }}>
-                    <Container maxWidth="lg">
-                        <Fade in={true} timeout={1000}>
-                            <Box>
-                                <Typography
-                                    variant="h3"
-                                    align="center"
-                                    gutterBottom
-                                    sx={{
-                                        fontWeight: 800,
-                                        mb: 2,
-                                        background: 'linear-gradient(90deg, #1976d2, #6a00ea)',
-                                        backgroundClip: 'text',
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent',
-                                        textShadow: '0px 2px 4px rgba(0,0,0,0.05)',
-                                    }}
-                                >
-                                    Our Features
-                                </Typography>
-                                <Typography
-                                    variant="h6"
-                                    align="center"
-                                    color="text.secondary"
-                                    sx={{ mb: 6, maxWidth: 700, mx: 'auto', fontWeight: 400 }}
-                                >
-                                    Designed to make managing your health easier and more convenient
-                                </Typography>
+                <AnimateOnScroll animation="animate__fadeInUp" threshold={0.1}>
+                    <Box sx={{ py: { xs: 6, md: 10 }, position: 'relative' }}>
+                        <Container maxWidth="lg">
+                            <Fade in={true} timeout={1000}>
+                                <Box>
+                                    <Typography
+                                        variant="h3"
+                                        align="center"
+                                        gutterBottom
+                                        sx={{
+                                            fontWeight: 800,
+                                            mb: 2,
+                                            background: 'linear-gradient(90deg, #1976d2, #6a00ea)',
+                                            backgroundClip: 'text',
+                                            WebkitBackgroundClip: 'text',
+                                            WebkitTextFillColor: 'transparent',
+                                            textShadow: '0px 2px 4px rgba(0,0,0,0.05)',
+                                        }}
+                                    >
+                                        Our Features
+                                    </Typography>
+                                    <Typography
+                                        variant="h6"
+                                        align="center"
+                                        color="text.secondary"
+                                        sx={{ mb: 6, maxWidth: 700, mx: 'auto', fontWeight: 400 }}
+                                    >
+                                        Designed to make managing your health easier and more convenient
+                                    </Typography>
 
-                                <Grid container spacing={4}>
-                                    {features.map((feature, index) => (
-                                        <Grid item xs={12} sm={6} md={3} key={feature.title}>
-                                            <Zoom in={true} style={{ transitionDelay: `${index * 150}ms` }}>
-                                                <Card
-                                                    elevation={4}
-                                                    sx={{
-                                                        borderRadius: 4,
-                                                        height: '100%',
-                                                        transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                                                        transform: 'translateY(0)',
-                                                        position: 'relative',
-                                                        overflow: 'hidden',
-                                                        '&:hover': {
-                                                            transform: 'translateY(-12px)',
-                                                            boxShadow: (theme) => `0 12px 28px rgba(0,0,0,0.15), 0 0 0 2px ${feature.hoverColor}22`,
-                                                            '& .feature-icon-container': {
-                                                                transform: 'scale(1.1)',
-                                                                backgroundColor: `${feature.hoverColor}22`,
+                                    <Grid container spacing={4}>
+                                        {features.map((feature, index) => (
+                                            <Grid item xs={12} sm={6} md={3} key={feature.title}>
+                                                <Zoom in={true} style={{ transitionDelay: `${index * 150}ms` }}>
+                                                    <Card
+                                                        elevation={4}
+                                                        sx={{
+                                                            borderRadius: 4,
+                                                            height: '100%',
+                                                            transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                                                            transform: 'translateY(0)',
+                                                            position: 'relative',
+                                                            overflow: 'hidden',
+                                                            '&:hover': {
+                                                                transform: 'translateY(-12px)',
+                                                                boxShadow: (theme) => `0 12px 28px rgba(0,0,0,0.15), 0 0 0 2px ${feature.hoverColor}22`,
+                                                                '& .feature-icon-container': {
+                                                                    transform: 'scale(1.1)',
+                                                                    backgroundColor: `${feature.hoverColor}22`,
+                                                                },
+                                                                '& .feature-icon': {
+                                                                    transform: 'scale(1.15)',
+                                                                    color: feature.hoverColor,
+                                                                },
+                                                                '& .feature-pill': {
+                                                                    opacity: 1,
+                                                                    transform: 'translateY(0)',
+                                                                }
                                                             },
-                                                            '& .feature-icon': {
-                                                                transform: 'scale(1.15)',
-                                                                color: feature.hoverColor,
-                                                            },
-                                                            '& .feature-pill': {
-                                                                opacity: 1,
-                                                                transform: 'translateY(0)',
-                                                            }
-                                                        },
-                                                        '&::before': {
-                                                            content: '""',
-                                                            position: 'absolute',
-                                                            top: 0,
-                                                            left: 0,
-                                                            width: '100%',
-                                                            height: '4px',
-                                                            background: `linear-gradient(90deg, ${feature.color}, ${feature.hoverColor})`,
-                                                            opacity: 0.8,
-                                                        }
-                                                    }}
-                                                >
-                                                    <Box sx={{
-                                                        textAlign: 'center',
-                                                        pt: 5,
-                                                        pb: 3,
-                                                        px: 3,
-                                                        position: 'relative',
-                                                    }}>
-                                                        <Box
-                                                            className="feature-pill"
-                                                            sx={{
+                                                            '&::before': {
+                                                                content: '""',
                                                                 position: 'absolute',
-                                                                top: 12,
-                                                                right: 12,
-                                                                borderRadius: '12px',
-                                                                backgroundColor: `${feature.color}22`,
-                                                                color: feature.color,
-                                                                fontSize: '0.75rem',
-                                                                fontWeight: 600,
-                                                                px: 1.5,
-                                                                py: 0.5,
-                                                                opacity: 0,
-                                                                transform: 'translateY(-10px)',
-                                                                transition: 'all 0.3s ease-out',
-                                                            }}
-                                                        >
-                                                            Popular
-                                                        </Box>
-                                                        <Box
-                                                            className="feature-icon-container"
-                                                            sx={{
-                                                                display: 'inline-flex',
-                                                                p: 2,
-                                                                borderRadius: '50%',
-                                                                mb: 2.5,
-                                                                backgroundColor: `${feature.color}11`,
-                                                                transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                                                            }}
-                                                        >
+                                                                top: 0,
+                                                                left: 0,
+                                                                width: '100%',
+                                                                height: '4px',
+                                                                background: `linear-gradient(90deg, ${feature.color}, ${feature.hoverColor})`,
+                                                                opacity: 0.8,
+                                                            }
+                                                        }}
+                                                    >
+                                                        <Box sx={{
+                                                            textAlign: 'center',
+                                                            pt: 5,
+                                                            pb: 3,
+                                                            px: 3,
+                                                            position: 'relative',
+                                                        }}>
                                                             <Box
-                                                                className="feature-icon"
+                                                                className="feature-pill"
                                                                 sx={{
+                                                                    position: 'absolute',
+                                                                    top: 12,
+                                                                    right: 12,
+                                                                    borderRadius: '12px',
+                                                                    backgroundColor: `${feature.color}22`,
                                                                     color: feature.color,
+                                                                    fontSize: '0.75rem',
+                                                                    fontWeight: 600,
+                                                                    px: 1.5,
+                                                                    py: 0.5,
+                                                                    opacity: 0,
+                                                                    transform: 'translateY(-10px)',
+                                                                    transition: 'all 0.3s ease-out',
+                                                                }}
+                                                            >
+                                                                Popular
+                                                            </Box>
+                                                            <Box
+                                                                className="feature-icon-container"
+                                                                sx={{
+                                                                    display: 'inline-flex',
+                                                                    p: 2,
+                                                                    borderRadius: '50%',
+                                                                    mb: 2.5,
+                                                                    backgroundColor: `${feature.color}11`,
                                                                     transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
                                                                 }}
                                                             >
-                                                                {feature.icon}
+                                                                <Box
+                                                                    className="feature-icon"
+                                                                    sx={{
+                                                                        color: feature.color,
+                                                                        transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                                                                    }}
+                                                                >
+                                                                    {feature.icon}
+                                                                </Box>
                                                             </Box>
+                                                            <Typography
+                                                                variant="h6"
+                                                                sx={{
+                                                                    fontWeight: 700,
+                                                                    mb: 1.5,
+                                                                    color: 'text.primary',
+                                                                }}
+                                                            >
+                                                                {feature.title}
+                                                            </Typography>
+                                                            <Typography
+                                                                variant="body2"
+                                                                color="text.secondary"
+                                                                sx={{
+                                                                    lineHeight: 1.6,
+                                                                    mb: 2.5
+                                                                }}
+                                                            >
+                                                                {feature.description}
+                                                            </Typography>
+                                                            <Button
+                                                                size="small"
+                                                                sx={{
+                                                                    color: feature.color,
+                                                                    borderRadius: '12px',
+                                                                    textTransform: 'none',
+                                                                    fontWeight: 600,
+                                                                    '&:hover': {
+                                                                        backgroundColor: `${feature.color}11`,
+                                                                    }
+                                                                }}
+                                                                endIcon={<ArrowForward fontSize="small" />}
+                                                            >
+                                                                Learn more
+                                                            </Button>
                                                         </Box>
-                                                        <Typography
-                                                            variant="h6"
-                                                            sx={{
-                                                                fontWeight: 700,
-                                                                mb: 1.5,
-                                                                color: 'text.primary',
-                                                            }}
-                                                        >
-                                                            {feature.title}
-                                                        </Typography>
-                                                        <Typography
-                                                            variant="body2"
-                                                            color="text.secondary"
-                                                            sx={{
-                                                                lineHeight: 1.6,
-                                                                mb: 2.5
-                                                            }}
-                                                        >
-                                                            {feature.description}
-                                                        </Typography>
-                                                        <Button
-                                                            size="small"
-                                                            sx={{
-                                                                color: feature.color,
-                                                                borderRadius: '12px',
-                                                                textTransform: 'none',
-                                                                fontWeight: 600,
-                                                                '&:hover': {
-                                                                    backgroundColor: `${feature.color}11`,
-                                                                }
-                                                            }}
-                                                            endIcon={<ArrowForward fontSize="small" />}
-                                                        >
-                                                            Learn more
-                                                        </Button>
-                                                    </Box>
-                                                </Card>
-                                            </Zoom>
-                                        </Grid>
-                                    ))}
-                                </Grid>
-                            </Box>
-                        </Fade>
-                    </Container>
-                </Box>
+                                                    </Card>
+                                                </Zoom>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                </Box>
+                            </Fade>
+                        </Container>
+                    </Box>
+                </AnimateOnScroll>
             )}
 
             {/* How It Works */}
             {!stepsLoaded ? (
                 <StepsSkeleton />
             ) : (
-                <Box
-                    sx={{
-                        py: { xs: 8, md: 12 },
-                        backgroundColor: theme.palette.mode === 'light' ? 'rgba(25, 118, 210, 0.05)' : 'rgba(66, 66, 66, 0.6)',
-                        position: 'relative',
-                    }}
-                >
-                    {/* Top wave divider */}
+                <AnimateOnScroll animation="animate__fadeInRight" threshold={0.1} delay={0.2}>
                     <Box
                         sx={{
-                            height: '150px',
-                            overflow: 'hidden',
-                            position: 'absolute',
-                            top: '-1px',
-                            left: 0,
-                            right: 0,
-                            transform: 'rotate(180deg)',
+                            py: { xs: 8, md: 12 },
+                            backgroundColor: theme.palette.mode === 'light' ? 'rgba(25, 118, 210, 0.05)' : 'rgba(66, 66, 66, 0.6)',
+                            position: 'relative',
                         }}
                     >
+                        {/* Top wave divider */}
                         <Box
-                            component="svg"
-                            preserveAspectRatio="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 1440 320"
                             sx={{
-                                width: '100%',
-                                height: '100%',
+                                height: '150px',
+                                overflow: 'hidden',
+                                position: 'absolute',
+                                top: '-1px',
+                                left: 0,
+                                right: 0,
+                                transform: 'rotate(180deg)',
                             }}
                         >
-                            <path
-                                fill="#ffffff"
-                                fillOpacity="1"
-                                d="M0,64L48,96C96,128,192,192,288,202.7C384,213,480,171,576,149.3C672,128,768,128,864,149.3C960,171,1056,213,1152,213.3C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-                            />
-                        </Box>
-                    </Box>
-
-                    <Container maxWidth="lg" sx={{ pt: 8 }}>
-                        <Fade in={true} timeout={1000}>
-                            <Box>
-                                <Typography
-                                    variant="h3"
-                                    align="center"
-                                    gutterBottom
-                                    sx={{
-                                        fontWeight: 800,
-                                        mb: 2,
-                                        background: 'linear-gradient(90deg, #43a047, #1976d2)',
-                                        backgroundClip: 'text',
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent',
-                                        textShadow: '0px 2px 4px rgba(0,0,0,0.05)',
-                                    }}
-                                >
-                                    How It Works
-                                </Typography>
-                                <Typography
-                                    variant="h6"
-                                    align="center"
-                                    color="text.secondary"
-                                    sx={{ mb: 8, maxWidth: 700, mx: 'auto', fontWeight: 400 }}
-                                >
-                                    Get your medications in three simple steps
-                                </Typography>
-
-                                <Grid container spacing={5} alignItems="stretch">
-                                    {steps.map((step, index) => (
-                                        <Grid item xs={12} md={4} key={step.label}>
-                                            <Zoom in={true} style={{ transitionDelay: `${index * 200}ms` }}>
-                                                <Paper
-                                                    elevation={4}
-                                                    sx={{
-                                                        p: 4,
-                                                        height: '100%',
-                                                        display: 'flex',
-                                                        flexDirection: 'column',
-                                                        alignItems: 'center',
-                                                        textAlign: 'center',
-                                                        borderRadius: 4,
-                                                        position: 'relative',
-                                                        overflow: 'hidden',
-                                                        transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                                                        '&:hover': {
-                                                            transform: 'translateY(-12px)',
-                                                            boxShadow: `0 18px 40px rgba(0,0,0,0.12)`,
-                                                            '& .step-number': {
-                                                                transform: 'scale(1.12) rotate(10deg)',
-                                                                boxShadow: `0 6px 20px ${step.color}80`,
-                                                            },
-                                                            '& .step-icon': {
-                                                                transform: 'scale(1.1) rotate(-5deg)',
-                                                                color: 'white',
-                                                            },
-                                                            '& .step-highlight': {
-                                                                opacity: 1,
-                                                            }
-                                                        },
-                                                    }}
-                                                >
-                                                    <Box
-                                                        className="step-highlight"
-                                                        sx={{
-                                                            position: 'absolute',
-                                                            top: 0,
-                                                            left: 0,
-                                                            width: '100%',
-                                                            height: '100%',
-                                                            background: `linear-gradient(135deg, ${step.color}05 0%, ${step.color}15 100%)`,
-                                                            opacity: 0,
-                                                            transition: 'opacity 0.5s ease',
-                                                            zIndex: 0,
-                                                        }}
-                                                    />
-
-                                                    <Box
-                                                        sx={{
-                                                            position: 'absolute',
-                                                            top: 0,
-                                                            left: 0,
-                                                            right: 0,
-                                                            height: '5px',
-                                                            background: `linear-gradient(90deg, ${step.color}, ${step.color}aa)`,
-                                                        }}
-                                                    />
-
-                                                    <Box
-                                                        className="step-number"
-                                                        sx={{
-                                                            position: 'absolute',
-                                                            top: 16,
-                                                            left: 16,
-                                                            width: 30,
-                                                            height: 30,
-                                                            borderRadius: '50%',
-                                                            backgroundColor: step.color,
-                                                            color: 'white',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            fontWeight: 'bold',
-                                                            fontSize: '1rem',
-                                                            boxShadow: `0 4px 10px ${step.color}40`,
-                                                            transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                                                            zIndex: 2,
-                                                        }}
-                                                    >
-                                                        {index + 1}
-                                                    </Box>
-
-                                                    <Avatar
-                                                        sx={{
-                                                            bgcolor: step.color,
-                                                            width: 80,
-                                                            height: 80,
-                                                            mb: 2.5,
-                                                            mt: 1.5,
-                                                            boxShadow: `0 6px 16px ${step.color}40`,
-                                                            position: 'relative',
-                                                            zIndex: 1,
-                                                        }}
-                                                    >
-                                                        <Box
-                                                            className="step-icon"
-                                                            sx={{
-                                                                transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                                                            }}
-                                                        >
-                                                            {step.icon}
-                                                        </Box>
-                                                    </Avatar>
-
-                                                    <Typography
-                                                        variant="h5"
-                                                        sx={{
-                                                            mb: 2,
-                                                            fontWeight: 700,
-                                                            color: step.color,
-                                                            position: 'relative',
-                                                            zIndex: 1,
-                                                        }}
-                                                    >
-                                                        {step.label}
-                                                    </Typography>
-
-                                                    <Typography
-                                                        variant="body1"
-                                                        sx={{
-                                                            flex: 1,
-                                                            mb: 2,
-                                                            position: 'relative',
-                                                            zIndex: 1,
-                                                            fontWeight: 500,
-                                                            color: 'text.primary',
-                                                        }}
-                                                    >
-                                                        {step.description}
-                                                    </Typography>
-
-                                                    <Box
-                                                        sx={{
-                                                            backgroundColor: `${step.color}15`,
-                                                            borderRadius: 2,
-                                                            p: 1.5,
-                                                            width: '100%',
-                                                            position: 'relative',
-                                                            zIndex: 1,
-                                                        }}
-                                                    >
-                                                        <Typography
-                                                            variant="body2"
-                                                            sx={{
-                                                                color: 'text.secondary',
-                                                                fontSize: '0.875rem',
-                                                                fontStyle: 'italic',
-                                                            }}
-                                                        >
-                                                            {step.detail}
-                                                        </Typography>
-                                                    </Box>
-
-                                                    {index < steps.length - 1 && (
-                                                        <Box
-                                                            sx={{
-                                                                display: { xs: 'none', md: 'block' },
-                                                                position: 'absolute',
-                                                                right: -30,
-                                                                top: '50%',
-                                                                transform: 'translateY(-50%)',
-                                                                color: step.color,
-                                                                zIndex: 1,
-                                                                animation: 'pulse-arrow 1.5s infinite ease-in-out',
-                                                                '@keyframes pulse-arrow': {
-                                                                    '0%': { transform: 'translateY(-50%) translateX(0)' },
-                                                                    '50%': { transform: 'translateY(-50%) translateX(5px)' },
-                                                                    '100%': { transform: 'translateY(-50%) translateX(0)' },
-                                                                }
-                                                            }}
-                                                        >
-                                                            <KeyboardArrowRight sx={{ fontSize: 40 }} />
-                                                        </Box>
-                                                    )}
-                                                </Paper>
-                                            </Zoom>
-                                        </Grid>
-                                    ))}
-                                </Grid>
-
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        mt: 6,
-                                    }}
-                                >
-                                    <Button
-                                        variant="outlined"
-                                        size="large"
-                                        sx={{
-                                            borderRadius: 28,
-                                            px: 4,
-                                            py: 1.5,
-                                            fontSize: '1rem',
-                                            fontWeight: 500,
-                                            borderColor: 'rgba(25, 118, 210, 0.5)',
-                                            '&:hover': {
-                                                borderColor: '#1976d2',
-                                                backgroundColor: 'rgba(25, 118, 210, 0.08)',
-                                            }
-                                        }}
-                                        endIcon={<PlayArrow />}
-                                    >
-                                        Watch Demo
-                                    </Button>
-                                </Box>
+                            <Box
+                                component="svg"
+                                preserveAspectRatio="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 1440 320"
+                                sx={{
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            >
+                                <path
+                                    fill="#ffffff"
+                                    fillOpacity="1"
+                                    d="M0,64L48,96C96,128,192,192,288,202.7C384,213,480,171,576,149.3C672,128,768,128,864,149.3C960,171,1056,213,1152,213.3C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+                                />
                             </Box>
-                        </Fade>
-                    </Container>
+                        </Box>
 
-                    {/* Bottom wave divider */}
-                    <Box
-                        sx={{
-                            height: '150px',
-                            overflow: 'hidden',
-                            position: 'absolute',
-                            bottom: '-1px',
-                            left: 0,
-                            right: 0,
-                        }}
-                    >
+                        <Container maxWidth="lg" sx={{ pt: 8 }}>
+                            <Fade in={true} timeout={1000}>
+                                <Box>
+                                    <Typography
+                                        variant="h3"
+                                        align="center"
+                                        gutterBottom
+                                        sx={{
+                                            fontWeight: 800,
+                                            mb: 2,
+                                            background: 'linear-gradient(90deg, #43a047, #1976d2)',
+                                            backgroundClip: 'text',
+                                            WebkitBackgroundClip: 'text',
+                                            WebkitTextFillColor: 'transparent',
+                                            textShadow: '0px 2px 4px rgba(0,0,0,0.05)',
+                                        }}
+                                    >
+                                        How It Works
+                                    </Typography>
+                                    <Typography
+                                        variant="h6"
+                                        align="center"
+                                        color="text.secondary"
+                                        sx={{ mb: 8, maxWidth: 700, mx: 'auto', fontWeight: 400 }}
+                                    >
+                                        Get your medications in three simple steps
+                                    </Typography>
+
+                                    <Grid container spacing={5} alignItems="stretch">
+                                        {steps.map((step, index) => (
+                                            <Grid item xs={12} md={4} key={step.label}>
+                                                <Zoom in={true} style={{ transitionDelay: `${index * 200}ms` }}>
+                                                    <Paper
+                                                        elevation={4}
+                                                        sx={{
+                                                            p: 4,
+                                                            height: '100%',
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            alignItems: 'center',
+                                                            textAlign: 'center',
+                                                            borderRadius: 4,
+                                                            position: 'relative',
+                                                            overflow: 'hidden',
+                                                            transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                                                            '&:hover': {
+                                                                transform: 'translateY(-12px)',
+                                                                boxShadow: `0 18px 40px rgba(0,0,0,0.12)`,
+                                                                '& .step-number': {
+                                                                    transform: 'scale(1.12) rotate(10deg)',
+                                                                    boxShadow: `0 6px 20px ${step.color}80`,
+                                                                },
+                                                                '& .step-icon': {
+                                                                    transform: 'scale(1.1) rotate(-5deg)',
+                                                                    color: 'white',
+                                                                },
+                                                                '& .step-highlight': {
+                                                                    opacity: 1,
+                                                                }
+                                                            },
+                                                        }}
+                                                    >
+                                                        <Box
+                                                            className="step-highlight"
+                                                            sx={{
+                                                                position: 'absolute',
+                                                                top: 0,
+                                                                left: 0,
+                                                                width: '100%',
+                                                                height: '100%',
+                                                                background: `linear-gradient(135deg, ${step.color}05 0%, ${step.color}15 100%)`,
+                                                                opacity: 0,
+                                                                transition: 'opacity 0.5s ease',
+                                                                zIndex: 0,
+                                                            }}
+                                                        />
+
+                                                        <Box
+                                                            sx={{
+                                                                position: 'absolute',
+                                                                top: 0,
+                                                                left: 0,
+                                                                right: 0,
+                                                                height: '5px',
+                                                                background: `linear-gradient(90deg, ${step.color}, ${step.color}aa)`,
+                                                            }}
+                                                        />
+
+                                                        <Box
+                                                            className="step-number"
+                                                            sx={{
+                                                                position: 'absolute',
+                                                                top: 16,
+                                                                left: 16,
+                                                                width: 30,
+                                                                height: 30,
+                                                                borderRadius: '50%',
+                                                                backgroundColor: step.color,
+                                                                color: 'white',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                fontWeight: 'bold',
+                                                                fontSize: '1rem',
+                                                                boxShadow: `0 4px 10px ${step.color}40`,
+                                                                transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                                                                zIndex: 2,
+                                                            }}
+                                                        >
+                                                            {index + 1}
+                                                        </Box>
+
+                                                        <Avatar
+                                                            sx={{
+                                                                bgcolor: step.color,
+                                                                width: 80,
+                                                                height: 80,
+                                                                mb: 2.5,
+                                                                mt: 1.5,
+                                                                boxShadow: `0 6px 16px ${step.color}40`,
+                                                                position: 'relative',
+                                                                zIndex: 1,
+                                                            }}
+                                                        >
+                                                            <Box
+                                                                className="step-icon"
+                                                                sx={{
+                                                                    transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                                                                }}
+                                                            >
+                                                                {step.icon}
+                                                            </Box>
+                                                        </Avatar>
+
+                                                        <Typography
+                                                            variant="h5"
+                                                            sx={{
+                                                                mb: 2,
+                                                                fontWeight: 700,
+                                                                color: step.color,
+                                                                position: 'relative',
+                                                                zIndex: 1,
+                                                            }}
+                                                        >
+                                                            {step.label}
+                                                        </Typography>
+
+                                                        <Typography
+                                                            variant="body1"
+                                                            sx={{
+                                                                flex: 1,
+                                                                mb: 2,
+                                                                position: 'relative',
+                                                                zIndex: 1,
+                                                                fontWeight: 500,
+                                                                color: 'text.primary',
+                                                            }}
+                                                        >
+                                                            {step.description}
+                                                        </Typography>
+
+                                                        <Box
+                                                            sx={{
+                                                                backgroundColor: `${step.color}15`,
+                                                                borderRadius: 2,
+                                                                p: 1.5,
+                                                                width: '100%',
+                                                                position: 'relative',
+                                                                zIndex: 1,
+                                                            }}
+                                                        >
+                                                            <Typography
+                                                                variant="body2"
+                                                                sx={{
+                                                                    color: 'text.secondary',
+                                                                    fontSize: '0.875rem',
+                                                                    fontStyle: 'italic',
+                                                                }}
+                                                            >
+                                                                {step.detail}
+                                                            </Typography>
+                                                        </Box>
+
+                                                        {index < steps.length - 1 && (
+                                                            <Box
+                                                                sx={{
+                                                                    display: { xs: 'none', md: 'block' },
+                                                                    position: 'absolute',
+                                                                    right: -30,
+                                                                    top: '50%',
+                                                                    transform: 'translateY(-50%)',
+                                                                    color: step.color,
+                                                                    zIndex: 1,
+                                                                    animation: 'pulse-arrow 1.5s infinite ease-in-out',
+                                                                    '@keyframes pulse-arrow': {
+                                                                        '0%': { transform: 'translateY(-50%) translateX(0)' },
+                                                                        '50%': { transform: 'translateY(-50%) translateX(5px)' },
+                                                                        '100%': { transform: 'translateY(-50%) translateX(0)' },
+                                                                    }
+                                                            }}
+                                                            >
+                                                                <KeyboardArrowRight sx={{ fontSize: 40 }} />
+                                                            </Box>
+                                                        )}
+                                                    </Paper>
+                                                </Zoom>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            mt: 6,
+                                        }}
+                                    >
+                                        <Button
+                                            variant="outlined"
+                                            size="large"
+                                            sx={{
+                                                borderRadius: 28,
+                                                px: 4,
+                                                py: 1.5,
+                                                fontSize: '1rem',
+                                                fontWeight: 500,
+                                                borderColor: 'rgba(25, 118, 210, 0.5)',
+                                                '&:hover': {
+                                                    borderColor: '#1976d2',
+                                                    backgroundColor: 'rgba(25, 118, 210, 0.08)',
+                                                }
+                                            }}
+                                            endIcon={<PlayArrow />}
+                                        >
+                                            Watch Demo
+                                        </Button>
+                                    </Box>
+                                </Box>
+                            </Fade>
+                        </Container>
+
+                        {/* Bottom wave divider */}
                         <Box
-                            component="svg"
-                            preserveAspectRatio="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 1440 320"
                             sx={{
-                                width: '100%',
-                                height: '100%',
+                                height: '150px',
+                                overflow: 'hidden',
+                                position: 'absolute',
+                                bottom: '-1px',
+                                left: 0,
+                                right: 0,
                             }}
                         >
-                            <path
-                                fill="#ffffff"
-                                fillOpacity="1"
-                                d="M0,64L48,96C96,128,192,192,288,202.7C384,213,480,171,576,149.3C672,128,768,128,864,149.3C960,171,1056,213,1152,213.3C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-                            />
+                            <Box
+                                component="svg"
+                                preserveAspectRatio="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 1440 320"
+                                sx={{
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            >
+                                <path
+                                    fill="#ffffff"
+                                    fillOpacity="1"
+                                    d="M0,64L48,96C96,128,192,192,288,202.7C384,213,480,171,576,149.3C672,128,768,128,864,149.3C960,171,1056,213,1152,213.3C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+                                />
+                            </Box>
                         </Box>
                     </Box>
-                </Box>
+                </AnimateOnScroll>
             )}
 
             {/* Testimonials */}
             {!testimonialsLoaded ? (
                 <TestimonialsSkeleton />
             ) : (
-                <Box sx={{ py: { xs: 8, md: 12 } }}>
-                    <Container maxWidth="lg">
-                        <Typography
-                            variant="h3"
-                            align="center"
-                            gutterBottom
-                            sx={{ fontWeight: 700 }}
-                        >
-                            What Our Customers Say
-                        </Typography>
-                        <Typography
-                            variant="h6"
-                            align="center"
-                            color="text.secondary"
-                            sx={{ mb: 6, maxWidth: 700, mx: 'auto', fontWeight: 400 }}
-                        >
-                            Join thousands of satisfied customers who trust our service
-                        </Typography>
-
-                        <Grid container spacing={4}>
-                            {testimonials.map((t, index) => (
-                                <Grid item xs={12} md={6} key={t.name}>
-                                    <Card
-                                        elevation={4}
-                                        sx={{
-                                            height: '100%',
-                                            borderRadius: 4,
-                                            position: 'relative',
-                                            overflow: 'visible',
-                                            transition: 'transform 0.3s',
-                                            '&:hover': {
-                                                transform: 'translateY(-8px)',
-                                            }
-                                        }}
-                                    >
-                                        <CardContent sx={{ p: 4 }}>
-                                            <Box
-                                                sx={{
-                                                    position: 'absolute',
-                                                    top: -20,
-                                                    left: 30,
-                                                    width: 40,
-                                                    height: 40,
-                                                    borderRadius: '50%',
-                                                    backgroundColor: '#1976d2',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                                                }}
-                                            >
-                                                <ThumbUp sx={{ color: 'white' }} />
-                                            </Box>
-                                            <Typography
-                                                variant="body1"
-                                                sx={{
-                                                    fontStyle: 'italic',
-                                                    mb: 3,
-                                                    lineHeight: 1.7,
-                                                    fontSize: '1.1rem',
-                                                }}
-                                            >
-                                                "{t.quote}"
-                                            </Typography>
-                                            <Divider sx={{ mb: 3 }} />
-                                            <Stack direction="row" spacing={2} alignItems="center">
-                                                <Avatar
-                                                    src={t.avatar}
-                                                    alt={t.name}
-                                                    sx={{ width: 56, height: 56 }}
-                                                />
-                                                <Box>
-                                                    <Typography variant="subtitle1" fontWeight={600}>
-                                                        {t.name}
-                                                    </Typography>
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        {t.role}
-                                                    </Typography>
-                                                    <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }}>
-                                                        {[...Array(t.rating)].map((_, i) => (
-                                                            <Box
-                                                                key={i}
-                                                                component="span"
-                                                                sx={{
-                                                                    color: '#FFB400',
-                                                                    fontSize: '18px'
-                                                                }}
-                                                            >
-                                                                ★
-                                                            </Box>
-                                                        ))}
-                                                    </Stack>
-                                                </Box>
-                                            </Stack>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                            ))}
-                        </Grid>
-
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                mt: 6
-                            }}
-                        >
-                            <Button
-                                variant="outlined"
-                                color="primary"
-                                sx={{
-                                    borderRadius: 28,
-                                    px: 4,
-                                    py: 1.5,
-                                    fontSize: '1rem',
-                                }}
-                                endIcon={<ArrowForward />}
-                            >
-                                View All Reviews
-                            </Button>
-                        </Box>
-                    </Container>
-                </Box>
-            )}
-
-            {/* Partners Section */}
-            <Box
-                sx={{
-                    py: 8,
-                    backgroundColor: 'rgba(0,0,0,0.02)'
-                }}
-            >
-                <Container maxWidth="lg">
-                    <Typography
-                        variant="h4"
-                        align="center"
-                        sx={{ mb: 2, fontWeight: 600 }}
-                    >
-                        Our Partners
-                    </Typography>
-                    <Typography
-                        variant="body1"
-                        align="center"
-                        color="text.secondary"
-                        sx={{ mb: 6, maxWidth: 700, mx: 'auto' }}
-                    >
-                        Working with trusted healthcare providers
-                    </Typography>
-
-                    <Paper
-                        elevation={2}
-                        sx={{
-                            py: 5,
-                            px: 3,
-                            borderRadius: 4,
-                            backgroundColor: 'white'
-                        }}
-                    >
-                        <Grid
-                            container
-                            spacing={4}
-                            justifyContent="center"
-                            alignItems="center"
-                        >
-                            {partners.map((p) => (
-                                <Grid item key={p.name} xs={6} sm={4} md={4}>
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            height: 100,
-                                            filter: 'grayscale(100%)',
-                                            opacity: 0.7,
-                                            transition: 'all 0.3s ease',
-                                            '&:hover': {
-                                                filter: 'grayscale(0%)',
-                                                opacity: 1,
-                                            },
-                                        }}
-                                    >
-                                        <Box
-                                            component="img"
-                                            src={p.logo}
-                                            alt={p.name}
-                                            sx={{ height: 60, maxWidth: '100%' }}
-                                        />
-                                    </Box>
-                                </Grid>
-                            ))}
-                        </Grid>
-                    </Paper>
-                </Container>
-            </Box>
-
-            {/* Call to action */}
-            <Box
-                sx={{
-                    background: 'linear-gradient(135deg, #43a047, #1976d2)',
-                    color: 'white',
-                    py: { xs: 8, md: 10 },
-                    position: 'relative',
-                    overflow: 'hidden',
-                }}
-            >
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
-                        opacity: 0.1,
-                        background: 'url(/pattern.png) repeat',
-                    }}
-                />
-                <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
-                    <Grid container spacing={4} alignItems="center">
-                        <Grid item xs={12} md={8}>
+                <AnimateOnScroll animation="animate__fadeInUp" threshold={0.1} delay={0.3}>
+                    <Box sx={{ py: { xs: 8, md: 12 } }}>
+                        <Container maxWidth="lg">
                             <Typography
                                 variant="h3"
-                                sx={{ fontWeight: 700, mb: 2 }}
+                                align="center"
+                                gutterBottom
+                                sx={{ fontWeight: 700 }}
                             >
-                                Ready to get started?
+                                What Our Customers Say
                             </Typography>
                             <Typography
                                 variant="h6"
-                                sx={{ fontWeight: 400, mb: 3, opacity: 0.9 }}
+                                align="center"
+                                color="text.secondary"
+                                sx={{ mb: 6, maxWidth: 700, mx: 'auto', fontWeight: 400 }}
                             >
-                                Join thousands of customers who trust us with their health needs
+                                Join thousands of satisfied customers who trust our service
                             </Typography>
-                            <Chip
-                                label="Free delivery on first order"
-                                color="secondary"
+
+                            <Grid container spacing={4}>
+                                {testimonials.map((t, index) => (
+                                    <Grid item xs={12} md={6} key={t.name}>
+                                        <Card
+                                            elevation={4}
+                                            sx={{
+                                                height: '100%',
+                                                borderRadius: 4,
+                                                position: 'relative',
+                                                overflow: 'visible',
+                                                transition: 'transform 0.3s',
+                                                '&:hover': {
+                                                    transform: 'translateY(-8px)',
+                                                }
+                                            }}
+                                        >
+                                            <CardContent sx={{ p: 4 }}>
+                                                <Box
+                                                    sx={{
+                                                        position: 'absolute',
+                                                        top: -20,
+                                                        left: 30,
+                                                        width: 40,
+                                                        height: 40,
+                                                        borderRadius: '50%',
+                                                        backgroundColor: '#1976d2',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                                                    }}
+                                                >
+                                                    <ThumbUp sx={{ color: 'white' }} />
+                                                </Box>
+                                                <Typography
+                                                    variant="body1"
+                                                    sx={{
+                                                        fontStyle: 'italic',
+                                                        mb: 3,
+                                                        lineHeight: 1.7,
+                                                        fontSize: '1.1rem',
+                                                    }}
+                                                >
+                                                    "{t.quote}"
+                                                </Typography>
+                                                <Divider sx={{ mb: 3 }} />
+                                                <Stack direction="row" spacing={2} alignItems="center">
+                                                    <Avatar
+                                                        src={t.avatar}
+                                                        alt={t.name}
+                                                        sx={{ width: 56, height: 56 }}
+                                                    />
+                                                    <Box>
+                                                        <Typography variant="subtitle1" fontWeight={600}>
+                                                            {t.name}
+                                                        </Typography>
+                                                        <Typography variant="body2" color="text.secondary">
+                                                            {t.role}
+                                                        </Typography>
+                                                        <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }}>
+                                                            {[...Array(t.rating)].map((_, i) => (
+                                                                <Box
+                                                                    key={i}
+                                                                    component="span"
+                                                                    sx={{
+                                                                        color: '#FFB400',
+                                                                        fontSize: '18px'
+                                                                    }}
+                                                                >
+                                                                    ★
+                                                                </Box>
+                                                            ))}
+                                                        </Stack>
+                                                    </Box>
+                                                </Stack>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                ))}
+                            </Grid>
+
+                            <Box
                                 sx={{
-                                    borderRadius: 4,
-                                    py: 2.5,
-                                    fontSize: '1rem',
-                                    mb: { xs: 3, md: 0 }
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    mt: 6
                                 }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={4} sx={{ textAlign: 'center' }}>
-                            <Button
-                                component={RouterLink}
-                                to="/register"
-                                variant="contained"
-                                size="large"
-                                sx={{
-                                    borderRadius: 28,
-                                    px: 4,
-                                    py: 1.5,
-                                    fontSize: '1.1rem',
-                                    fontWeight: 600,
-                                    backgroundColor: 'white',
-                                    color: 'primary.main',
-                                    boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
-                                    '&:hover': {
-                                        backgroundColor: 'rgba(255,255,255,0.9)',
-                                        transform: 'translateY(-3px)',
-                                        boxShadow: '0 12px 20px rgba(0,0,0,0.15)',
-                                    },
-                                    transition: 'all 0.3s ease',
-                                }}
-                                endIcon={<ArrowForward />}
                             >
-                                Sign Up Now
-                            </Button>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    sx={{
+                                        borderRadius: 28,
+                                        px: 4,
+                                        py: 1.5,
+                                        fontSize: '1rem',
+                                    }}
+                                    endIcon={<ArrowForward />}
+                                >
+                                    View All Reviews
+                                </Button>
+                            </Box>
+                        </Container>
+                    </Box>
+                </AnimateOnScroll>
+            )}
+
+            {/* Partners Section */}
+            {!partnersLoaded ? (
+                <Box sx={{ py: 8, height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CircularProgress />
+                </Box>
+            ) : (
+                <AnimateOnScroll animation="animate__fadeInUp" threshold={0.1} delay={0.2}>
+                    <Box
+                        sx={{
+                            py: 8,
+                            backgroundColor: 'rgba(0,0,0,0.02)'
+                        }}
+                    >
+                        <Container maxWidth="lg">
+                            <Typography
+                                variant="h4"
+                                align="center"
+                                sx={{ mb: 2, fontWeight: 600 }}
+                            >
+                                Our Partners
+                            </Typography>
+                            <Typography
+                                variant="body1"
+                                align="center"
+                                color="text.secondary"
+                                sx={{ mb: 6, maxWidth: 700, mx: 'auto' }}
+                            >
+                                Working with trusted healthcare providers
+                            </Typography>
+
+                            <Paper
+                                elevation={2}
+                                sx={{
+                                    py: 5,
+                                    px: 3,
+                                    borderRadius: 4,
+                                    backgroundColor: 'white'
+                                }}
+                            >
+                                <Grid
+                                    container
+                                    spacing={4}
+                                    justifyContent="center"
+                                    alignItems="center"
+                                >
+                                    {partners.map((p) => (
+                                        <Grid item key={p.name} xs={6} sm={4} md={4}>
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    height: 100,
+                                                    filter: 'grayscale(100%)',
+                                                    opacity: 0.7,
+                                                    transition: 'all 0.3s ease',
+                                                    '&:hover': {
+                                                        filter: 'grayscale(0%)',
+                                                        opacity: 1,
+                                                    },
+                                                }}
+                                            >
+                                                <Box
+                                                    component="img"
+                                                    src={p.logo}
+                                                    alt={p.name}
+                                                    sx={{ height: 60, maxWidth: '100%' }}
+                                                />
+                                            </Box>
+                                        </Grid>
+                                    ))}
+                                </Grid>
+                            </Paper>
+                        </Container>
+                    </Box>
+                </AnimateOnScroll>
+            )}
+
+            {/* Call to action */}
+            <AnimateOnScroll animation="animate__fadeIn" threshold={0.1} delay={0.1}>
+                <Box
+                    sx={{
+                        background: 'linear-gradient(135deg, #43a047, #1976d2)',
+                        color: 'white',
+                        py: { xs: 8, md: 10 },
+                        position: 'relative',
+                        overflow: 'hidden',
+                    }}
+                >
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            width: '100%',
+                            height: '100%',
+                            opacity: 0.1,
+                            background: 'url(/pattern.png) repeat',
+                        }}
+                    />
+                    <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
+                        <Grid container spacing={4} alignItems="center">
+                            <Grid item xs={12} md={8}>
+                                <Typography
+                                    variant="h3"
+                                    sx={{ fontWeight: 700, mb: 2 }}
+                                >
+                                    Ready to get started?
+                                </Typography>
+                                <Typography
+                                    variant="h6"
+                                    sx={{ fontWeight: 400, mb: 3, opacity: 0.9 }}
+                                >
+                                    Join thousands of customers who trust us with their health needs
+                                </Typography>
+                                <Chip
+                                    label="Free delivery on first order"
+                                    color="secondary"
+                                    sx={{
+                                        borderRadius: 4,
+                                        py: 2.5,
+                                        fontSize: '1rem',
+                                        mb: { xs: 3, md: 0 }
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={4} sx={{ textAlign: 'center' }}>
+                                <Button
+                                    component={RouterLink}
+                                    to="/register"
+                                    variant="contained"
+                                    size="large"
+                                    sx={{
+                                        borderRadius: 28,
+                                        px: 4,
+                                        py: 1.5,
+                                        fontSize: '1.1rem',
+                                        fontWeight: 600,
+                                        backgroundColor: 'white',
+                                        color: 'primary.main',
+                                        boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(255,255,255,0.9)',
+                                            transform: 'translateY(-3px)',
+                                            boxShadow: '0 12px 20px rgba(0,0,0,0.15)',
+                                        },
+                                        transition: 'all 0.3s ease',
+                                    }}
+                                    endIcon={<ArrowForward />}
+                                >
+                                    Sign Up Now
+                                </Button>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Container>
-            </Box>
+                    </Container>
+                </Box>
+            </AnimateOnScroll>
         </Box>
     );
 };

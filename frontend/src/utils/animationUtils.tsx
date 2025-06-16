@@ -1,95 +1,68 @@
-import { useState, useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
-import { motion, useAnimation } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 
-// Custom hook for triggering animations when elements scroll into view
-export const useScrollAnimation = (threshold = 0.1) => {
-  const controls = useAnimation();
-  const [ref, inView] = useInView({ threshold });
+// Hook for detecting when an element enters the viewport
+export const useInView = (options?: IntersectionObserverInit) => {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (inView) {
-      controls.start('visible');
+    const observer = new IntersectionObserver(([entry]) => {
+      // Update state when intersection status changes
+      setIsInView(entry.isIntersecting);
+    }, {
+      threshold: 0.2, // Trigger when 20% of the element is visible
+      rootMargin: '0px',
+      ...options
+    });
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
-  }, [controls, inView]);
-
-  return { ref, controls, inView };
-};
-
-// Custom hook for parallax effect on scroll
-export const useParallax = (speed = 0.5) => {
-  const [offset, setOffset] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setOffset(window.pageYOffset);
-    };
-
-    window.addEventListener('scroll', handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
     };
-  }, []);
+  }, [options]);
 
-  return {
-    y: offset * speed,
-    style: { transform: `translateY(${offset * speed}px)` }
-  };
+  return { ref, isInView };
 };
 
-// Animation variants for different elements
-export const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: "easeOut" }
-  }
+// Animation wrapper component
+interface AnimateOnScrollProps {
+  children: React.ReactNode;
+  animation: string;
+  delay?: number;
+  threshold?: number;
+  rootMargin?: string;
+  className?: string;
+}
+
+export const AnimateOnScroll: React.FC<AnimateOnScrollProps> = ({
+  children,
+  animation,
+  delay = 0,
+  threshold = 0.2,
+  rootMargin = '0px',
+  className = '',
+}) => {
+  const { ref, isInView } = useInView({
+    threshold,
+    rootMargin,
+  });
+
+  return (
+    <div
+      ref={ref}
+      className={`${className} ${isInView ? animation : 'opacity-0'}`}
+      style={{
+        transition: `all 0.6s ease-out ${delay}s`,
+        opacity: isInView ? 1 : 0
+      }}
+    >
+      {children}
+    </div>
+  );
 };
-
-export const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { duration: 0.6 }
-  }
-};
-
-export const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2
-    }
-  }
-};
-
-export const scaleIn = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.5 }
-  }
-};
-
-// Shimmer effect for skeleton loading
-export const ShimmerEffect = () => (
-  <div
-    style={{
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      animation: 'shimmer 2s infinite linear',
-      background: 'linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%)',
-      backgroundSize: '200% 100%',
-    }}
-  />
-);
-
-// Custom animated Box component using framer-motion
-export const MotionBox = motion.div;

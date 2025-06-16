@@ -34,7 +34,7 @@ import {
     MedicalServices,
     ThumbUp,
     PlayArrow,
-    PharmacyOutlined,
+    LocalPharmacyOutlined,
     LocalPharmacy,
 } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
@@ -1150,4 +1150,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-

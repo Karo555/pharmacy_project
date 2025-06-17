@@ -1,39 +1,38 @@
 package org.example.pharmacyproject.dtos.user.register;
 
-import org.example.pharmacyproject.commonTypes.UserRole;
+import java.time.LocalDateTime;
 
 public class RegistrationResponseDTO {
-    private long userId;
-    private String username;
-    private UserRole role;
+    private long id;
+    private String email;
+    private LocalDateTime registeredAt;
+    private String role;
 
-    public RegistrationResponseDTO(long userId, String username, UserRole role) {
-        this.userId = userId;
-        this.username = username;
+    public RegistrationResponseDTO() {
+    }
+
+    public RegistrationResponseDTO(long id, String email, LocalDateTime registeredAt, String role) {
+        this.id = id;
+        this.email = email;
+        this.registeredAt = registeredAt;
         this.role = role;
     }
 
-    public String getUsername() {
-        return username;
+    public long getId() {
+        return id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getEmail() {
+        return email;
     }
 
-    public UserRole getRole() {
+
+    public LocalDateTime getRegisteredAt() {
+        return registeredAt;
+    }
+
+
+    public String getRole() {
         return role;
-    }
-
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
     }
 }

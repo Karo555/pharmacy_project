@@ -66,12 +66,12 @@ public class AuthService {
         auth = authRepository.save(auth);
         logger.info("Created AuthEntity id={} for userId={}", auth.getId(), user.getId());
 
-        // 4) Return a response DTO
-        return new RegistrationResponseDTO(
-                user.getId(),
-                auth.getUsername(),
-                auth.getRole()
-        );
+//        // 4) Return a response DTO
+//        return new RegistrationResponseDTO(
+//                user.getId(),
+//                user.getEmail(),
+//                user.getRegisterAt()
+//        );
     }
 
     /**

@@ -1,62 +1,53 @@
 package org.example.pharmacyproject.security;
 
+import java.io.IOException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.pharmacyproject.services.TokenService;
-import org.example.pharmacyproject.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import java.io.IOException;
-import java.util.List;
+
+import org.example.pharmacyproject.services.TokenService;
+import org.springframework.stereotype.Component;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final JwtService jwtService;
 
-    @Autowired
-    public JwtAuthenticationFilter(JwtService jwtService) {
-        this.jwtService = jwtService;
-    }
+    private final TokenService tokenService;
+    private final CustomUserDetailsService userDetailsService;
 
-    public JwtAuthenticationFilter(TokenService tokenService, UserService userService) {
-
+    public JwtAuthenticationFilter(TokenService tokenService,
+                                   CustomUserDetailsService userDetailsService) {
+        this.tokenService = tokenService;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try{
-            final String authHeader = request.getHeader("Authorization");
-            final String jwt;
-
-            if(authHeader == null || !authHeader.startsWith("Bearer ")){
-                filterChain.doFilter(request, response);
-                return;
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer ")) {
+            String token = header.substring(7);
+            if (tokenService.validateAccessToken(token)) {
+                String username = tokenService.getUsernameFromToken(token);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+                authentication.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-            jwt = authHeader.substring(7);
-            final String username = jwtService.extractUsername(jwt);
-            final String role = jwtService.extractRole(jwt).name();
-
-            if(username != null && !username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null) {
-                if(jwtService.isTokenValid(jwt)){
-                    SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, null, List.of(new SimpleGrantedAuthority(role)));
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    securityContext.setAuthentication(authToken);
-                    SecurityContextHolder.setContext(securityContext);
-                }
-            }
+        }
         filterChain.doFilter(request, response);
-        }
-        catch (Exception e){
-            filterChain.doFilter(request, response);
-        }
     }
 }

@@ -31,7 +31,7 @@ import {
     Facebook as FacebookIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from "../../hooks/useAuth";
 import MuiLink from "@mui/material/Link";
 
 const Register: React.FC = () => {

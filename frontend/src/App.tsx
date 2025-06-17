@@ -1,16 +1,45 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import AppRouter from './router/AppRouter';
-import Login from './pages/Auth/Login';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import Register from './pages/Auth/Register';
+import Login from './pages/Auth/Login';
+import Profile from './pages/Dashboard/Profile';
+import Dashboard from './pages/Dashboard/Dashboard';
 
-const App = () => {
+const App: React.FC = () => {
     return (
-        <Router>
-            <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-            </Routes>
-        </Router>
+        <AuthProvider>
+            <Router>
+                <Routes>
+                    {/* Public routes */}
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/login" element={<Login />} />
+
+                    {/* Protected routes */}
+                    <Route
+                        path="/profile"
+                        element={
+                            <ProtectedRoute>
+                                <Profile />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/dashboard"
+                        element={
+                            <ProtectedRoute>
+                                <Dashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    {/* Default redirect */}
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+            </Router>
+        </AuthProvider>
     );
 };
 

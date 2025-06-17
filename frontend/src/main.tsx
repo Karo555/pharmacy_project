@@ -1,13 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import AppRouter from './router/AppRouter';
-import { AuthProvider } from './contexts/AuthContext';
+import { createRoot } from 'react-dom/client';
+import App from './App';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+const container = document.getElementById('root');
+if (!container) {
+    throw new Error('Root container missing in index.html');
+}
+
+const root = createRoot(container);
+root.render(
     <React.StrictMode>
-        <AuthProvider>
-            <AppRouter />
-        </AuthProvider>
+        <App />
     </React.StrictMode>
 );
-

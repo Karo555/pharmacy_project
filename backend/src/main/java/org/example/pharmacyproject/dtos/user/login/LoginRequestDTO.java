@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class LoginRequest {
+public class LoginRequestDTO {
 
     @Email(message = "Email must be valid")
     @NotBlank(message = "Email is required")
@@ -15,9 +15,9 @@ public class LoginRequest {
     @Size(min = 6, max = 100, message = "Password must be between 6 and 100 characters")
     private String password;
 
-    public LoginRequest() {}
+    public LoginRequestDTO() {}
 
-    public LoginRequest(String email, String password) {
+    public LoginRequestDTO(String email, String password) {
         this.email = email;
         this.password = password;
     }

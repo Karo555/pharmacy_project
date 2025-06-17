@@ -2,8 +2,7 @@
 package org.example.pharmacyproject.controllers;
 
 import jakarta.validation.Valid;
-import org.example.pharmacyproject.dtos.user.login.LoginDto;
-import org.example.pharmacyproject.dtos.user.login.LoginResponseDto;
+import org.example.pharmacyproject.dtos.user.login.LoginResponseDTO;
 import org.example.pharmacyproject.dtos.user.register.RegistrationRequestDTO;
 import org.example.pharmacyproject.dtos.user.register.RegistrationResponseDTO;
 import org.example.pharmacyproject.dtos.UserDto;
@@ -19,28 +18,28 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class AuthController {
 
-    private final AuthService authService;
-    private final AuthRepository authRepository;
+//    private final AuthService authService;
+//    private final AuthRepository authRepository;
+//
+//    public AuthController(AuthService authService,
+//                          AuthRepository authRepository) {
+//        this.authService = authService;
+//        this.authRepository = authRepository;
+//    }
 
-    public AuthController(AuthService authService,
-                          AuthRepository authRepository) {
-        this.authService = authService;
-        this.authRepository = authRepository;
-    }
+//    @PostMapping("/register")
+//    public ResponseEntity<RegistrationResponseDTO> register(
+//            @Valid @RequestBody RegistrationRequestDTO requestBody) {
+//        RegistrationResponseDTO dto = authService.register(requestBody);
+//        return ResponseEntity.status(201).body(dto);
+//    }
 
-    @PostMapping("/register")
-    public ResponseEntity<RegistrationResponseDTO> register(
-            @Valid @RequestBody RegistrationRequestDTO requestBody) {
-        RegistrationResponseDTO dto = authService.register(requestBody);
-        return ResponseEntity.status(201).body(dto);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(
-            @Valid @RequestBody LoginDto requestBody) {
-        LoginResponseDto dto = authService.login(requestBody);
-        return ResponseEntity.ok(dto);
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<LoginResponseDTO> login(
+//            @Valid @RequestBody LoginDto requestBody) {
+//        LoginResponseDTO dto = authService.login(requestBody);
+//        return ResponseEntity.ok(dto);
+//    }
 
     @GetMapping("/me")
     public ResponseEntity<UserDto> me(Authentication authentication) {

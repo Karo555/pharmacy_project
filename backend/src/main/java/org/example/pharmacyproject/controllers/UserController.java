@@ -2,8 +2,6 @@
 package org.example.pharmacyproject.controllers;
 
 import jakarta.validation.Valid;
-import org.example.pharmacyproject.dtos.user.profile.GetUserProfileDto;
-import org.example.pharmacyproject.dtos.user.profile.UpdateUserProfileDto;
 import org.example.pharmacyproject.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,13 +1,7 @@
 // File: backend/src/main/java/org/example/pharmacyproject/controller/AuthController.java
 package org.example.pharmacyproject.controllers;
 
-import jakarta.validation.Valid;
-import org.example.pharmacyproject.dtos.user.login.LoginResponseDTO;
-import org.example.pharmacyproject.dtos.user.register.RegistrationRequestDTO;
-import org.example.pharmacyproject.dtos.user.register.RegistrationResponseDTO;
-import org.example.pharmacyproject.dtos.UserDto;
 import org.example.pharmacyproject.entities.AuthEntity;
-import org.example.pharmacyproject.repositories.AuthRepository;
 import org.example.pharmacyproject.services.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

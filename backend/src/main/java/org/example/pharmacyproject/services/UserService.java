@@ -1,8 +1,6 @@
 // src/main/java/org/example/pharmacyproject/service/UserService.java
 package org.example.pharmacyproject.services;
 
-import org.example.pharmacyproject.dtos.user.profile.GetUserProfileDto;
-import org.example.pharmacyproject.dtos.user.profile.UpdateUserProfileDto;
 import org.example.pharmacyproject.entities.UserEntity;
 import org.example.pharmacyproject.repositories.UserRepository;
 import org.springframework.stereotype.Service;

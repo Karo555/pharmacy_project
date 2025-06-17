@@ -37,6 +37,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+
         <!-- Jakarta Validation -->
         <dependency>
             <groupId>jakarta.validation</groupId>

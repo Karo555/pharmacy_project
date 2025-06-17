@@ -1,50 +1,49 @@
-// File: backend/src/main/java/org/example/pharmacyproject/controller/AuthController.java
 package org.example.pharmacyproject.controllers;
 
+import org.example.pharmacyproject.dtos.user.password.reset.PasswordResetRequestDTO;
+import org.example.pharmacyproject.dtos.user.password.reset.PasswordResetResponseDTO;
+import org.example.pharmacyproject.dtos.user.register.RegistrationRequestDTO;
+import org.example.pharmacyproject.dtos.user.register.RegistrationResponseDTO;
+import org.example.pharmacyproject.dtos.user.login.LoginRequestDTO;
+import org.example.pharmacyproject.dtos.user.login.LoginResponseDTO;
+import org.example.pharmacyproject.dtos.user.tokens.RefreshTokenRequestDTO;
+import org.example.pharmacyproject.dtos.user.tokens.RefreshTokenResponseDTO;
 import org.example.pharmacyproject.services.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class AuthController {
 
-//    private final AuthService authService;
-//    private final AuthRepository authRepository;
-//
-//    public AuthController(AuthService authService,
-//                          AuthRepository authRepository) {
-//        this.authService = authService;
-//        this.authRepository = authRepository;
-//    }
+    private final AuthService authService;
 
-//    @PostMapping("/register")
-//    public ResponseEntity<RegistrationResponseDTO> register(
-//            @Valid @RequestBody RegistrationRequestDTO requestBody) {
-//        RegistrationResponseDTO dto = authService.register(requestBody);
-//        return ResponseEntity.status(201).body(dto);
-//    }
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<LoginResponseDTO> login(
-//            @Valid @RequestBody LoginDto requestBody) {
-//        LoginResponseDTO dto = authService.login(requestBody);
-//        return ResponseEntity.ok(dto);
-//    }
+    @PostMapping("/register")
+    public ResponseEntity<RegistrationResponseDTO> register(
+            @Valid @RequestBody RegistrationRequestDTO request) {
+        return ResponseEntity.ok(authService.register(request));
+    }
 
-//    @GetMapping("/me")
-//    public ResponseEntity<UserDto> me(Authentication authentication) {
-//        String username = authentication.getName();
-//        AuthEntity auth = authRepository.findByUsername(username)
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//        UserDto dto = new UserDto(
-//                auth.getUser().getId(),
-//                auth.getUser().getName(),
-//                auth.getUser().getEmail(),
-//                auth.getRole()
-//        );
-//        return ResponseEntity.ok(dto);
-//    }
-//}
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(
+            @Valid @RequestBody LoginRequestDTO request) {
+        return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<RefreshTokenResponseDTO> refresh(
+            @Valid @RequestBody RefreshTokenRequestDTO request) {
+        return ResponseEntity.ok(authService.refreshToken(request));
+    }
+
+    @PostMapping("/password/reset")
+    public ResponseEntity<PasswordResetResponseDTO> resetPassword(
+            @Valid @RequestBody PasswordResetRequestDTO request) {
+        return ResponseEntity.ok(authService.requestPasswordReset(request));
+    }
+}

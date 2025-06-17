@@ -1,7 +1,7 @@
 package org.example.pharmacyproject.config;
 
-import org.example.pharmacyproject.infrastructure.entity.DrugEntity;
-import org.example.pharmacyproject.infrastructure.repository.DrugRepository;
+import org.example.pharmacyproject.entities.DrugEntity;
+import org.example.pharmacyproject.repositories.DrugRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

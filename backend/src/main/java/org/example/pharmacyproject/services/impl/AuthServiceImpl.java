@@ -85,8 +85,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public LoginResponseDTO login(LoginRequestDTO request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
+        User user = userRepository.findByEmail(request.getEmail());
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Invalid credentials");
         }
@@ -133,9 +132,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public PasswordResetResponseDTO requestPasswordReset(PasswordResetRequestDTO request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Email not found"));
-
+        User user = userRepository.findByEmail(request.getEmail());
         PasswordResetToken resetToken = new PasswordResetToken(
                 UUID.randomUUID().toString(),
                 LocalDateTime.now().plusHours(1),

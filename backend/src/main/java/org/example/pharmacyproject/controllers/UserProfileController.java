@@ -21,19 +21,21 @@ public class UserProfileController {
         this.userService = userService;
     }
 
-    // Fetch current user profile
+    // Fetch current user profile by email from the JWT
     @GetMapping
     public ResponseEntity<UserProfileResponseDTO> getProfile(
-            @AuthenticationPrincipal(expression = "id") Long userId) {
-        return ResponseEntity.ok(userService.getProfile(userId));
+            @AuthenticationPrincipal(expression = "username") String email) {
+        UserProfileResponseDTO profile = userService.getProfileByEmail(email);
+        return ResponseEntity.ok(profile);
     }
 
-    // Update profile fields (address, phone, payment)
+    // Update profile fields (address, phone, payment) by email
     @PutMapping
     public ResponseEntity<UserProfileResponseDTO> updateProfile(
-            @AuthenticationPrincipal(expression = "id") Long userId,
+            @AuthenticationPrincipal(expression = "username") String email,
             @Valid @RequestBody UserProfileUpdateRequestDTO dto) {
-        return ResponseEntity.ok(userService.updateProfile(userId, dto));
+        UserProfileResponseDTO updated = userService.updateProfileByEmail(email, dto);
+        return ResponseEntity.ok(updated);
     }
 
     // Change password when logged in

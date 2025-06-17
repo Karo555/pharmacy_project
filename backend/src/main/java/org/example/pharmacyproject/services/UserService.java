@@ -10,4 +10,6 @@ public interface UserService {
     UserProfileResponseDTO getProfile(Long userId);
     UserProfileResponseDTO updateProfile(Long userId, UserProfileUpdateRequestDTO dto);
     PasswordChangeResponseDTO changePassword(Long userId, PasswordChangeRequestDTO dto);
+    UserProfileResponseDTO getProfileByEmail(String email);
+    UserProfileResponseDTO updateProfileByEmail(String email, UserProfileUpdateRequestDTO dto);
 }

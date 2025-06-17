@@ -1,7 +1,6 @@
 package org.example.pharmacyproject.security;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.example.pharmacyproject.entities.User;
 import org.example.pharmacyproject.repositories.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,9 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("No user found with email: " + email));
-
+        User user = userRepository.findByEmail(email);
         Set<GrantedAuthority> authorities = Set.of(new SimpleGrantedAuthority(user.getRole().getName()));
 
         return new org.springframework.security.core.userdetails.User(

@@ -24,6 +24,38 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
+    @Override
+    @Transactional(readOnly = true)
+    public UserProfileResponseDTO getProfileByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        return mapToResponse(user);
+    }
+
+    @Override
+    @Transactional
+    public UserProfileResponseDTO updateProfileByEmail(String email, UserProfileUpdateRequestDTO dto) {
+        User user = userRepository.findByEmail(email);
+        // apply the changes
+        user.setAddress(dto.getAddress());
+        user.setPhoneNumber(dto.getPhoneNumber());
+        user.setPaymentMethod(dto.getPaymentMethod());
+        user.setUpdatedAt(LocalDateTime.now());
+        userRepository.save(user);
+        return mapToResponse(user);
+    }
+
+    private UserProfileResponseDTO mapToResponse(User u) {
+        return new UserProfileResponseDTO(
+                u.getId(),
+                u.getEmail(),
+                u.getAddress(),
+                u.getPhoneNumber(),
+                u.getPaymentMethod(),
+                u.getRole().toString(),
+                u.getRegisteredAt(),
+                u.getUpdatedAt()
+        );
+    }
 
     @Override
     @Transactional(readOnly = true)

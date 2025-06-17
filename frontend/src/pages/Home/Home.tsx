@@ -19,7 +19,7 @@ import {
     ArrowForward,
 } from '@mui/icons-material';
 import { useAuth } from '../../hooks/useAuth';
-import pattern from '../../../assets/pattern.png';
+import pattern from '../../assets/pattern.png';
 
 const Home: React.FC = () => {
     const { token } = useAuth();

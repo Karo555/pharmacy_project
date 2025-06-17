@@ -1,4 +1,3 @@
-// File: frontend/src/pages/Auth/Login.tsx
 import React, { useState } from 'react';
 import {
     Container,
@@ -104,7 +103,7 @@ const Login: React.FC = () => {
 
         try {
             const response = await axios.post("/api/login", {
-                username: form.email,  // backend expects 'username' field
+                email: form.email,
                 password: form.password,
             });
             const token = response.data.token;

@@ -1,6 +1,8 @@
 package org.example.pharmacyproject.entities;
 
 import jakarta.persistence.*;
+
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,8 +16,8 @@ public class Role {
     @Column(nullable = false, unique = true)
     private String name;    // e.g. "ROLE_USER", "ROLE_ADMIN"
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;  // optional back-reference
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
+    private Set<User> users = new HashSet<>();
 
     public Role() {}
 

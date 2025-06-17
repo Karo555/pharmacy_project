@@ -41,7 +41,6 @@ const Register: React.FC = () => {
     const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
 
     const [form, setForm] = useState({
-        username: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -60,11 +59,6 @@ const Register: React.FC = () => {
         let error = "";
 
         switch (name) {
-            case "username":
-                if (!value.trim()) error = "Username is required";
-                else if (value.length < 3) error = "Username must be at least 3 characters";
-                break;
-
             case "email":
                 if (!value.trim()) error = "Email is required";
                 else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value))
@@ -140,19 +134,14 @@ const Register: React.FC = () => {
         setStatusMessage({ type: null, message: null });
 
         try {
-            const response = await axios.post('/api/register', {
-                username: form.username,
+            const response = await axios.post('/api/auth/register', {
                 email: form.email,
-                password: form.password,
-                // default role USER
-                role: 'USER',
+                password: form.password
             });
 
-            // register returns { userId, username, role }
-            // we need to login to get the token
-            // assuming /api/login accepts same username + password
-            const loginResp = await axios.post('/api/login', {
-                username: form.username,
+
+            const loginResp = await axios.post('/api/auth/login', {
+                email: form.email,
                 password: form.password,
             });
 
@@ -391,30 +380,6 @@ const Register: React.FC = () => {
 
                         <Box component="form" onSubmit={handleSubmit} noValidate>
                             <Stack spacing={2.5}>
-                                <TextField
-                                    label="Username"
-                                    name="username"
-                                    fullWidth
-                                    variant="outlined"
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonOutline color="primary" />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                    value={form.username}
-                                    onChange={handleChange}
-                                    required
-                                    error={!!errors.username}
-                                    helperText={errors.username}
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            borderRadius: 2,
-                                        }
-                                    }}
-                                />
-
                                 <TextField
                                     label="Email Address"
                                     name="email"

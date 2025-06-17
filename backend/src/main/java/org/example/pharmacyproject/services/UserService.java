@@ -36,20 +36,20 @@ public class UserService {
         if (dto.getUsername() != null && !dto.getUsername().isBlank()) {
             user.setName(dto.getUsername());
         }
-        if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
-            user.setEmail(dto.getEmail());
-        }
+//        if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
+//            user.setEmail(dto.getEmail());
+//        }
         // phoneNumber and address will be ignored until added to UserEntity
 
         user = userRepository.save(user);
 
-        return new GetUserProfileDto(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                null,
-                null
-        );
+//        return new GetUserProfileDto(
+//                user.getId(),
+//                user.getName(),
+//                user.getEmail(),
+//                null,
+//                null
+//        );
     }
 }
 

@@ -1,5 +1,7 @@
 package org.example.pharmacyproject.controllers;
 
+import org.example.pharmacyproject.dtos.user.password.change.PasswordChangeResponseDTO;
+import org.example.pharmacyproject.dtos.user.password.reset.PasswordResetConfirmDTO;
 import org.example.pharmacyproject.dtos.user.password.reset.PasswordResetRequestDTO;
 import org.example.pharmacyproject.dtos.user.password.reset.PasswordResetResponseDTO;
 import org.example.pharmacyproject.dtos.user.register.RegistrationRequestDTO;
@@ -45,5 +47,15 @@ public class AuthController {
     public ResponseEntity<PasswordResetResponseDTO> resetPassword(
             @Valid @RequestBody PasswordResetRequestDTO request) {
         return ResponseEntity.ok(authService.requestPasswordReset(request));
+    }
+
+    @PostMapping("/password/reset/confirm")
+    public ResponseEntity<PasswordChangeResponseDTO> confirmReset(
+            @Valid @RequestBody PasswordResetConfirmDTO request) {
+        PasswordChangeResponseDTO result = authService.confirmPasswordReset(
+                request.getToken(),
+                request.getNewPassword()
+        );
+        return ResponseEntity.ok(result);
     }
 }

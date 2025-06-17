@@ -1,6 +1,5 @@
 package org.example.pharmacyproject.repositories;
 
-import org.example.pharmacyproject.entities.AuthEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

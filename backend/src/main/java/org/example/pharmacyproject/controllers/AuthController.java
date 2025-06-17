@@ -1,7 +1,6 @@
 // File: backend/src/main/java/org/example/pharmacyproject/controller/AuthController.java
 package org.example.pharmacyproject.controllers;
 
-import org.example.pharmacyproject.entities.AuthEntity;
 import org.example.pharmacyproject.services.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -35,17 +34,17 @@ public class AuthController {
 //        return ResponseEntity.ok(dto);
 //    }
 
-    @GetMapping("/me")
-    public ResponseEntity<UserDto> me(Authentication authentication) {
-        String username = authentication.getName();
-        AuthEntity auth = authRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        UserDto dto = new UserDto(
-                auth.getUser().getId(),
-                auth.getUser().getName(),
-                auth.getUser().getEmail(),
-                auth.getRole()
-        );
-        return ResponseEntity.ok(dto);
-    }
-}
+//    @GetMapping("/me")
+//    public ResponseEntity<UserDto> me(Authentication authentication) {
+//        String username = authentication.getName();
+//        AuthEntity auth = authRepository.findByUsername(username)
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//        UserDto dto = new UserDto(
+//                auth.getUser().getId(),
+//                auth.getUser().getName(),
+//                auth.getUser().getEmail(),
+//                auth.getRole()
+//        );
+//        return ResponseEntity.ok(dto);
+//    }
+//}

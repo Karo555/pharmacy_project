@@ -13,10 +13,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class DrugServiceImpl implements DrugService {
 
     private final DrugRepository drugRepository;
+
+    // Constructor injection ensures the repository is initialized
+    public DrugServiceImpl(DrugRepository drugRepository) {
+        this.drugRepository = drugRepository;
+    }
 
     @Override
     @Transactional(readOnly = true)

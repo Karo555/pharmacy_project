@@ -1,9 +1,38 @@
-.header-toolbar {
+/* src/components/Layout/Header.css */
+
+/* (Optional) if you want to target the Toolbar for consistent flex spacing */
+.MuiToolbar-root {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+/* Base styling for all nav links */
+.nav-link {
+    margin-left: 1rem;
+    text-decoration: none;
+    color: inherit;
+    font-weight: 500;
+    position: relative;
+}
+
+/* Underline indicator when active */
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: currentColor;
+}
+
+/* Avatar button spacing */
+.avatar-button {
+    margin-left: 1rem;
+}
+
+/* src/components/Layout/Header.css */
 .nav-buttons > a {
     margin-left: 1rem;
     text-decoration: none;

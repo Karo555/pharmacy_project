@@ -10,10 +10,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/drugs")
-@RequiredArgsConstructor
 public class DrugController {
 
     private final DrugService drugService;
+
+    // Constructor injection ensures drugService is properly initialized
+    public DrugController(DrugService drugService) {
+        this.drugService = drugService;
+    }
 
     /**
      * GET /api/drugs

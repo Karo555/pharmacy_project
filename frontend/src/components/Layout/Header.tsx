@@ -1,5 +1,6 @@
-import './Header.css';
+// src/components/Layout/Header.tsx
 import React from 'react';
+import './Header.css';
 import {
     AppBar,
     Toolbar,
@@ -38,42 +39,46 @@ const Header: React.FC = () => {
                     component={NavLink}
                     to="/"
                     variant="h6"
-                    className="nav-link"
-                    sx={{ flexGrow: 1 }}
+                    sx={{ textDecoration: 'none', color: 'inherit', flexGrow: 1 }}
                 >
                     MedTrack
                 </Typography>
 
-                {!token ? (
-                    <Box>
-                        <Button component={NavLink} to="/login" color="inherit" className="nav-link">
-                            Sign In
-                        </Button>
-                        <Button component={NavLink} to="/register" color="inherit" className="nav-link">
-                            Sign Up
-                        </Button>
-                    </Box>
-                ) : (
-                    <Box>
-                        <Button component={NavLink} to="/dashboard" color="inherit" className="nav-link">
-                            Dashboard
-                        </Button>
-                        <IconButton color="inherit" onClick={handleMenuOpen} sx={{ ml: 1 }}>
-                            <Avatar sx={{ bgcolor: 'secondary.main' }} />
-                        </IconButton>
-                        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-                            <MenuItem
-                                component={NavLink}
-                                to="/profile"
-                                onClick={handleMenuClose}
-                                className="nav-link"
-                            >
-                                Profile
-                            </MenuItem>
-                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                        </Menu>
-                    </Box>
-                )}
+                {/* wrap nav links in this container */}
+                <Box className="nav-buttons">
+                    {!token ? (
+                        <>
+                            <Button component={NavLink} to="/login" color="inherit">
+                                Sign In
+                            </Button>
+                            <Button component={NavLink} to="/register" color="inherit">
+                                Sign Up
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button component={NavLink} to="/dashboard" color="inherit">
+                                Dashboard
+                            </Button>
+                            <Button component={NavLink} to="/drugs" color="inherit">
+                                Drugs
+                            </Button>
+                            <IconButton color="inherit" onClick={handleMenuOpen} className="avatar-button">
+                                <Avatar sx={{ bgcolor: 'secondary.main' }} />
+                            </IconButton>
+                            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                                <MenuItem
+                                    component={NavLink}
+                                    to="/profile"
+                                    onClick={handleMenuClose}
+                                >
+                                    Profile
+                                </MenuItem>
+                                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                            </Menu>
+                        </>
+                    )}
+                </Box>
             </Toolbar>
         </AppBar>
     );

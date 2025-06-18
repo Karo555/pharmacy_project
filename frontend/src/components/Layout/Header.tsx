@@ -1,7 +1,18 @@
+import './Header.css';
 import React from 'react';
-import { AppBar, Toolbar, Typography, Box, Button, IconButton, Avatar, Menu, MenuItem } from '@mui/material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useAuth } from "../../hooks/useAuth";
+import {
+    AppBar,
+    Toolbar,
+    Typography,
+    Box,
+    Button,
+    IconButton,
+    Avatar,
+    Menu,
+    MenuItem,
+} from '@mui/material';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
 const Header: React.FC = () => {
     const { token, logout } = useAuth();
@@ -14,7 +25,6 @@ const Header: React.FC = () => {
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
-
     const handleLogout = () => {
         logout();
         handleMenuClose();
@@ -25,31 +35,41 @@ const Header: React.FC = () => {
         <AppBar position="static">
             <Toolbar>
                 <Typography
-                    component={RouterLink}
+                    component={NavLink}
                     to="/"
                     variant="h6"
-                    sx={{ textDecoration: 'none', color: 'inherit', flexGrow: 1 }}
+                    className="nav-link"
+                    sx={{ flexGrow: 1 }}
                 >
                     MedTrack
                 </Typography>
 
                 {!token ? (
                     <Box>
-                        <Button component={RouterLink} to="/login" color="inherit">Sign In</Button>
-                        <Button component={RouterLink} to="/register" color="inherit">Sign Up</Button>
+                        <Button component={NavLink} to="/login" color="inherit" className="nav-link">
+                            Sign In
+                        </Button>
+                        <Button component={NavLink} to="/register" color="inherit" className="nav-link">
+                            Sign Up
+                        </Button>
                     </Box>
                 ) : (
                     <Box>
-                        <Button component={RouterLink} to="/dashboard" color="inherit">Dashboard</Button>
+                        <Button component={NavLink} to="/dashboard" color="inherit" className="nav-link">
+                            Dashboard
+                        </Button>
                         <IconButton color="inherit" onClick={handleMenuOpen} sx={{ ml: 1 }}>
                             <Avatar sx={{ bgcolor: 'secondary.main' }} />
                         </IconButton>
-                        <Menu
-                            anchorEl={anchorEl}
-                            open={Boolean(anchorEl)}
-                            onClose={handleMenuClose}
-                        >
-                            <MenuItem component={RouterLink} to="/profile" onClick={handleMenuClose}>Profile</MenuItem>
+                        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                            <MenuItem
+                                component={NavLink}
+                                to="/profile"
+                                onClick={handleMenuClose}
+                                className="nav-link"
+                            >
+                                Profile
+                            </MenuItem>
                             <MenuItem onClick={handleLogout}>Logout</MenuItem>
                         </Menu>
                     </Box>

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "animate.css": "^4.1.1",
+    "react-intersection-observer": "^9.16.0"
+  }
+}

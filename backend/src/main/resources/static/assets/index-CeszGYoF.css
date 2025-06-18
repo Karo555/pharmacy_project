@@ -1,0 +1,1 @@
+.header-toolbar{display:flex;justify-content:space-between;align-items:center}.nav-buttons>a{margin-left:1rem;text-decoration:none;color:inherit;font-weight:500;position:relative}.nav-buttons>a.active:after{content:"";position:absolute;bottom:-4px;left:0;right:0;height:2px;background-color:currentColor}.avatar-button{margin-left:1rem}

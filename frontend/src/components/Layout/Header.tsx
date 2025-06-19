@@ -1,5 +1,6 @@
 import React from 'react';
 import './Header.css';
+import '../../styles/globals.css';
 import {
     AppBar,
     Toolbar,
@@ -28,40 +29,51 @@ const Header: React.FC = () => {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar position="static" className="shadow-md" sx={{ bgcolor: 'var(--color-primary)' }}>
             <Toolbar>
                 <Typography
                     component={NavLink}
                     to="/"
                     variant="h6"
-                    className="nav-link"
+                    className="nav-link font-bold text-white"
                     sx={{ flexGrow: 1 }}
                 >
                     MedTrack
                 </Typography>
 
-                <Box>
+                <Box className="flex items-center">
                     {!token ? (
                         <>
-                            <Button component={NavLink} to="/login" color="inherit" className="nav-link">
+                            <Button component={NavLink} to="/login" color="inherit" className="nav-link text-white">
                                 Sign In
                             </Button>
-                            <Button component={NavLink} to="/register" color="inherit" className="nav-link">
+                            <Button
+                                component={NavLink}
+                                to="/register"
+                                color="inherit"
+                                className="nav-link btn btn-outline rounded-full ml-2 text-white"
+                                sx={{ borderColor: 'rgba(255,255,255,0.5)' }}
+                            >
                                 Sign Up
                             </Button>
                         </>
                     ) : (
                         <>
-                            <Button component={NavLink} to="/dashboard" color="inherit" className="nav-link">
+                            <Button component={NavLink} to="/dashboard" color="inherit" className="nav-link text-white">
                                 Dashboard
                             </Button>
 
-                            <Button component={NavLink} to="/drugs" color="inherit" className="nav-link">
+                            <Button component={NavLink} to="/drugs" color="inherit" className="nav-link text-white">
                                 Drugs
                             </Button>
 
                             {/* NEW: Prescriptions link */}
-                            <Button component={NavLink} to="/prescriptions" color="inherit" className="nav-link">
+                            <Button
+                                component={NavLink}
+                                to="/prescriptions"
+                                color="inherit"
+                                className="nav-link text-white"
+                            >
                                 Prescriptions
                             </Button>
 

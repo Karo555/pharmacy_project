@@ -60,14 +60,20 @@ const Register: React.FC = () => {
 
         switch (name) {
             case "email":
-                if (!value.trim()) error = "Email is required";
+                if (!value.trim()) error = "Email address is required";
                 else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value))
-                    error = "Email should be valid";
+                    error = "Please enter a valid email address (e.g., user@example.com)";
                 break;
 
             case "password":
                 if (!value) error = "Password is required";
-                else if (value.length < 8) error = "Password must be at least 8 characters";
+                else if (value.length < 8) error = "Password must be at least 8 characters long";
+                else if (!/(?=.*[a-z])/.test(value))
+                    error = "Password must contain at least one lowercase letter";
+                else if (!/(?=.*[A-Z])/.test(value))
+                    error = "Password must contain at least one uppercase letter";
+                else if (!/(?=.*\d)/.test(value))
+                    error = "Password must contain at least one number";
                 break;
 
             case "confirmPassword":
@@ -83,29 +89,42 @@ const Register: React.FC = () => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
 
-        const error = validateField(name, value);
-        if (error) {
-            setErrors(prev => ({ ...prev, [name]: error }));
-        } else {
-            setErrors(prev => {
-                const newErrors = { ...prev };
-                delete newErrors[name];
-                return newErrors;
-            });
+        // Clear status messages when user starts typing again
+        if (statusMessage.type === 'error') {
+            setStatusMessage({ type: null, message: null });
         }
+
+        // Delay validation to avoid validating while typing
+        setTimeout(() => {
+            const currentValue = (document.getElementsByName(name)[0] as HTMLInputElement)?.value;
+            if (currentValue === value) {
+                const error = validateField(name, value);
+                if (error) {
+                    setErrors(prev => ({ ...prev, [name]: error }));
+                } else {
+                    setErrors(prev => {
+                        const newErrors = { ...prev };
+                        delete newErrors[name];
+                        return newErrors;
+                    });
+                }
+            }
+        }, 500);
 
         // Special check for confirmPassword when password changes
         if (name === 'password' && form.confirmPassword) {
-            const confirmError = value !== form.confirmPassword ? "Passwords do not match" : "";
-            if (confirmError) {
-                setErrors(prev => ({ ...prev, confirmPassword: confirmError }));
-            } else {
-                setErrors(prev => {
-                    const newErrors = { ...prev };
-                    delete newErrors.confirmPassword;
-                    return newErrors;
-                });
-            }
+            setTimeout(() => {
+                const confirmError = value !== form.confirmPassword ? "Passwords do not match" : "";
+                if (confirmError) {
+                    setErrors(prev => ({ ...prev, confirmPassword: confirmError }));
+                } else {
+                    setErrors(prev => {
+                        const newErrors = { ...prev };
+                        delete newErrors.confirmPassword;
+                        return newErrors;
+                    });
+                }
+            }, 500);
         }
     };
 
@@ -174,6 +193,51 @@ const Register: React.FC = () => {
 
     const handleToggleConfirmPasswordVisibility = () => {
         setShowConfirmPassword(!showConfirmPassword);
+    };
+
+    const getPasswordStrength = (password: string) => {
+        // Basic password strength algorithm
+        let strength = 0;
+        if (password.length >= 8) strength++;
+        if (/(?=.*[a-z])/.test(password)) strength++;
+        if (/(?=.*[A-Z])/.test(password)) strength++;
+        if (/(?=.*\d)/.test(password)) strength++;
+        if (/(?=.*[!@#$%^&*])/.test(password)) strength++;
+        return strength;
+    };
+
+    const getPasswordStrengthColor = (strength: number) => {
+        switch (strength) {
+            case 1:
+            case 2:
+                return 'error.main';
+            case 3:
+                return 'warning.main';
+            case 4:
+            case 5:
+                return 'success.main';
+            default:
+                return 'transparent';
+        }
+    };
+
+    const getPasswordStrengthLabel = (strength: number) => {
+        switch (strength) {
+            case 0:
+                return '';
+            case 1:
+                return 'Very Weak';
+            case 2:
+                return 'Weak';
+            case 3:
+                return 'Fair';
+            case 4:
+                return 'Strong';
+            case 5:
+                return 'Very Strong';
+            default:
+                return '';
+        }
     };
 
     return (
@@ -389,12 +453,21 @@ const Register: React.FC = () => {
                                                 <EmailOutlined color="primary" />
                                             </InputAdornment>
                                         ),
+                                        className: form.email ? "filled-input" : ""
                                     }}
                                     value={form.email}
                                     onChange={handleChange}
                                     required
                                     error={!!errors.email}
-                                    helperText={errors.email}
+                                    helperText={errors.email || "We'll send a confirmation email to this address"}
+                                    FormHelperTextProps={{
+                                        sx: { opacity: errors.email ? 1 : 0.7 }
+                                    }}
+                                    onBlur={() => {
+                                        if (form.email) {
+                                            setErrors(prev => ({ ...prev, email: validateField("email", form.email) }));
+                                        }
+                                    }}
                                     sx={{
                                         '& .MuiOutlinedInput-root': {
                                             borderRadius: 2,
@@ -402,41 +475,90 @@ const Register: React.FC = () => {
                                     }}
                                 />
 
-                                <TextField
-                                    label="Password"
-                                    name="password"
-                                    type={showPassword ? "text" : "password"}
-                                    fullWidth
-                                    variant="outlined"
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <VpnKeyOutlined color="primary" />
-                                            </InputAdornment>
-                                        ),
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={handleTogglePasswordVisibility}
-                                                    edge="end"
+                                <Box>
+                                    <TextField
+                                        label="Password"
+                                        name="password"
+                                        type={showPassword ? "text" : "password"}
+                                        fullWidth
+                                        variant="outlined"
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <VpnKeyOutlined color="primary" />
+                                                </InputAdornment>
+                                            ),
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label={showPassword ? "Hide password" : "Show password"}
+                                                        onClick={handleTogglePasswordVisibility}
+                                                        edge="end"
+                                                    >
+                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                            className: form.password ? "filled-input" : ""
+                                        }}
+                                        value={form.password}
+                                        onChange={handleChange}
+                                        required
+                                        error={!!errors.password}
+                                        helperText={errors.password || "Use 8+ characters with a mix of letters, numbers & symbols"}
+                                        FormHelperTextProps={{
+                                            sx: { opacity: errors.password ? 1 : 0.7 }
+                                        }}
+                                        onBlur={() => {
+                                            if (form.password) {
+                                                setErrors(prev => ({ ...prev, password: validateField("password", form.password) }));
+                                            }
+                                        }}
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: 2,
+                                            }
+                                        }}
+                                    />
+
+                                    {form.password && !errors.password && (
+                                        <Box sx={{ mt: 1, mb: 1 }}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                                                <Typography variant="caption" color="text.secondary" sx={{ mr: 1 }}>
+                                                    Password strength:
+                                                </Typography>
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    width: '100%',
+                                                    gap: 0.5
+                                                }}>
+                                                    {[...Array(4)].map((_, i) => (
+                                                        <Box
+                                                            key={i}
+                                                            sx={{
+                                                                height: 4,
+                                                                flex: 1,
+                                                                borderRadius: 1,
+                                                                bgcolor: i < getPasswordStrength(form.password)
+                                                                    ? getPasswordStrengthColor(getPasswordStrength(form.password))
+                                                                    : 'rgba(0,0,0,0.1)'
+                                                            }}
+                                                        />
+                                                    ))}
+                                                </Box>
+                                                <Typography
+                                                    variant="caption"
+                                                    sx={{
+                                                        ml: 1,
+                                                        color: getPasswordStrengthColor(getPasswordStrength(form.password))
+                                                    }}
                                                 >
-                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                    value={form.password}
-                                    onChange={handleChange}
-                                    required
-                                    error={!!errors.password}
-                                    helperText={errors.password}
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            borderRadius: 2,
-                                        }
-                                    }}
-                                />
+                                                    {getPasswordStrengthLabel(getPasswordStrength(form.password))}
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                    )}
+                                </Box>
 
                                 <TextField
                                     label="Confirm Password"
@@ -453,7 +575,7 @@ const Register: React.FC = () => {
                                         endAdornment: (
                                             <InputAdornment position="end">
                                                 <IconButton
-                                                    aria-label="toggle confirm password visibility"
+                                                    aria-label={showConfirmPassword ? "Hide confirmed password" : "Show confirmed password"}
                                                     onClick={handleToggleConfirmPasswordVisibility}
                                                     edge="end"
                                                 >
@@ -461,12 +583,24 @@ const Register: React.FC = () => {
                                                 </IconButton>
                                             </InputAdornment>
                                         ),
+                                        className: form.confirmPassword ? "filled-input" : ""
                                     }}
                                     value={form.confirmPassword}
                                     onChange={handleChange}
                                     required
                                     error={!!errors.confirmPassword}
-                                    helperText={errors.confirmPassword}
+                                    helperText={errors.confirmPassword || "Re-enter your password to confirm"}
+                                    FormHelperTextProps={{
+                                        sx: { opacity: errors.confirmPassword ? 1 : 0.7 }
+                                    }}
+                                    onBlur={() => {
+                                        if (form.confirmPassword) {
+                                            setErrors(prev => ({
+                                                ...prev,
+                                                confirmPassword: validateField("confirmPassword", form.confirmPassword)
+                                            }));
+                                        }
+                                    }}
                                     sx={{
                                         '& .MuiOutlinedInput-root': {
                                             borderRadius: 2,

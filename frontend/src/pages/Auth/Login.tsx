@@ -62,11 +62,11 @@ const Login: React.FC = () => {
         if (name === "email") {
             if (!value.trim()) error = "Email is required";
             else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value))
-                error = "Email should be valid";
+                error = "Please enter a valid email address (e.g., user@example.com)";
         }
         if (name === "password") {
             if (!value) error = "Password is required";
-            else if (value.length < 6) error = "Password must be at least 6 characters";
+            else if (value.length < 6) error = "Password must be at least 6 characters long";
         }
         return error;
     };
@@ -74,7 +74,19 @@ const Login: React.FC = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setForm(prev => ({ ...prev, [name]: value }));
-        setErrors(prev => ({ ...prev, [name]: validateField(name, value) }));
+
+        // Clear login status when user starts typing again
+        if (loginStatus.type === 'error') {
+            setLoginStatus({ type: null, message: null });
+        }
+
+        // Only show errors after user has stopped typing
+        setTimeout(() => {
+            const currentValue = (document.getElementsByName(name)[0] as HTMLInputElement)?.value;
+            if (currentValue === value) {
+                setErrors(prev => ({ ...prev, [name]: validateField(name, value) }));
+            }
+        }, 500);
     };
 
     const validate = (): boolean => {
@@ -89,7 +101,17 @@ const Login: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!validate()) return;
+        if (!validate()) {
+            // Show a summary of errors
+            const errorCount = Object.keys(errors).length;
+            if (errorCount > 0) {
+                setLoginStatus({
+                    type: 'error',
+                    message: `Please fix the ${errorCount} error${errorCount > 1 ? 's' : ''} in the form before submitting.`
+                });
+            }
+            return;
+        }
 
         setSubmitting(true);
         setLoginStatus({ type: null, message: null });
@@ -101,11 +123,39 @@ const Login: React.FC = () => {
             };
             const resp = await apiLogin(payload);
             login(resp.token);
-            setLoginStatus({ type: 'success', message: 'Logged in successfully!' });
-            navigate('/dashboard');
+
+            // Show success message with more details
+            setLoginStatus({
+                type: 'success',
+                message: 'Login successful! Redirecting you to your dashboard...'
+            });
+
+            // Short delay before redirect for better user experience
+            setTimeout(() => {
+                navigate('/dashboard');
+            }, 1200);
+
         } catch (err: any) {
-            const msg = err.response?.data?.message || err.message || 'Login failed';
-            setLoginStatus({ type: 'error', message: msg });
+            // Enhanced error handling with more specific messages
+            let errorMessage = 'Login failed';
+
+            if (err.response) {
+                if (err.response.status === 401) {
+                    errorMessage = 'Invalid email or password. Please try again.';
+                } else if (err.response.status === 403) {
+                    errorMessage = 'Your account has been locked. Please contact support.';
+                } else if (err.response.status >= 500) {
+                    errorMessage = 'Server error. Please try again later.';
+                } else if (err.response.data?.message) {
+                    errorMessage = err.response.data.message;
+                }
+            } else if (err.message === 'Network Error') {
+                errorMessage = 'Network error. Please check your internet connection.';
+            } else if (err.message) {
+                errorMessage = err.message;
+            }
+
+            setLoginStatus({ type: 'error', message: errorMessage });
         } finally {
             setSubmitting(false);
         }
@@ -170,12 +220,23 @@ const Login: React.FC = () => {
                                     type="email"
                                     fullWidth
                                     variant="outlined"
-                                    InputProps={{ startAdornment: <InputAdornment position="start"><EmailOutlined /></InputAdornment> }}
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start"><EmailOutlined /></InputAdornment>,
+                                        className: form.email ? "filled-input" : ""
+                                    }}
                                     value={form.email}
                                     onChange={handleChange}
                                     required
                                     error={!!errors.email}
-                                    helperText={errors.email}
+                                    helperText={errors.email || "Enter the email you registered with"}
+                                    FormHelperTextProps={{
+                                        sx: { opacity: errors.email ? 1 : 0.7 }
+                                    }}
+                                    onBlur={() => {
+                                        if (form.email) {
+                                            setErrors(prev => ({ ...prev, email: validateField("email", form.email) }));
+                                        }
+                                    }}
                                 />
 
                                 <TextField
@@ -186,13 +247,30 @@ const Login: React.FC = () => {
                                     variant="outlined"
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start"><VpnKeyOutlined /></InputAdornment>,
-                                        endAdornment: <InputAdornment position="end"><IconButton onClick={handleTogglePasswordVisibility}>{showPassword ? <VisibilityOff /> : <Visibility />}</IconButton></InputAdornment>,
+                                        endAdornment: <InputAdornment position="end">
+                                            <IconButton
+                                                onClick={handleTogglePasswordVisibility}
+                                                aria-label={showPassword ? "Hide password" : "Show password"}
+                                                edge="end"
+                                            >
+                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>,
+                                        className: form.password ? "filled-input" : ""
                                     }}
                                     value={form.password}
                                     onChange={handleChange}
                                     required
                                     error={!!errors.password}
-                                    helperText={errors.password}
+                                    helperText={errors.password || "Minimum 6 characters"}
+                                    FormHelperTextProps={{
+                                        sx: { opacity: errors.password ? 1 : 0.7 }
+                                    }}
+                                    onBlur={() => {
+                                        if (form.password) {
+                                            setErrors(prev => ({ ...prev, password: validateField("password", form.password) }));
+                                        }
+                                    }}
                                 />
 
                                 <Box sx={{ textAlign: 'right' }}>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Container, Grid, Typography, Button, useMediaQuery } from '@mui/material';
+import { Box, Container, Grid, Typography, Button, InputBase, useMediaQuery, Paper, InputAdornment } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import SearchIcon from '@mui/icons-material/Search';
 import { motion } from 'framer-motion';
 import '../../styles/globals.css';
 
@@ -13,10 +14,10 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
     // Use the string version for the query to avoid the theme dependency issue
     const isMobile = useMediaQuery('(max-width:900px)');
     const [loaded, setLoaded] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
-    // Parallax offsets
-    const patternOffset = scrollY * 0.2;
-    const circleOffset = scrollY * 0.5;
+    // Parallax offsets for subtle movement
+    const patternOffset = scrollY * 0.1;
 
     useEffect(() => {
         setLoaded(true);
@@ -42,74 +43,69 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
         }
     };
 
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleSearchSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Implement search functionality or navigation
+        console.log('Search for:', searchTerm);
+    };
+
     return (
         <Box
             className="position-relative overflow-hidden"
             sx={{
-                background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))',
+                background: 'var(--color-primary)',
                 color: '#fff',
                 minHeight: { xs: 'calc(100vh - 64px)', md: '80vh' }
             }}
         >
-            {/* Animated Background Elements */}
+            {/* Background Pattern Texture */}
             <Box
                 sx={{
                     position: 'absolute',
                     width: '100%',
                     height: '100%',
-                    background: "url('/pattern.png') repeat",
-                    opacity: 0.1,
+                    backgroundImage: `url('/pattern.png'), linear-gradient(0deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 100%)`,
+                    backgroundRepeat: 'repeat, no-repeat',
+                    backgroundSize: '300px, cover',
+                    opacity: 0.07,
                     transform: `translateY(${patternOffset}px)`,
                 }}
             />
 
-            {/* Abstract Circle Elements */}
+            {/* Abstract Shapes */}
             <Box
                 component={motion.div}
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 0.3 }}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 0.12 }}
                 transition={{ duration: 1.5, ease: "easeOut" }}
                 className="position-absolute"
                 sx={{
-                    width: 300,
-                    height: 300,
-                    borderRadius: '50%',
-                    background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%)',
-                    top: -100 + circleOffset,
-                    right: '10%',
+                    width: { xs: 300, md: 500 },
+                    height: { xs: 300, md: 500 },
+                    borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%',
+                    background: 'var(--color-secondary)',
+                    top: { xs: '-15%', md: '-10%' },
+                    right: { xs: '-20%', md: '-5%' },
                 }}
             />
 
             <Box
                 component={motion.div}
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 0.2 }}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 0.1 }}
                 transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }}
                 className="position-absolute"
                 sx={{
-                    width: 200,
-                    height: 200,
-                    borderRadius: '50%',
-                    background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%)',
-                    bottom: -50,
-                    left: '5%',
-                    transform: `translateY(${-circleOffset * 0.3}px)`,
-                }}
-            />
-
-            <Box
-                component={motion.div}
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 0.15 }}
-                transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
-                className="position-absolute"
-                sx={{
-                    width: 400,
-                    height: 400,
-                    borderRadius: '50%',
-                    background: 'radial-gradient(circle, rgba(150,100,255,0.15) 0%, rgba(150,100,255,0) 70%)',
-                    top: '30%',
-                    left: '-10%',
+                    width: { xs: 200, md: 400 },
+                    height: { xs: 200, md: 400 },
+                    borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
+                    background: 'var(--color-accent)',
+                    bottom: { xs: '-10%', md: '-5%' },
+                    left: { xs: '-15%', md: '-10%' },
                 }}
             />
 
@@ -118,50 +114,133 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
                 variants={containerVariants}
                 initial="hidden"
                 animate={loaded ? "visible" : "hidden"}
+                maxWidth="lg"
                 sx={{
                     position: 'relative',
                     zIndex: 1,
-                    py: { xs: 6, sm: 8, md: 12 },
+                    py: { xs: 8, sm: 10, md: 12 },
                     display: 'flex',
                     alignItems: 'center',
-                    minHeight: { xs: 'calc(100vh - 100px)', md: '70vh' }
+                    minHeight: { xs: 'calc(100vh - 100px)', md: '75vh' }
                 }}
             >
-                <Grid container spacing={4} alignItems="center">
-                    <Grid item xs={12} md={6}>
+                <Grid container spacing={{ xs: 6, md: 8 }} alignItems="center">
+                    <Grid item xs={12} md={7}>
                         <Box component={motion.div} variants={itemVariants}>
                             <Typography
-                                variant="h2"
-                                gutterBottom
+                                variant="h1"
+                                className="mb-4"
                                 sx={{
-                                    fontWeight: 800,
-                                    fontSize: { xs: '2.5rem', sm: '3rem', md: '3.75rem' },
-                                    lineHeight: 1.2,
-                                    backgroundImage: 'linear-gradient(45deg, #ffffff, #e0e0ff)',
-                                    backgroundClip: 'text',
-                                    color: 'transparent',
-                                    textShadow: '0 5px 25px rgba(0,0,0,0.1)',
-                                    mb: 2
+                                    fontWeight: 900,
+                                    fontSize: { xs: '3rem', sm: '4rem', md: '5rem' },
+                                    lineHeight: 1.1,
+                                    letterSpacing: '-0.02em',
+                                    color: '#ffffff',
+                                    textShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                                    mb: { xs: 3, md: 4 }
                                 }}
                             >
-                                Your health, our priority
+                                Your health,{' '}
+                                <Box
+                                    component="span"
+                                    sx={{
+                                        position: 'relative',
+                                        '&::after': {
+                                            content: '""',
+                                            position: 'absolute',
+                                            bottom: '0.1em',
+                                            left: 0,
+                                            width: '100%',
+                                            height: '0.2em',
+                                            backgroundColor: 'var(--color-accent)',
+                                            opacity: 0.6,
+                                            borderRadius: '4px'
+                                        }
+                                    }}
+                                >
+                                    our priority
+                                </Box>
                             </Typography>
                         </Box>
 
                         <Box component={motion.div} variants={itemVariants}>
                             <Typography
-                                variant="h6"
+                                variant="h5"
                                 sx={{
-                                    mb: 4,
-                                    maxWidth: 500,
+                                    mb: 5,
+                                    maxWidth: 580,
                                     lineHeight: 1.6,
-                                    fontSize: { xs: '1rem', md: '1.25rem' },
+                                    fontSize: { xs: '1.1rem', md: '1.35rem' },
                                     color: 'rgba(255, 255, 255, 0.9)',
                                     fontWeight: 400
                                 }}
                             >
-                                Professional online pharmacy with secure delivery and expert care available 24/7.
+                                Professional online pharmacy with secure delivery and expert care available 24/7. Find medications you need easily.
                             </Typography>
+                        </Box>
+
+                        {/* Prominent Search Bar */}
+                        <Box
+                            component={motion.div}
+                            variants={itemVariants}
+                            sx={{ mb: 5 }}
+                        >
+                            <Paper
+                                component="form"
+                                elevation={4}
+                                onSubmit={handleSearchSubmit}
+                                sx={{
+                                    p: '4px 6px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    borderRadius: '50px',
+                                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                    boxShadow: '0 8px 20px rgba(0, 0, 0, 0.15)',
+                                    maxWidth: 500,
+                                    transition: 'all 0.3s ease',
+                                    '&:hover, &:focus-within': {
+                                        transform: 'translateY(-2px)',
+                                        boxShadow: '0 12px 24px rgba(0, 0, 0, 0.2)',
+                                        backgroundColor: '#ffffff'
+                                    }
+                                }}
+                            >
+                                <InputBase
+                                    sx={{
+                                        ml: 2,
+                                        flex: 1,
+                                        fontSize: '1.1rem',
+                                        py: 1.2,
+                                        color: 'var(--color-text)'
+                                    }}
+                                    placeholder="Search for medications..."
+                                    inputProps={{ 'aria-label': 'search medications' }}
+                                    value={searchTerm}
+                                    onChange={handleSearchChange}
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <SearchIcon color="primary" />
+                                        </InputAdornment>
+                                    }
+                                />
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    sx={{
+                                        borderRadius: '50px',
+                                        px: { xs: 3, md: 4 },
+                                        py: 1.2,
+                                        ml: 1,
+                                        mr: 0.5,
+                                        fontSize: '1rem',
+                                        backgroundColor: 'var(--color-primary)',
+                                        fontWeight: 600,
+                                        textTransform: 'none'
+                                    }}
+                                >
+                                    Search
+                                </Button>
+                            </Paper>
                         </Box>
 
                         <Box
@@ -169,9 +248,8 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
                             variants={itemVariants}
                             sx={{
                                 display: 'flex',
-                                gap: 2,
+                                gap: 3,
                                 flexWrap: 'wrap',
-                                mt: 2
                             }}
                         >
                             <Button
@@ -182,14 +260,15 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
                                 endIcon={<ArrowForwardIcon />}
                                 sx={{
                                     borderRadius: '50px',
-                                    px: { xs: 3, md: 4 },
-                                    py: 1.5,
-                                    fontSize: { xs: '0.9rem', md: '1rem' },
-                                    background: 'rgba(255, 255, 255, 0.9)',
-                                    color: '#6a00ea',
+                                    px: { xs: 3.5, md: 4.5 },
+                                    py: 1.8,
+                                    fontSize: { xs: '1rem', md: '1.1rem' },
+                                    background: '#ffffff',
+                                    color: 'var(--color-primary)',
                                     fontWeight: 600,
                                     boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
                                     transition: 'all 0.3s ease',
+                                    textTransform: 'none',
                                     '&:hover': {
                                         background: '#ffffff',
                                         transform: 'translateY(-3px)',
@@ -206,12 +285,14 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
                                 size="large"
                                 sx={{
                                     borderRadius: '50px',
-                                    px: { xs: 3, md: 4 },
-                                    py: 1.5,
-                                    fontSize: { xs: '0.9rem', md: '1rem' },
-                                    borderColor: 'rgba(255,255,255,0.6)',
+                                    px: { xs: 3.5, md: 4.5 },
+                                    py: 1.8,
+                                    fontSize: { xs: '1rem', md: '1.1rem' },
+                                    borderColor: 'rgba(255,255,255,0.8)',
+                                    borderWidth: 2,
                                     color: '#fff',
                                     fontWeight: 600,
+                                    textTransform: 'none',
                                     transition: 'all 0.3s ease',
                                     '&:hover': {
                                         borderColor: '#ffffff',
@@ -228,7 +309,7 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
                     <Grid
                         item
                         xs={12}
-                        md={6}
+                        md={5}
                         sx={{
                             textAlign: 'center',
                             display: { xs: isMobile ? 'none' : 'block', md: 'block' }

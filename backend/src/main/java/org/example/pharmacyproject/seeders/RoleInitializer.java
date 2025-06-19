@@ -1,4 +1,4 @@
-package org.example.pharmacyproject.seeding;
+package org.example.pharmacyproject.seeders;
 
 import jakarta.annotation.PostConstruct;
 import org.example.pharmacyproject.entities.Role;

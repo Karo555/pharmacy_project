@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Box,
   TextField,
@@ -38,20 +38,37 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [searchTerm, setSearchTerm] = useState(initialValue);
   const [isTyping, setIsTyping] = useState(false);
   const theme = useTheme();
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const prevSearchTermRef = useRef<string>(initialValue);
 
   // Handle debounced search
   useEffect(() => {
-    if (searchTerm === initialValue && initialValue === '') return;
+    // Don't trigger search when component first mounts with empty initialValue
+    if (searchTerm === initialValue && initialValue === '' && prevSearchTermRef.current === initialValue) return;
+
+    // Don't search again if the term hasn't changed
+    if (searchTerm === prevSearchTermRef.current) return;
 
     setIsTyping(true);
-    const handler = setTimeout(() => {
+
+    // Clear any existing timer
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    timerRef.current = setTimeout(() => {
       setIsTyping(false);
       if (searchTerm.length >= minSearchLength || searchTerm === '') {
+        prevSearchTermRef.current = searchTerm;
         onSearch(searchTerm);
       }
     }, debounceTime);
 
-    return () => clearTimeout(handler);
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
   }, [searchTerm, debounceTime, initialValue, minSearchLength, onSearch]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

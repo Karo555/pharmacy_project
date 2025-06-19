@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Container,
   Box,
@@ -36,19 +36,10 @@ const SearchResults: React.FC = () => {
   // Use a ref to track whether initial search has been performed
   const initialSearchDone = useRef<boolean>(false);
 
-  // Fetch initial results when component mounts
-  useEffect(() => {
-    if (initialQuery && !initialSearchDone.current) {
-      performSearch(initialQuery);
-      initialSearchDone.current = true;
-    } else if (!initialQuery && !initialSearchDone.current) {
-      fetchInitialDrugs();
-      initialSearchDone.current = true;
-    }
-  }, [initialQuery]);
-
+  // Use a ref to hold the fetchInitialDrugs function to break the circular dependency
+  const fetchInitialDrugsRef = useRef<() => Promise<void> | null>(null);
   // Load initial set of medications
-  const fetchInitialDrugs = async () => {
+  const fetchInitialDrugs = useCallback(async () => {
     if (loading) {
       try {
         const data = token ? await listDrugs() : await getPublicDrugs();
@@ -60,17 +51,44 @@ const SearchResults: React.FC = () => {
         setLoading(false);
       }
     }
-  };
+  }, [loading, token]);
+
+  // Update the ref whenever fetchInitialDrugs changes
+  useEffect(() => {
+    fetchInitialDrugsRef.current = fetchInitialDrugs;
+  }, [fetchInitialDrugs]);
 
   // Perform search using the appropriate endpoint based on auth status
-  const performSearch = async (query: string) => {
-    // Skip if this exact query has been searched before and found no results
+  const performSearch = useCallback(async (query: string) => {
+    console.log('performSearch called with query:', query);
+    console.log('performSearch deps:', {
+      searchedQueriesSize: searchedQueries.size,
+      searchQuery,
+      hasToken: !!token
+    });
+
+    // Skip if this exact query has been searched before
     if (searchedQueries.has(query.trim().toLowerCase())) {
+      console.log('Search skipped - query already searched');
+      return;
+    }
+
+    // Don't skip based on matching current query during initial search
+    // This was causing the initial search to be skipped
+    if (!initialSearchDone.current &&
+        query.trim().toLowerCase() === searchQuery.trim().toLowerCase()) {
+      console.log('NOT skipping initial search even though query matches searchQuery');
+    }
+    // Skip if it's not initial search and matches current query
+    else if (initialSearchDone.current &&
+             query.trim().toLowerCase() === searchQuery.trim().toLowerCase()) {
+      console.log('Search skipped - query matches current query (not initial search)');
       return;
     }
 
     if (!query.trim()) {
-      fetchInitialDrugs();
+      console.log('Empty query, calling fetchInitialDrugs');
+      fetchInitialDrugsRef.current && fetchInitialDrugsRef.current();
       return;
     }
 
@@ -110,7 +128,36 @@ const SearchResults: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchedQueries, searchQuery, token]);
+
+  // Fetch initial results when component mounts or when location changes
+  useEffect(() => {
+    console.log('Main useEffect running with deps:', {
+      initialQuery,
+      hasToken: !!token,
+      performSearchRef: typeof performSearch
+    });
+
+    console.log('Dependency array values:', JSON.stringify({
+      initialQuery,
+      tokenExists: !!token,
+      performSearchIdentity: performSearch.toString().substring(0, 50) + '...'
+    }));
+
+    // Reset the initialSearchDone ref when the location changes
+    initialSearchDone.current = false;
+
+    if (initialQuery && !initialSearchDone.current) {
+      console.log('Running initial search with query:', initialQuery);
+      performSearch(initialQuery);
+      initialSearchDone.current = true;
+    } else if (!initialQuery && !initialSearchDone.current) {
+      console.log('No initial query, fetching initial drugs');
+      fetchInitialDrugs();
+      initialSearchDone.current = true;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialQuery, token, performSearch]);
 
   // Client-side filtering function (used for authenticated users)
   const filterDrugs = (query: string, drugList: DrugDto[]): DrugDto[] => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Container, Grid, Typography, Button, InputBase, useMediaQuery, Paper, InputAdornment } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SearchIcon from '@mui/icons-material/Search';
 import { motion } from 'framer-motion';
@@ -47,11 +47,13 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
         setSearchTerm(e.target.value);
     };
 
+    const navigate = useNavigate();
+
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (searchTerm.trim()) {
-            // Redirect to the search results page with the query parameter
-            window.location.href = `/search?q=${encodeURIComponent(searchTerm.trim())}`;
+            // Use React Router navigation instead of direct location change
+            navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
         }
     };
 

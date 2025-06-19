@@ -1,4 +1,3 @@
-// src/components/Layout/Header.tsx
 import React from 'react';
 import './Header.css';
 import {
@@ -20,12 +19,8 @@ const Header: React.FC = () => {
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(e.currentTarget);
-    };
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
+    const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) => setAnchorEl(e.currentTarget);
+    const handleMenuClose = () => setAnchorEl(null);
     const handleLogout = () => {
         logout();
         handleMenuClose();
@@ -39,30 +34,37 @@ const Header: React.FC = () => {
                     component={NavLink}
                     to="/"
                     variant="h6"
-                    sx={{ textDecoration: 'none', color: 'inherit', flexGrow: 1 }}
+                    className="nav-link"
+                    sx={{ flexGrow: 1 }}
                 >
                     MedTrack
                 </Typography>
 
-                {/* wrap nav links in this container */}
-                <Box className="nav-buttons">
+                <Box>
                     {!token ? (
                         <>
-                            <Button component={NavLink} to="/login" color="inherit">
+                            <Button component={NavLink} to="/login" color="inherit" className="nav-link">
                                 Sign In
                             </Button>
-                            <Button component={NavLink} to="/register" color="inherit">
+                            <Button component={NavLink} to="/register" color="inherit" className="nav-link">
                                 Sign Up
                             </Button>
                         </>
                     ) : (
                         <>
-                            <Button component={NavLink} to="/dashboard" color="inherit">
+                            <Button component={NavLink} to="/dashboard" color="inherit" className="nav-link">
                                 Dashboard
                             </Button>
-                            <Button component={NavLink} to="/drugs" color="inherit">
+
+                            <Button component={NavLink} to="/drugs" color="inherit" className="nav-link">
                                 Drugs
                             </Button>
+
+                            {/* NEW: Prescriptions link */}
+                            <Button component={NavLink} to="/prescriptions" color="inherit" className="nav-link">
+                                Prescriptions
+                            </Button>
+
                             <IconButton color="inherit" onClick={handleMenuOpen} className="avatar-button">
                                 <Avatar sx={{ bgcolor: 'secondary.main' }} />
                             </IconButton>
@@ -71,6 +73,7 @@ const Header: React.FC = () => {
                                     component={NavLink}
                                     to="/profile"
                                     onClick={handleMenuClose}
+                                    className="nav-link"
                                 >
                                     Profile
                                 </MenuItem>

@@ -12,9 +12,10 @@ import Login from './pages/Auth/Login';
 import Profile from './pages/Dashboard/Profile';
 import Dashboard from './pages/Dashboard/Dashboard';
 
-// ← new imports:
 import DrugListPage from './pages/Drugs/DrugListPage';
 import DrugDetailPage from './pages/Drugs/DrugDetailPage';
+import PrescriptionListPage from './pages/Prescriptions/PrescriptionListPage';
+import PrescriptionDetailPage from './pages/Prescriptions/PrescriptionDetailPage';
 
 const App: React.FC = () => {
     return (
@@ -31,7 +32,25 @@ const App: React.FC = () => {
                         <Route path="/drugs" element={<DrugListPage />} />
                         <Route path="/drugs/:id" element={<DrugDetailPage />} />
 
-                        {/* Protected routes */}
+                        {/* Prescriptions (requires login) */}
+                        <Route
+                            path="/prescriptions"
+                            element={
+                                <ProtectedRoute>
+                                    <PrescriptionListPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/prescriptions/:id"
+                            element={
+                                <ProtectedRoute>
+                                    <PrescriptionDetailPage />
+                                </ProtectedRoute>
+                            }
+                        />
+
+                        {/* Other protected routes */}
                         <Route
                             path="/profile"
                             element={

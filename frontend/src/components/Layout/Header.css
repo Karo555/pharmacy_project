@@ -1,6 +1,3 @@
-/* src/components/Layout/Header.css */
-
-/* (Optional) if you want to target the Toolbar for consistent flex spacing */
 .MuiToolbar-root {
     display: flex;
     justify-content: space-between;

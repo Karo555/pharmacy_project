@@ -9,10 +9,11 @@ import {
     Card,
     CardContent,
     CardActions,
-    Button,
-    CircularProgress
+    Button
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import Spinner from '../../components/ui/Spinner';
+import '../../styles/globals.css';
 
 const DrugListPage: React.FC = () => {
     const [drugs, setDrugs] = useState<DrugDto[]>([]);
@@ -30,17 +31,13 @@ const DrugListPage: React.FC = () => {
     }, []);
 
     if (loading) {
-        return (
-            <Box sx={{ display:'flex', justifyContent:'center', mt:4 }}>
-                <CircularProgress />
-            </Box>
-        );
+        return <Spinner text="Loading medications..." />;
     }
 
     if (error) {
         return (
             <Container>
-                <Typography color="error" align="center" mt={4}>
+                <Typography color="error" align="center" className="mt-8 text-center">
                     {error}
                 </Typography>
             </Container>

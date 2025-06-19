@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
-import { Container, Box, CircularProgress, Button, Typography } from '@mui/material';
+import { Container, Box, Button, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { getDrugById } from '../../api/drug';
 import { DrugDto } from '../../types/drug';
 import DrugDetail from '../../components/Drugs/DrugDetail';
+import Spinner from '../../components/ui/Spinner';
+import '../../styles/globals.css';
 
 const DrugDetailPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -21,14 +23,14 @@ const DrugDetailPage: React.FC = () => {
     }, [id]);
 
     if (loading) {
-        return <Box display="flex" justifyContent="center" mt={8}><CircularProgress /></Box>;
+        return <Spinner text="Loading medication details..." />;
     }
 
     if (error || !drug) {
         return (
-            <Container sx={{ mt: 8 }}>
-                <Typography color="error">{error || 'Not found'}</Typography>
-                <Button component={RouterLink} to="/drugs" startIcon={<ArrowBackIcon />} sx={{ mt: 2 }}>
+            <Container className="mt-8">
+                <Typography color="error" className="text-error">{error || 'Not found'}</Typography>
+                <Button component={RouterLink} to="/drugs" startIcon={<ArrowBackIcon />} className="mt-2">
                     Back to list
                 </Button>
             </Container>

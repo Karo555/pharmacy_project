@@ -8,12 +8,13 @@ import {
     CardContent,
     CardActions,
     Button,
-    CircularProgress,
     Alert,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { listPrescriptions } from '../../api/prescription';
 import { PrescriptionDTO } from '../../types/prescription';
+import Spinner from '../../components/ui/Spinner';
+import '../../styles/globals.css';
 
 const PrescriptionListPage: React.FC = () => {
     const [prescriptions, setPrescriptions] = useState<PrescriptionDTO[]>([]);
@@ -47,18 +48,7 @@ const PrescriptionListPage: React.FC = () => {
     }, []);
 
     if (loading) {
-        return (
-            <Box
-                sx={{
-                    height: '60vh',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}
-            >
-                <CircularProgress />
-            </Box>
-        );
+        return <Spinner text="Loading prescriptions..." />;
     }
 
     if (error) {

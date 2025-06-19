@@ -13,7 +13,6 @@ import {
     IconButton,
     useTheme,
     useMediaQuery,
-    CircularProgress,
     Divider,
     Zoom,
     Checkbox,
@@ -33,6 +32,8 @@ import {
 import axios from 'axios';
 import { useAuth } from "../../hooks/useAuth";
 import MuiLink from "@mui/material/Link";
+import Spinner from "../../components/ui/Spinner";
+import "../../styles/globals.css";
 
 const Register: React.FC = () => {
     const navigate = useNavigate();
@@ -523,7 +524,7 @@ const Register: React.FC = () => {
                                     endIcon={!loading && <HowToReg />}
                                 >
                                     {loading ? (
-                                        <CircularProgress size={24} color="inherit" />
+                                        <Spinner />
                                     ) : (
                                         "Create Account"
                                     )}

@@ -10,7 +10,6 @@ import {
     Card,
     Alert,
     Zoom,
-    CircularProgress,
     InputAdornment,
     IconButton,
     useTheme,
@@ -31,6 +30,8 @@ import MuiLink from "@mui/material/Link";
 import { useAuth } from "../../hooks/useAuth";
 import { login as apiLogin } from "../../api/auth";
 import { LoginRequestDTO } from "types/auth";
+import Spinner from "../../components/ui/Spinner";
+import "../../styles/globals.css";
 
 interface FormState {
     email: string;
@@ -201,7 +202,7 @@ const Login: React.FC = () => {
                                 </Box>
 
                                 <Button fullWidth type="submit" variant="contained" size="large" disabled={submitting} endIcon={!submitting && <LoginIcon />}>
-                                    {submitting ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
+                                    {submitting ? <Spinner /> : 'Sign In'}
                                 </Button>
 
                                 {/* social buttons omitted for brevity */}

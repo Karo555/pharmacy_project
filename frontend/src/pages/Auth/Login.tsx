@@ -8,8 +8,6 @@ import {
     Stack,
     Divider,
     Card,
-    Alert,
-    Zoom,
     InputAdornment,
     IconButton,
     useTheme,
@@ -31,6 +29,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { login as apiLogin } from "../../api/auth";
 import { LoginRequestDTO } from "types/auth";
 import Spinner from "../../components/ui/Spinner";
+import Alert from "../../components/ui/Alert";
 import "../../styles/globals.css";
 
 interface FormState {
@@ -151,11 +150,12 @@ const Login: React.FC = () => {
                         )}
 
                         {loginStatus.type && (
-                            <Zoom in>
-                                <Alert severity={loginStatus.type} sx={{ mb: 3 }} onClose={() => setLoginStatus({ type: null, message: null })}>
-                                    {loginStatus.message}
-                                </Alert>
-                            </Zoom>
+                            <Alert
+                                type={loginStatus.type}
+                                message={loginStatus.message || ''}
+                                onClose={() => setLoginStatus({ type: null, message: null })}
+                                isStatic={true}
+                            />
                         )}
 
                         <Typography variant="h5" fontWeight={600} sx={{ mb: 4, display: { xs: 'none', md: 'block' } }}>

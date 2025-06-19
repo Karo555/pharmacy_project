@@ -7,14 +7,12 @@ import {
     TextField,
     Button,
     Stack,
-    Alert,
     Card,
     InputAdornment,
     IconButton,
     useTheme,
     useMediaQuery,
     Divider,
-    Zoom,
     Checkbox,
     FormControlLabel,
 } from '@mui/material';
@@ -33,6 +31,7 @@ import axios from 'axios';
 import { useAuth } from "../../hooks/useAuth";
 import MuiLink from "@mui/material/Link";
 import Spinner from "../../components/ui/Spinner";
+import Alert from "../../components/ui/Alert";
 import "../../styles/globals.css";
 
 const Register: React.FC = () => {
@@ -360,15 +359,12 @@ const Register: React.FC = () => {
 
                         {/* Status messages */}
                         {statusMessage.type && (
-                            <Zoom in={!!statusMessage.type}>
-                                <Alert
-                                    severity={statusMessage.type}
-                                    sx={{ mb: 3 }}
-                                    onClose={() => setStatusMessage({ type: null, message: null })}
-                                >
-                                    {statusMessage.message}
-                                </Alert>
-                            </Zoom>
+                            <Alert
+                                type={statusMessage.type}
+                                message={statusMessage.message || ''}
+                                onClose={() => setStatusMessage({ type: null, message: null })}
+                                isStatic={true}
+                            />
                         )}
 
                         <Typography
@@ -605,3 +601,4 @@ const Register: React.FC = () => {
 };
 
 export default Register;
+

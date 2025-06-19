@@ -9,11 +9,12 @@ import {
     Checkbox,
     FormControlLabel,
     Button,
-    CircularProgress,
-    Alert,
 } from '@mui/material';
 import { listDrugs } from '../../api/drug';
 import {PrescriptionCreateRequestDTO, PrescriptionDTO} from "@/types/prescription";
+import Spinner from '../../components/ui/Spinner';
+import Alert from '../../components/ui/Alert';
+import '../../styles/globals.css';
 
 
 interface Props {
@@ -81,12 +82,19 @@ const PrescriptionForm: React.FC<Props> = ({ initialData, onSubmit }) => {
     };
 
     if (loadingDrugs) {
-        return <CircularProgress />;
+        return <Spinner text="Loading medications..." />;
     }
 
     return (
         <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600, mx: 'auto' }}>
-            {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+            {error && (
+                <Alert
+                    type="error"
+                    message={error}
+                    onClose={() => setError(null)}
+                    isStatic={true}
+                />
+            )}
 
             <FormControl fullWidth sx={{ mb: 2 }}>
                 <InputLabel id="drug-select-label">Drug</InputLabel>

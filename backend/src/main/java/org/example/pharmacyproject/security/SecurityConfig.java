@@ -38,7 +38,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/auth/**",
-                                "/api/password/**"
+                                "/api/password/**",
+                                "/api/public/**"  // Allow unauthenticated access to all public endpoints
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -66,4 +67,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-

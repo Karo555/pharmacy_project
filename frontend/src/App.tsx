@@ -12,6 +12,7 @@ import Register from './pages/Auth/Register';
 import Login from './pages/Auth/Login';
 import Profile from './pages/Dashboard/Profile';
 import Dashboard from './pages/Dashboard/Dashboard';
+import SearchResults from './pages/SearchResults';
 
 import DrugListPage from './pages/Drugs/DrugListPage';
 import DrugDetailPage from './pages/Drugs/DrugDetailPage';
@@ -54,6 +55,7 @@ const App: React.FC = () => {
                             <Route path="/" element={<Home />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/login" element={<Login />} />
+                            <Route path="/search" element={<SearchResults />} />
 
                             {/* Drug catalog (public) */}
                             <Route path="/drugs" element={<DrugListPage />} />

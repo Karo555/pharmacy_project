@@ -49,8 +49,10 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
 
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Implement search functionality or navigation
-        console.log('Search for:', searchTerm);
+        if (searchTerm.trim()) {
+            // Redirect to the search results page with the query parameter
+            window.location.href = `/search?q=${encodeURIComponent(searchTerm.trim())}`;
+        }
     };
 
     return (
@@ -145,17 +147,6 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
                                     component="span"
                                     sx={{
                                         position: 'relative',
-                                        '&::after': {
-                                            content: '""',
-                                            position: 'absolute',
-                                            bottom: '0.1em',
-                                            left: 0,
-                                            width: '100%',
-                                            height: '0.2em',
-                                            backgroundColor: 'var(--color-accent)',
-                                            opacity: 0.6,
-                                            borderRadius: '4px'
-                                        }
                                     }}
                                 >
                                     our priority

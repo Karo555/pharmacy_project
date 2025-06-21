@@ -11,54 +11,118 @@ import {
     Avatar,
     Menu,
     MenuItem,
-    Tooltip,
     Drawer,
     List,
     ListItem,
     ListItemText,
+    ListItemIcon,
     useMediaQuery,
     useTheme,
+    Tooltip,
 } from '@mui/material';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import useThemeMode from '../../hooks/useThemeMode';
 import ThemeToggle from '../ui/ThemeToggle';
 import MenuIcon from '@mui/icons-material/Menu';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import MedicationIcon from '@mui/icons-material/Medication';
+import DescriptionIcon from '@mui/icons-material/Description';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import HomeIcon from '@mui/icons-material/Home';
 
 const Header: React.FC = () => {
     const { token, logout } = useAuth();
     const { isDarkMode } = useThemeMode();
     const navigate = useNavigate();
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+    const location = useLocation();
+    const [menuOpen, setMenuOpen] = React.useState(false);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    const [scrolled, setScrolled] = React.useState(false);
 
-    const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) => setAnchorEl(e.currentTarget);
-    const handleMenuClose = () => setAnchorEl(null);
+    // Detect scroll to change header appearance
+    React.useEffect(() => {
+        const handleScroll = () => {
+            const isScrolled = window.scrollY > 10;
+            if (isScrolled !== scrolled) {
+                setScrolled(isScrolled);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [scrolled]);
+
     const handleLogout = () => {
         logout();
-        handleMenuClose();
-        setMobileMenuOpen(false);
+        setMenuOpen(false);
         navigate('/login');
     };
 
-    const toggleMobileMenu = () => {
-        setMobileMenuOpen(!mobileMenuOpen);
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
     };
 
     const handleNavigation = (path: string) => {
         navigate(path);
-        setMobileMenuOpen(false);
+        setMenuOpen(false);
     };
 
-    // Mobile menu drawer content
-    const mobileMenuContent = (
+    // Check if we're not on the home page to show back button
+    const showBackButton = location.pathname !== '/';
+
+    // Determine primary CTA based on authentication status
+    const primaryCTA = !token ? (
+        <Button
+            component={NavLink}
+            to="/register"
+            variant="contained"
+            color="secondary"
+            className="rounded-full"
+            sx={{
+                px: 2.5,
+                py: 0.5,
+                fontSize: isMobile ? '0.75rem' : '0.85rem',
+                whiteSpace: 'nowrap',
+                minWidth: 'auto',
+                height: '32px'
+            }}
+        >
+            Sign Up
+        </Button>
+    ) : (
+        <Button
+            component={NavLink}
+            to="/prescriptions/upload"
+            variant="contained"
+            color="secondary"
+            className="rounded-full"
+            sx={{
+                px: 2.5,
+                py: 0.5,
+                fontSize: isMobile ? '0.75rem' : '0.85rem',
+                whiteSpace: 'nowrap',
+                minWidth: 'auto',
+                height: '32px'
+            }}
+        >
+            Upload Rx
+        </Button>
+    );
+
+    // Menu content
+    const menuContent = (
         <Box
-            sx={{ width: 250 }}
+            sx={{ width: 280 }}
             role="presentation"
-            onClick={() => setMobileMenuOpen(false)}
-            className="mobile-menu"
+            className="menu-content"
         >
             <List>
                 <ListItem>
@@ -67,36 +131,49 @@ const Header: React.FC = () => {
                     </Typography>
                 </ListItem>
 
+                <ListItem button onClick={() => handleNavigation('/')}>
+                    <ListItemIcon><HomeIcon /></ListItemIcon>
+                    <ListItemText primary="Home" />
+                </ListItem>
+
                 {!token ? (
                     <>
                         <ListItem button onClick={() => handleNavigation('/login')}>
+                            <ListItemIcon><LoginIcon /></ListItemIcon>
                             <ListItemText primary="Sign In" />
                         </ListItem>
                         <ListItem button onClick={() => handleNavigation('/register')}>
+                            <ListItemIcon><PersonAddIcon /></ListItemIcon>
                             <ListItemText primary="Sign Up" />
                         </ListItem>
                     </>
                 ) : (
                     <>
                         <ListItem button onClick={() => handleNavigation('/dashboard')}>
+                            <ListItemIcon><DashboardIcon /></ListItemIcon>
                             <ListItemText primary="Dashboard" />
                         </ListItem>
                         <ListItem button onClick={() => handleNavigation('/drugs')}>
+                            <ListItemIcon><MedicationIcon /></ListItemIcon>
                             <ListItemText primary="Drugs" />
                         </ListItem>
                         <ListItem button onClick={() => handleNavigation('/prescriptions')}>
+                            <ListItemIcon><DescriptionIcon /></ListItemIcon>
                             <ListItemText primary="Prescriptions" />
                         </ListItem>
                         <ListItem button onClick={() => handleNavigation('/profile')}>
+                            <ListItemIcon><AccountCircleIcon /></ListItemIcon>
                             <ListItemText primary="Profile" />
                         </ListItem>
                         <ListItem button onClick={handleLogout}>
+                            <ListItemIcon><LogoutIcon /></ListItemIcon>
                             <ListItemText primary="Logout" />
                         </ListItem>
                     </>
                 )}
 
                 <ListItem>
+                    <ListItemText primary="Theme" />
                     <ThemeToggle />
                 </ListItem>
             </List>
@@ -104,97 +181,97 @@ const Header: React.FC = () => {
     );
 
     return (
-        <AppBar position="static" className="shadow-md" sx={{ bgcolor: 'var(--color-primary)', position: 'relative', overflow: 'hidden' }}>
-            <Toolbar sx={{ position: 'relative', zIndex: 1 }}>
-                <Typography
-                    component={NavLink}
-                    to="/"
-                    variant="h6"
-                    className="nav-link font-bold text-white"
-                    sx={{ flexGrow: 1 }}
-                >
-                    MedTrack
-                </Typography>
+        <AppBar
+            position="fixed"
+            className={`shadow-md transition-all duration-300 ${scrolled ? 'shadow-lg' : ''}`}
+            sx={{
+                bgcolor: scrolled ? 'var(--color-primary-dark, #0a1929)' : 'var(--color-primary)',
+                height: scrolled ? '50px' : '60px',
+                transition: 'all 0.3s ease',
+                zIndex: theme.zIndex.drawer + 1,
+            }}
+            elevation={scrolled ? 4 : 2}
+        >
+            <Toolbar
+                sx={{
+                    position: 'relative',
+                    zIndex: 1,
+                    justifyContent: 'space-between',
+                    minHeight: scrolled ? '50px !important' : '60px !important',
+                    px: { xs: 1.5, sm: 2 },
+                    py: 0
+                }}
+                variant="dense"
+            >
+                {/* Left section: Back button & Logo */}
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    {showBackButton && (
+                        <Tooltip title="Back">
+                            <IconButton
+                                color="inherit"
+                                onClick={() => navigate(-1)}
+                                sx={{
+                                    mr: 0.5,
+                                    width: '32px',
+                                    height: '32px'
+                                }}
+                                aria-label="back"
+                                size="small"
+                            >
+                                <ArrowBackIcon fontSize="small" />
+                            </IconButton>
+                        </Tooltip>
+                    )}
 
-                {isMobile ? (
-                    <>
+                    <Typography
+                        component={NavLink}
+                        to="/"
+                        variant={scrolled ? "subtitle1" : "h6"}
+                        className="nav-link font-bold text-white"
+                        sx={{
+                            fontSize: scrolled ? '1.1rem' : '1.25rem',
+                            transition: 'font-size 0.3s ease'
+                        }}
+                    >
+                        MedTrack
+                    </Typography>
+                </Box>
+
+                {/* Right section: Primary CTA & Menu */}
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    {primaryCTA}
+
+                    <Tooltip title="Menu">
                         <IconButton
                             color="inherit"
                             aria-label="open menu"
+                            onClick={toggleMenu}
+                            className="menu-button"
                             edge="end"
-                            onClick={toggleMobileMenu}
-                            className="hamburger-button"
+                            size="small"
+                            sx={{
+                                width: '32px',
+                                height: '32px',
+                                ml: 0.5
+                            }}
                         >
-                            <MenuIcon />
+                            <MenuIcon fontSize="small" />
                         </IconButton>
-                        <Drawer
-                            anchor="right"
-                            open={mobileMenuOpen}
-                            onClose={() => setMobileMenuOpen(false)}
-                        >
-                            {mobileMenuContent}
-                        </Drawer>
-                    </>
-                ) : (
-                    <Box className="flex items-center">
-                        {/* Theme toggle button */}
-                        <ThemeToggle />
+                    </Tooltip>
+                </Box>
 
-                        {!token ? (
-                            <>
-                                <Button component={NavLink} to="/login" color="inherit" className="nav-link text-white">
-                                    Sign In
-                                </Button>
-                                <Button
-                                    component={NavLink}
-                                    to="/register"
-                                    color="inherit"
-                                    className="nav-link btn btn-outline rounded-full ml-2 text-white"
-                                    sx={{ borderColor: 'rgba(255,255,255,0.5)' }}
-                                >
-                                    Sign Up
-                                </Button>
-                            </>
-                        ) : (
-                            <>
-                                <Button component={NavLink} to="/dashboard" color="inherit" className="nav-link text-white">
-                                    Dashboard
-                                </Button>
-
-                                <Button component={NavLink} to="/drugs" color="inherit" className="nav-link text-white">
-                                    Drugs
-                                </Button>
-
-                                <Button
-                                    component={NavLink}
-                                    to="/prescriptions"
-                                    color="inherit"
-                                    className="nav-link text-white"
-                                >
-                                    Prescriptions
-                                </Button>
-
-                                <IconButton color="inherit" onClick={handleMenuOpen} className="avatar-button">
-                                    <Avatar sx={{ bgcolor: 'secondary.main' }} />
-                                </IconButton>
-                                <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-                                    <MenuItem
-                                        component={NavLink}
-                                        to="/profile"
-                                        onClick={handleMenuClose}
-                                        className="nav-link"
-                                    >
-                                        Profile
-                                    </MenuItem>
-                                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                                </Menu>
-                            </>
-                        )}
-                    </Box>
-                )}
+                {/* Menu drawer - same for both mobile and desktop */}
+                <Drawer
+                    anchor="right"
+                    open={menuOpen}
+                    onClose={() => setMenuOpen(false)}
+                >
+                    {menuContent}
+                </Drawer>
             </Toolbar>
         </AppBar>
     );
 };
 
 export default Header;
+

@@ -1,6 +1,8 @@
 package org.example.pharmacyproject.services.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.example.pharmacyproject.dtos.user.password.change.PasswordChangeRequestDTO;
 import org.example.pharmacyproject.dtos.user.password.change.PasswordChangeResponseDTO;
@@ -112,5 +114,20 @@ public class UserServiceImpl implements UserService {
                 user.getUpdatedAt()
         );
     }
-}
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserProfileResponseDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+        userRepository.delete(user);
+    }
+}

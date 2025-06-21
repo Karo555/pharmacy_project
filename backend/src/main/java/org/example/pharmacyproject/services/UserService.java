@@ -5,6 +5,8 @@ import org.example.pharmacyproject.dtos.user.password.change.PasswordChangeRespo
 import org.example.pharmacyproject.dtos.user.profile.UserProfileResponseDTO;
 import org.example.pharmacyproject.dtos.user.profile.UserProfileUpdateRequestDTO;
 
+import java.util.List;
+
 
 public interface UserService {
     UserProfileResponseDTO getProfile(Long userId);
@@ -12,4 +14,6 @@ public interface UserService {
     PasswordChangeResponseDTO changePassword(Long userId, PasswordChangeRequestDTO dto);
     UserProfileResponseDTO getProfileByEmail(String email);
     UserProfileResponseDTO updateProfileByEmail(String email, UserProfileUpdateRequestDTO dto);
+    List<UserProfileResponseDTO> getAllUsers();
+    void deleteUser(Long userId);
 }

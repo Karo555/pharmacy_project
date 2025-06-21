@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Box, CircularProgress, Fade } from '@mui/material';
+import { Box, Fade } from '@mui/material';
 import { useAuth } from "../hooks/useAuth";
 import HeroSection from '../components/Home/HeroSection';
 import FeaturesSection from '../components/Home/FeaturesSection';
@@ -12,7 +12,6 @@ import Silk from '../components/ui/Silk';
 
 const Home: React.FC = () => {
     const { token } = useAuth();
-    const [loading, setLoading] = useState(true);
     const [scrollY, setScrollY] = useState(0);
     const [sectionsVisible, setSectionsVisible] = useState({
         features: false,
@@ -64,30 +63,10 @@ const Home: React.FC = () => {
         if (callToActionRef.current) observer.observe(callToActionRef.current);
 
         return () => observer.disconnect();
-    }, [loading]);
-
-    // simulate load
-    useEffect(() => {
-        const timer = setTimeout(() => setLoading(false), 800);
-        return () => clearTimeout(timer);
     }, []);
 
     if (token) {
         return <Navigate to="/dashboard" replace />;
-    }
-
-    if (loading) {
-        return (
-            <Box sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh',
-                background: 'linear-gradient(135deg, #0a6cce, #6a00ea)'
-            }}>
-                <CircularProgress sx={{ color: 'white' }} size={60} />
-            </Box>
-        );
     }
 
     return (

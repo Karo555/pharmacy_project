@@ -302,18 +302,6 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
                                 }
                             }}
                         >
-                            {/*<Box*/}
-                            {/*    component="img"*/}
-                            {/*    src="/hero-illustration.png"*/}
-                            {/*    alt="Hero Illustration"*/}
-                            {/*    sx={{*/}
-                            {/*        maxWidth: '100%',*/}
-                            {/*        height: 'auto',*/}
-                            {/*        filter: 'drop-shadow(0 10px 25px rgba(0,0,0,0.2))',*/}
-                            {/*        transform: `translateY(${-scrollY * 0.1}px)`,*/}
-                            {/*        transition: 'transform 0.2s ease-out'*/}
-                            {/*    }}*/}
-                            {/*/>*/}
                         </Box>
                     </Grid>
                 </Grid>

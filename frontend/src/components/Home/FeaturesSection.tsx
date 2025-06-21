@@ -49,12 +49,26 @@ const FeatureCard = ({ feature, index }: { feature: typeof features[0], index: n
             transition={{ duration: 0.6, delay: index * 0.1 }}
             viewport={{ once: true, margin: "-50px" }}
             className="full-width"
+            style={{
+                display: 'flex',
+                justifyContent: 'center',
+                height: '100%'
+            }}
         >
             <Card
                 className="card shadow-md rounded-lg p-4"
                 sx={{
                     height: '100%',
+                    width: '100%',
                     transition: 'all 0.3s ease',
+                    backgroundColor: 'rgba(30, 30, 30, 0.7)',
+                    backdropFilter: 'blur(10px)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'space-between', // Changed to space-between for better layout
+                    textAlign: 'center',
+                    padding: '2rem',
                     '&:hover': {
                         transform: 'translateY(-8px)',
                         boxShadow: 'var(--shadow-lg)',
@@ -67,42 +81,55 @@ const FeatureCard = ({ feature, index }: { feature: typeof features[0], index: n
                         color: feature.color,
                         display: 'flex',
                         justifyContent: 'center',
+                        width: '100%',
                     }}
                 >
                     <Box
                         sx={{
-                            p: 2,
+                            p: 3, // Increased padding for larger icon area
                             borderRadius: '50%',
-                            bgcolor: `${feature.color}15`,
+                            bgcolor: `${feature.color}25`,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
+                            width: '80px', // Fixed width
+                            height: '80px', // Fixed height
                         }}
                     >
                         {feature.icon}
                     </Box>
                 </Box>
-                <Typography
-                    variant="h6"
-                    sx={{
-                        fontWeight: 700,
-                        mb: 1.5,
-                        color: theme.palette.text.primary,
-                    }}
-                >
-                    {feature.title}
-                </Typography>
-                <Typography
-                    variant="body1"
-                    color="text.secondary"
-                    sx={{
-                        mb: 3,
-                        fontSize: '0.95rem',
-                        lineHeight: 1.6,
-                    }}
-                >
-                    {feature.description}
-                </Typography>
+                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
+                    <Typography
+                        variant="h6"
+                        sx={{
+                            fontWeight: 700,
+                            mb: 2,
+                            color: '#ffffff',
+                            height: '32px', // Fixed height for title
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        {feature.title}
+                    </Typography>
+                    <Typography
+                        variant="body1"
+                        sx={{
+                            mb: 3,
+                            fontSize: '0.95rem',
+                            lineHeight: 1.6,
+                            color: 'rgba(255, 255, 255, 0.85)',
+                            height: '80px', // Fixed height for description
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        {feature.description}
+                    </Typography>
+                </Box>
                 <Button
                     size="small"
                     endIcon={<ArrowForwardIcon />}
@@ -111,7 +138,7 @@ const FeatureCard = ({ feature, index }: { feature: typeof features[0], index: n
                         textTransform: 'none',
                         fontWeight: 600,
                         '&:hover': {
-                            backgroundColor: `${feature.color}10`,
+                            backgroundColor: `${feature.color}20`,
                         }
                     }}
                 >
@@ -127,10 +154,14 @@ const FeaturesSection: React.FC = () => {
         <Box
             sx={{
                 py: { xs: 8, md: 12 },
-                backgroundColor: 'transparent', // Changed from '#f8f9fa' to transparent
+                backgroundColor: 'transparent',
                 position: 'relative',
                 overflow: 'hidden',
-                zIndex: 1, // Added to ensure proper stacking
+                zIndex: 1,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%'
             }}
         >
             {/* Background Elements */}
@@ -141,7 +172,7 @@ const FeaturesSection: React.FC = () => {
                     height: 300,
                     borderRadius: '50%',
                     background: 'radial-gradient(circle, rgba(25,118,210,0.05) 0%, rgba(25,118,210,0) 70%)',
-                    top: -150,
+                    top: -500,
                     left: '10%',
                     zIndex: 0,
                 }}
@@ -160,7 +191,17 @@ const FeaturesSection: React.FC = () => {
                 }}
             />
 
-            <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
+            <Container
+                maxWidth="lg"
+                sx={{
+                    position: 'relative',
+                    zIndex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
                 <Box
                     component={motion.div}
                     initial={{ opacity: 0, y: 20 }}
@@ -196,9 +237,28 @@ const FeaturesSection: React.FC = () => {
                     </Typography>
                 </Box>
 
-                <Grid container spacing={4}>
+                <Grid
+                    container
+                    spacing={4}
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        width: '100%'
+                    }}
+                >
                     {features.map((feature, idx) => (
-                        <Grid item xs={12} sm={6} md={3} key={idx}>
+                        <Grid
+                            item
+                            xs={12}
+                            sm={6}
+                            md={3}
+                            key={idx}
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                height: { xs: 'auto', md: '400px' }, // Fixed height for desktop
+                            }}
+                        >
                             <FeatureCard feature={feature} index={idx} />
                         </Grid>
                     ))}

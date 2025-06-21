@@ -26,6 +26,7 @@ interface SilkUniforms {
   uColor: UniformValue<Color>;
   uRotation: UniformValue<number>;
   uTime: UniformValue<number>;
+  uOpacity: UniformValue<number>;
   [uniform: string]: IUniform;
 }
 
@@ -50,6 +51,7 @@ uniform float uSpeed;
 uniform float uScale;
 uniform float uRotation;
 uniform float uNoiseIntensity;
+uniform float uOpacity;
 
 const float e = 2.71828182845904523536;
 
@@ -80,8 +82,8 @@ void main() {
                                    0.02 * tOffset) +
                            sin(20.0 * (tex.x + tex.y - 0.1 * tOffset)));
 
-  vec4 col = vec4(uColor, 1.0) * vec4(pattern) - rnd / 15.0 * uNoiseIntensity;
-  col.a = 1.0;
+  vec4 col = vec4(uColor, uOpacity) * vec4(pattern, pattern, pattern, 1.0) - rnd / 15.0 * uNoiseIntensity;
+  col.a = col.a * pattern * uOpacity; // Make the alpha channel depend on the pattern and opacity
   gl_FragColor = col;
 }
 `;
@@ -133,6 +135,8 @@ export interface SilkProps {
   noiseIntensity?: number;
   rotation?: number;
   useDynamicTheme?: boolean;
+  backgroundColor?: string;
+  opacity?: number;
 }
 
 const Silk: React.FC<SilkProps> = ({
@@ -142,6 +146,8 @@ const Silk: React.FC<SilkProps> = ({
   noiseIntensity = 1.5,
   rotation = 0,
   useDynamicTheme = true,
+  backgroundColor = "#000000",
+  opacity = 0.5,
 }) => {
   const meshRef = useRef<Mesh>(null);
   const { isDarkMode } = useThemeMode();
@@ -155,6 +161,14 @@ const Silk: React.FC<SilkProps> = ({
     return color;
   }, [isDarkMode, color, useDynamicTheme]);
 
+  // Determine background color based on theme if useDynamicTheme is true
+  const bgColor = useMemo(() => {
+    if (useDynamicTheme) {
+      return isDarkMode ? "#000000" : "#000000"; // Always use black background
+    }
+    return backgroundColor;
+  }, [isDarkMode, backgroundColor, useDynamicTheme]);
+
   const uniforms = useMemo<SilkUniforms>(
     () => {
       console.log("Updating uniforms with color:", themeColor);
@@ -165,9 +179,10 @@ const Silk: React.FC<SilkProps> = ({
         uColor: { value: new Color(...hexToNormalizedRGB(themeColor)) },
         uRotation: { value: rotation },
         uTime: { value: 0 },
+        uOpacity: { value: opacity },
       };
     },
-    [speed, scale, noiseIntensity, themeColor, rotation]
+    [speed, scale, noiseIntensity, themeColor, rotation, opacity]
   );
 
   // Force update the shader material when theme changes
@@ -178,15 +193,27 @@ const Silk: React.FC<SilkProps> = ({
       };
       if (material && material.uniforms) {
         material.uniforms.uColor.value = new Color(...hexToNormalizedRGB(themeColor));
+        material.uniforms.uOpacity.value = opacity;
         material.needsUpdate = true;
       }
     }
-  }, [themeColor]);
+  }, [themeColor, opacity]);
 
   return (
-    <Canvas dpr={[1, 2]} frameloop="always">
-      <SilkPlane ref={meshRef} uniforms={uniforms} />
-    </Canvas>
+    <div style={{
+      position: 'relative',
+      width: '100%',
+      height: '100%',
+      backgroundColor: bgColor
+    }}>
+      <Canvas
+        dpr={[1, 2]}
+        frameloop="always"
+        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+      >
+        <SilkPlane ref={meshRef} uniforms={uniforms} />
+      </Canvas>
+    </div>
   );
 };
 

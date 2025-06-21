@@ -104,8 +104,8 @@ const Header: React.FC = () => {
     );
 
     return (
-        <AppBar position="static" className="shadow-md" sx={{ bgcolor: 'var(--color-primary)' }}>
-            <Toolbar>
+        <AppBar position="static" className="shadow-md" sx={{ bgcolor: 'var(--color-primary)', position: 'relative', overflow: 'hidden' }}>
+            <Toolbar sx={{ position: 'relative', zIndex: 1 }}>
                 <Typography
                     component={NavLink}
                     to="/"

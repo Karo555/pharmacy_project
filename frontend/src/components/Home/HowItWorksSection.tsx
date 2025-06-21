@@ -27,7 +27,12 @@ const steps = [
 ];
 
 const HowItWorksSection: React.FC = () => (
-    <Box sx={{ py: { xs: 8, md: 12 }, backgroundColor: '#fff' }}>
+    <Box sx={{
+        py: { xs: 8, md: 12 },
+        backgroundColor: 'transparent', // Changed from '#fff' to transparent
+        position: 'relative',
+        zIndex: 1 // Added for proper stacking
+    }}>
         <Container>
             <Typography
                 variant="h3"

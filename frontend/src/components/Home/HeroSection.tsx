@@ -62,11 +62,24 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
         <Box
             className="position-relative overflow-hidden"
             sx={{
-                background: 'var(--color-primary)',
+                background: 'transparent', // Changed from 'var(--color-primary)' to transparent
                 color: '#fff',
-                minHeight: { xs: 'calc(100vh - 64px)', md: '80vh' }
+                minHeight: { xs: 'calc(100vh - 64px)', md: '80vh' },
+                zIndex: 1, // Added to ensure proper stacking
+                position: 'relative', // Ensure position is set for proper stacking
             }}
         >
+            {/* Semi-transparent overlay to ensure text readability */}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    background: 'linear-gradient(135deg, rgba(25, 118, 210, 0.7), rgba(0, 0, 0, 0.5))',
+                    zIndex: -1,
+                }}
+            />
+
             {/* Background Pattern Texture */}
             <Box
                 sx={{
@@ -78,6 +91,7 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
                     backgroundSize: '300px, cover',
                     opacity: 0.07,
                     transform: `translateY(${patternOffset}px)`,
+                    zIndex: -1, // Added to place behind content
                 }}
             />
 

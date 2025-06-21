@@ -127,9 +127,10 @@ const FeaturesSection: React.FC = () => {
         <Box
             sx={{
                 py: { xs: 8, md: 12 },
-                backgroundColor: '#f8f9fa',
+                backgroundColor: 'transparent', // Changed from '#f8f9fa' to transparent
                 position: 'relative',
                 overflow: 'hidden',
+                zIndex: 1, // Added to ensure proper stacking
             }}
         >
             {/* Background Elements */}

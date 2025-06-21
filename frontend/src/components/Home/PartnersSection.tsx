@@ -13,7 +13,12 @@ const partners: Partner[] = [
 ];
 
 const PartnersSection: React.FC = () => (
-    <Box sx={{ py: { xs: 8, md: 12 }, backgroundColor: '#fff' }}>
+    <Box sx={{
+        py: { xs: 8, md: 12 },
+        backgroundColor: 'transparent', // Changed from '#fff' to transparent
+        position: 'relative',
+        zIndex: 1 // Added for proper stacking
+    }}>
         <Container>
             <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 700, mb: 3 }}>
                 Our Partners

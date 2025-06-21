@@ -27,7 +27,12 @@ const testimonials: Testimonial[] = [
 ];
 
 const TestimonialsSection: React.FC = () => (
-    <Box sx={{ py: { xs: 8, md: 12 }, backgroundColor: '#f9f9f9' }}>
+    <Box sx={{
+        py: { xs: 8, md: 12 },
+        backgroundColor: 'transparent', // Changed from '#f9f9f9' to transparent
+        position: 'relative',
+        zIndex: 1
+    }}>
         <Container>
             <Typography variant="h3" align="center" gutterBottom sx={{ fontWeight: 800, mb: 3 }}>
                 What Our Customers Say

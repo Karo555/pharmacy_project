@@ -4,7 +4,14 @@ import { ArrowForward } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 
 const CallToActionSection: React.FC = () => (
-    <Box sx={{ py: { xs: 8, md: 10 }, background: 'linear-gradient(135deg, #43a047, #1976d2)', color: '#fff', position: 'relative', overflow: 'hidden' }}>
+    <Box sx={{
+        py: { xs: 8, md: 10 },
+        background: 'linear-gradient(135deg, rgba(67, 160, 71, 0.7), rgba(25, 118, 210, 0.7))', // Changed to semi-transparent
+        color: '#fff',
+        position: 'relative',
+        overflow: 'hidden',
+        zIndex: 1 // Added for proper stacking
+    }}>
         <Container>
             <Grid container spacing={4} alignItems="center">
                 <Grid item xs={12} md={8}>

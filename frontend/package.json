@@ -29,6 +29,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.0",
     "react-tsparticles": "^2.12.2",
+    "three": "^0.177.0",
     "tsparticles": "^3.8.1",
     "tsparticles-engine": "^2.12.0",
     "zustand": "^5.0.5"
@@ -38,6 +39,7 @@
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@types/react-lazy-load-image-component": "^1.6.4",
+    "@types/three": "^0.177.0",
     "@vitejs/plugin-react": "^4.4.1",
     "autoprefixer": "^10.4.21",
     "cpx": "^1.2.1",

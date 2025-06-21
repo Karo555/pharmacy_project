@@ -1,8 +1,9 @@
 /* eslint-disable react/no-unknown-property */
-import React, { forwardRef, useMemo, useRef, useLayoutEffect } from "react";
+import React, { forwardRef, useMemo, useRef, useLayoutEffect, useEffect } from "react";
 import { Canvas, useFrame, useThree, RootState } from "@react-three/fiber";
 import { Color, Mesh, ShaderMaterial } from "three";
 import { IUniform } from "three";
+import { useThemeMode } from "../../hooks/useThemeMode";
 
 type NormalizedRGB = [number, number, number];
 
@@ -131,6 +132,7 @@ export interface SilkProps {
   color?: string;
   noiseIntensity?: number;
   rotation?: number;
+  useDynamicTheme?: boolean;
 }
 
 const Silk: React.FC<SilkProps> = ({
@@ -139,20 +141,47 @@ const Silk: React.FC<SilkProps> = ({
   color = "#7B7481",
   noiseIntensity = 1.5,
   rotation = 0,
+  useDynamicTheme = true,
 }) => {
   const meshRef = useRef<Mesh>(null);
+  const { isDarkMode } = useThemeMode();
+
+  // Determine color based on theme if useDynamicTheme is true
+  const themeColor = useMemo(() => {
+    console.log("Theme changed:", isDarkMode ? "dark" : "light");
+    if (useDynamicTheme) {
+      return isDarkMode ? "#3366cc" : "#1976d280"; // Dark blue for dark mode, light blue for light mode
+    }
+    return color;
+  }, [isDarkMode, color, useDynamicTheme]);
 
   const uniforms = useMemo<SilkUniforms>(
-    () => ({
-      uSpeed: { value: speed },
-      uScale: { value: scale },
-      uNoiseIntensity: { value: noiseIntensity },
-      uColor: { value: new Color(...hexToNormalizedRGB(color)) },
-      uRotation: { value: rotation },
-      uTime: { value: 0 },
-    }),
-    [speed, scale, noiseIntensity, color, rotation]
+    () => {
+      console.log("Updating uniforms with color:", themeColor);
+      return {
+        uSpeed: { value: speed },
+        uScale: { value: scale },
+        uNoiseIntensity: { value: noiseIntensity },
+        uColor: { value: new Color(...hexToNormalizedRGB(themeColor)) },
+        uRotation: { value: rotation },
+        uTime: { value: 0 },
+      };
+    },
+    [speed, scale, noiseIntensity, themeColor, rotation]
   );
+
+  // Force update the shader material when theme changes
+  useEffect(() => {
+    if (meshRef.current) {
+      const material = meshRef.current.material as ShaderMaterial & {
+        uniforms: SilkUniforms;
+      };
+      if (material && material.uniforms) {
+        material.uniforms.uColor.value = new Color(...hexToNormalizedRGB(themeColor));
+        material.needsUpdate = true;
+      }
+    }
+  }, [themeColor]);
 
   return (
     <Canvas dpr={[1, 2]} frameloop="always">

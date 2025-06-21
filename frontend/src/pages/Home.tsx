@@ -106,9 +106,9 @@ const Home: React.FC = () => {
                 <Silk
                     speed={5}
                     scale={1.2}
-                    color="#1976d280"
                     noiseIntensity={2.5}
                     rotation={0.2}
+                    useDynamicTheme={true}
                 />
             </Box>
 

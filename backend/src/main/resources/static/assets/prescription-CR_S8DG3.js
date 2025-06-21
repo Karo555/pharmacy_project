@@ -1,0 +1,1 @@
+import{a as s}from"./index-Dq7h7Pqt.js";const i=async()=>{const{data:t}=await s.get("/prescriptions");return t},n=async t=>{const{data:a}=await s.get(`/prescriptions/${t}`);return a};export{n as g,i as l};

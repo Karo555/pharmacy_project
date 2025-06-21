@@ -1,0 +1,1 @@
+import{a as t}from"./axios-BH6LnKjt.js";const c=async()=>{const{data:a}=await t.get("/drugs");return a},n=async a=>{const{data:s}=await t.get(`/drugs/${a}`);return s},e=async()=>{const{data:a}=await t.get("/public/drugs");return a},u=async a=>{const{data:s}=await t.get(`/public/drugs/search?query=${encodeURIComponent(a)}`);return s};export{n as a,e as g,c as l,u as s};

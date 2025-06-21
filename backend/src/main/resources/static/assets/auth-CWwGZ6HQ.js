@@ -1,0 +1,1 @@
+import{a as e}from"./axios-BH6LnKjt.js";const r=t=>e.post("/auth/login",t).then(a=>a.data),n=()=>e.get("/profile").then(t=>t.data),s=t=>e.put("/profile",t).then(a=>a.data),p=t=>e.post("/profile/password",t).then(a=>a.data);export{p as c,n as g,r as l,s as u};

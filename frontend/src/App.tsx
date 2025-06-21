@@ -3,6 +3,7 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
+import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { CounterProvider } from './contexts/CounterContext';
@@ -45,6 +46,29 @@ const App: React.FC = () => {
                         <ErrorBoundary>
                             <Router>
                                 <Layout>
+                                    {/* Toast notification container */}
+                                    <Toaster
+                                        position="top-right"
+                                        toastOptions={{
+                                            duration: 4000,
+                                            style: {
+                                                background: '#fff',
+                                                color: '#333',
+                                            },
+                                            success: {
+                                                iconTheme: {
+                                                    primary: '#4caf50',
+                                                    secondary: '#fff',
+                                                },
+                                            },
+                                            error: {
+                                                iconTheme: {
+                                                    primary: '#f44336',
+                                                    secondary: '#fff',
+                                                },
+                                            },
+                                        }}
+                                    />
                                     <ErrorBoundary>
                                         <Suspense fallback={<SuspenseFallback />}>
                                             <Routes>

@@ -2,6 +2,28 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import "./TrueFocus.css";
 
+interface TrueFocusProps {
+  sentence?: string;
+  manualMode?: boolean;
+  blurAmount?: number;
+  borderColor?: string;
+  glowColor?: string;
+  animationDuration?: number;
+  pauseBetweenAnimations?: number;
+}
+
+interface FocusRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+// Type for CSS custom properties
+interface CustomCSSProperties extends React.CSSProperties {
+  [key: `--${string}`]: string | number;
+}
+
 const TrueFocus = ({
   sentence = "True Focus",
   manualMode = false,
@@ -10,13 +32,13 @@ const TrueFocus = ({
   glowColor = "rgba(0, 255, 0, 0.6)",
   animationDuration = 0.5,
   pauseBetweenAnimations = 1,
-}) => {
+}: TrueFocusProps) => {
   const words = sentence.split(" ");
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [lastActiveIndex, setLastActiveIndex] = useState(null);
-  const containerRef = useRef(null);
-  const wordRefs = useRef([]);
-  const [focusRect, setFocusRect] = useState({ x: 0, y: 0, width: 0, height: 0 });
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [lastActiveIndex, setLastActiveIndex] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const [focusRect, setFocusRect] = useState<FocusRect>({ x: 0, y: 0, width: 0, height: 0 });
 
   useEffect(() => {
     if (!manualMode) {
@@ -44,17 +66,21 @@ const TrueFocus = ({
     });
   }, [currentIndex, words.length]);
 
-  const handleMouseEnter = (index) => {
+  const handleMouseEnter = (index: number): void => {
     if (manualMode) {
       setLastActiveIndex(index);
       setCurrentIndex(index);
     }
   };
 
-  const handleMouseLeave = () => {
-    if (manualMode) {
+  const handleMouseLeave = (): void => {
+    if (manualMode && lastActiveIndex !== null) {
       setCurrentIndex(lastActiveIndex);
     }
+  };
+
+  const setWordRef = (index: number) => (el: HTMLSpanElement | null): void => {
+    wordRefs.current[index] = el;
   };
 
   return (
@@ -64,7 +90,7 @@ const TrueFocus = ({
         return (
           <span
             key={index}
-            ref={(el) => (wordRefs.current[index] = el)}
+            ref={setWordRef(index)}
             className={`focus-word ${manualMode ? "manual" : ""} ${isActive && !manualMode ? "active" : ""
               }`}
             style={{
@@ -79,7 +105,7 @@ const TrueFocus = ({
               "--border-color": borderColor,
               "--glow-color": glowColor,
               transition: `filter ${animationDuration}s ease`,
-            }}
+            } as CustomCSSProperties}
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
           >
@@ -103,7 +129,7 @@ const TrueFocus = ({
         style={{
           "--border-color": borderColor,
           "--glow-color": glowColor,
-        }}
+        } as CustomCSSProperties}
       >
         <span className="corner top-left"></span>
         <span className="corner top-right"></span>
@@ -115,3 +141,4 @@ const TrueFocus = ({
 };
 
 export default TrueFocus;
+

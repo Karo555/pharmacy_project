@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Button, Paper } from '@mui/material';
-import { useCounterContext } from '../contexts/CounterContext';
+import { useCounterContext } from '../../contexts/CounterContext';
 
 const CounterContextExample: React.FC = () => {
   const { count, increment, decrement, reset } = useCounterContext();

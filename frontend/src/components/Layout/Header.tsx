@@ -87,12 +87,17 @@ const Header: React.FC = () => {
             color="secondary"
             className="rounded-full"
             sx={{
-                px: 2.5,
+                px: { xs: 2, sm: 2.5 },
                 py: 0.5,
-                fontSize: isMobile ? '0.75rem' : '0.85rem',
+                fontSize: { xs: '16px', sm: '16px' }, // Ensuring minimum 16px font size
                 whiteSpace: 'nowrap',
                 minWidth: 'auto',
-                height: '32px'
+                height: '44px',
+                minHeight: '44px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                letterSpacing: '0.25px'
             }}
         >
             Sign Up
@@ -105,101 +110,184 @@ const Header: React.FC = () => {
             color="secondary"
             className="rounded-full"
             sx={{
-                px: 2.5,
+                px: { xs: 2, sm: 2.5 },
                 py: 0.5,
-                fontSize: isMobile ? '0.75rem' : '0.85rem',
+                fontSize: { xs: '16px', sm: '16px' }, // Ensuring minimum 16px font size
                 whiteSpace: 'nowrap',
                 minWidth: 'auto',
-                height: '32px'
+                height: '44px',
+                minHeight: '44px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                letterSpacing: '0.25px'
             }}
         >
-            Upload Rx
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                <DescriptionIcon sx={{ fontSize: '1.1rem' }} />
+                <span>{isMobile ? 'Upload' : 'Upload Rx'}</span>
+            </Box>
         </Button>
     );
 
     // Menu content
     const menuContent = (
         <Box
-            sx={{ width: 280 }}
+            sx={{ width: { xs: '85vw', sm: 320 }, maxWidth: '100vw' }}
             role="presentation"
             className="menu-content"
         >
             <List>
-                <ListItem>
-                    <Typography variant="h6" className="font-bold">
+                <ListItem sx={{ my: 1 }}>
+                    <Typography variant="h6" className="font-bold" sx={{ fontSize: '18px' }}>
                         MedTrack
                     </Typography>
                 </ListItem>
 
-                <ListItem button onClick={() => handleNavigation('/')}>
-                    <ListItemIcon><HomeIcon /></ListItemIcon>
-                    <ListItemText primary="Home" />
+                <ListItem
+                    button
+                    onClick={() => handleNavigation('/')}
+                    sx={{ py: 1.5 }}
+                >
+                    <ListItemIcon><HomeIcon sx={{ fontSize: '22px' }} /></ListItemIcon>
+                    <ListItemText
+                        primary="Home"
+                        primaryTypographyProps={{ fontSize: '16px' }}
+                    />
                 </ListItem>
 
                 {!token ? (
                     <>
-                        <ListItem button onClick={() => handleNavigation('/login')}>
-                            <ListItemIcon><LoginIcon /></ListItemIcon>
-                            <ListItemText primary="Sign In" />
+                        <ListItem
+                            button
+                            onClick={() => handleNavigation('/login')}
+                            sx={{ py: 1.5 }}
+                        >
+                            <ListItemIcon><LoginIcon sx={{ fontSize: '22px' }} /></ListItemIcon>
+                            <ListItemText
+                                primary="Sign In"
+                                primaryTypographyProps={{ fontSize: '16px' }}
+                            />
                         </ListItem>
-                        <ListItem button onClick={() => handleNavigation('/register')}>
-                            <ListItemIcon><PersonAddIcon /></ListItemIcon>
-                            <ListItemText primary="Sign Up" />
+                        <ListItem
+                            button
+                            onClick={() => handleNavigation('/register')}
+                            sx={{ py: 1.5 }}
+                        >
+                            <ListItemIcon><PersonAddIcon sx={{ fontSize: '22px' }} /></ListItemIcon>
+                            <ListItemText
+                                primary="Sign Up"
+                                primaryTypographyProps={{ fontSize: '16px' }}
+                            />
                         </ListItem>
                     </>
                 ) : (
                     <>
-                        <ListItem button onClick={() => handleNavigation('/dashboard')}>
-                            <ListItemIcon><DashboardIcon /></ListItemIcon>
-                            <ListItemText primary="Dashboard" />
+                        <ListItem
+                            button
+                            onClick={() => handleNavigation('/dashboard')}
+                            sx={{ py: 1.5 }}
+                        >
+                            <ListItemIcon><DashboardIcon sx={{ fontSize: '22px' }} /></ListItemIcon>
+                            <ListItemText
+                                primary="Dashboard"
+                                primaryTypographyProps={{ fontSize: '16px' }}
+                            />
                         </ListItem>
-                        <ListItem button onClick={() => handleNavigation('/drugs')}>
-                            <ListItemIcon><MedicationIcon /></ListItemIcon>
-                            <ListItemText primary="Drugs" />
+                        <ListItem
+                            button
+                            onClick={() => handleNavigation('/drugs')}
+                            sx={{ py: 1.5 }}
+                        >
+                            <ListItemIcon><MedicationIcon sx={{ fontSize: '22px' }} /></ListItemIcon>
+                            <ListItemText
+                                primary="Drugs"
+                                primaryTypographyProps={{ fontSize: '16px' }}
+                            />
                         </ListItem>
-                        <ListItem button onClick={() => handleNavigation('/prescriptions')}>
-                            <ListItemIcon><DescriptionIcon /></ListItemIcon>
-                            <ListItemText primary="Prescriptions" />
+                        <ListItem
+                            button
+                            onClick={() => handleNavigation('/prescriptions')}
+                            sx={{ py: 1.5 }}
+                        >
+                            <ListItemIcon><DescriptionIcon sx={{ fontSize: '22px' }} /></ListItemIcon>
+                            <ListItemText
+                                primary="Prescriptions"
+                                primaryTypographyProps={{ fontSize: '16px' }}
+                            />
                         </ListItem>
-                        <ListItem button onClick={() => handleNavigation('/profile')}>
-                            <ListItemIcon><AccountCircleIcon /></ListItemIcon>
-                            <ListItemText primary="Profile" />
+                        <ListItem
+                            button
+                            onClick={() => handleNavigation('/profile')}
+                            sx={{ py: 1.5 }}
+                        >
+                            <ListItemIcon><AccountCircleIcon sx={{ fontSize: '22px' }} /></ListItemIcon>
+                            <ListItemText
+                                primary="Profile"
+                                primaryTypographyProps={{ fontSize: '16px' }}
+                            />
                         </ListItem>
-                        <ListItem button onClick={handleLogout}>
-                            <ListItemIcon><LogoutIcon /></ListItemIcon>
-                            <ListItemText primary="Logout" />
+                        <ListItem
+                            button
+                            onClick={handleLogout}
+                            sx={{ py: 1.5 }}
+                        >
+                            <ListItemIcon><LogoutIcon sx={{ fontSize: '22px' }} /></ListItemIcon>
+                            <ListItemText
+                                primary="Logout"
+                                primaryTypographyProps={{ fontSize: '16px' }}
+                            />
                         </ListItem>
                     </>
                 )}
 
-                <ListItem>
-                    <ListItemText primary="Theme" />
+                <ListItem sx={{ py: 1.5 }}>
+                    <ListItemText
+                        primary="Theme"
+                        primaryTypographyProps={{ fontSize: '16px' }}
+                    />
                     <ThemeToggle />
                 </ListItem>
             </List>
         </Box>
     );
 
+    // Define specific styles for different breakpoints
+    const responsiveHeaderHeight = {
+        xs: scrolled ? '56px' : '64px',
+        sm: scrolled ? '60px' : '64px',
+        md: scrolled ? '60px' : '64px'
+    };
+
+    const logoFontSize = {
+        xs: scrolled ? '16px' : '18px',
+        sm: scrolled ? '18px' : '20px',
+        md: scrolled ? '20px' : '22px'
+    };
+
     return (
         <AppBar
             position="fixed"
-            className={`shadow-md transition-all duration-300 ${scrolled ? 'shadow-lg' : ''}`}
+            className={`transition-all duration-300 ${scrolled ? 'shadow-lg' : ''}`}
             sx={{
-                bgcolor: scrolled ? 'var(--color-primary-dark, #0a1929)' : 'var(--color-primary)',
-                height: scrolled ? '50px' : '60px',
+                bgcolor: scrolled ? 'rgba(10, 25, 41, 0.8)' : 'transparent',
+                backdropFilter: scrolled ? 'blur(8px)' : 'none',
+                height: responsiveHeaderHeight,
                 transition: 'all 0.3s ease',
                 zIndex: theme.zIndex.drawer + 1,
+                boxShadow: scrolled ? '0 4px 20px rgba(0, 0, 0, 0.15)' : 'none',
             }}
-            elevation={scrolled ? 4 : 2}
+            elevation={0}
         >
             <Toolbar
                 sx={{
                     position: 'relative',
                     zIndex: 1,
                     justifyContent: 'space-between',
-                    minHeight: scrolled ? '50px !important' : '60px !important',
-                    px: { xs: 1.5, sm: 2 },
-                    py: 0
+                    minHeight: responsiveHeaderHeight,
+                    px: { xs: 1, sm: 2 },
+                    py: 0,
+                    gap: { xs: 1, sm: 2 }
                 }}
                 variant="dense"
             >
@@ -211,14 +299,13 @@ const Header: React.FC = () => {
                                 color="inherit"
                                 onClick={() => navigate(-1)}
                                 sx={{
-                                    mr: 0.5,
-                                    width: '32px',
-                                    height: '32px'
+                                    mr: { xs: 0.5, sm: 1 },
+                                    width: '44px',
+                                    height: '44px'
                                 }}
                                 aria-label="back"
-                                size="small"
                             >
-                                <ArrowBackIcon fontSize="small" />
+                                <ArrowBackIcon fontSize={isMobile ? "small" : "medium"} />
                             </IconButton>
                         </Tooltip>
                     )}
@@ -229,8 +316,14 @@ const Header: React.FC = () => {
                         variant={scrolled ? "subtitle1" : "h6"}
                         className="nav-link font-bold text-white"
                         sx={{
-                            fontSize: scrolled ? '1.1rem' : '1.25rem',
-                            transition: 'font-size 0.3s ease'
+                            fontSize: logoFontSize,
+                            lineHeight: 1.2,
+                            transition: 'font-size 0.3s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            height: '44px',
+                            px: { xs: 0.5, sm: 1 },
+                            letterSpacing: '0.5px'
                         }}
                     >
                         MedTrack
@@ -238,7 +331,7 @@ const Header: React.FC = () => {
                 </Box>
 
                 {/* Right section: Primary CTA & Menu */}
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.5, sm: 1 } }}>
                     {primaryCTA}
 
                     <Tooltip title="Menu">
@@ -248,14 +341,13 @@ const Header: React.FC = () => {
                             onClick={toggleMenu}
                             className="menu-button"
                             edge="end"
-                            size="small"
                             sx={{
-                                width: '32px',
-                                height: '32px',
-                                ml: 0.5
+                                width: '44px',
+                                height: '44px',
+                                ml: { xs: 0.5, sm: 0.5 }
                             }}
                         >
-                            <MenuIcon fontSize="small" />
+                            <MenuIcon fontSize={isMobile ? "medium" : "medium"} />
                         </IconButton>
                     </Tooltip>
                 </Box>
@@ -274,4 +366,3 @@ const Header: React.FC = () => {
 };
 
 export default Header;
-

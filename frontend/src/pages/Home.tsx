@@ -8,6 +8,7 @@ import HowItWorksSection from '../components/Home/HowItWorksSection';
 import TestimonialsSection from '../components/Home/TestimonialsSection';
 import PartnersSection from '../components/Home/PartnersSection';
 import CallToActionSection from '../components/Home/CallToActionSection';
+import Silk from '../components/ui/Silk';
 
 const Home: React.FC = () => {
     const { token } = useAuth();
@@ -90,7 +91,38 @@ const Home: React.FC = () => {
     }
 
     return (
-        <Box sx={{ overflowX: 'hidden' }}>
+        <Box sx={{ overflowX: 'hidden', position: 'relative' }}>
+            {/* Silk background for the entire page */}
+            <Box
+                sx={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    zIndex: -3,
+                }}
+            >
+                <Silk
+                    speed={5}
+                    scale={1.2}
+                    color="#1976d280"
+                    noiseIntensity={2.5}
+                    rotation={0.2}
+                />
+            </Box>
+
+            {/* Semi-transparent overlay to ensure text readability */}
+            <Box
+                sx={{
+                    position: 'fixed',
+                    width: '100%',
+                    height: '100%',
+                    background: 'linear-gradient(135deg, rgba(25, 118, 210, 0.3), rgba(0, 0, 0, 0.4))',
+                    zIndex: -2,
+                }}
+            />
+
             <HeroSection scrollY={scrollY} />
 
             <Fade in={sectionsVisible.features} timeout={1000}>

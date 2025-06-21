@@ -21,6 +21,7 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
     const patternOffset = scrollY * 0.1;
 
     useEffect(() => {
+        // Set loaded to true immediately to prevent initial blue background
         setLoaded(true);
     }, []);
 
@@ -62,28 +63,17 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
         <Box
             className="position-relative overflow-hidden"
             sx={{
-                background: 'transparent', // Changed from 'var(--color-primary)' to transparent
+                background: 'transparent',
                 color: '#fff',
                 minHeight: { xs: 'calc(100vh - 64px)', md: '80vh' },
-                zIndex: 1, // Added to ensure proper stacking
-                position: 'relative', // Ensure position is set for proper stacking
+                zIndex: 1,
+                position: 'relative',
             }}
         >
-            {/* Semi-transparent overlay to ensure text readability */}
-            <Box
-                sx={{
-                    position: 'absolute',
-                    width: '100%',
-                    height: '100%',
-                    background: 'linear-gradient(135deg, rgba(25, 118, 210, 0.7), rgba(0, 0, 0, 0.5))',
-                    zIndex: -1,
-                }}
-            />
-
             {/* Background Pattern Texture */}
             <Box
                 sx={{
-                    position: 'absolute',
+                    position: 'center',
                     width: '100%',
                     height: '100%',
                     backgroundImage: `url('/pattern.png'), linear-gradient(0deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 100%)`,
@@ -91,42 +81,10 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
                     backgroundSize: '300px, cover',
                     opacity: 0.07,
                     transform: `translateY(${patternOffset}px)`,
-                    zIndex: -1, // Added to place behind content
+                    zIndex: -1,
                 }}
             />
 
-            {/* Abstract Shapes */}
-            <Box
-                component={motion.div}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 0.12 }}
-                transition={{ duration: 1.5, ease: "easeOut" }}
-                className="position-absolute"
-                sx={{
-                    width: { xs: 300, md: 500 },
-                    height: { xs: 300, md: 500 },
-                    borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%',
-                    background: 'var(--color-secondary)',
-                    top: { xs: '-15%', md: '-10%' },
-                    right: { xs: '-20%', md: '-5%' },
-                }}
-            />
-
-            <Box
-                component={motion.div}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 0.1 }}
-                transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }}
-                className="position-absolute"
-                sx={{
-                    width: { xs: 200, md: 400 },
-                    height: { xs: 200, md: 400 },
-                    borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
-                    background: 'var(--color-accent)',
-                    bottom: { xs: '-10%', md: '-5%' },
-                    left: { xs: '-15%', md: '-10%' },
-                }}
-            />
 
             <Container
                 component={motion.div}
@@ -344,18 +302,18 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
                                 }
                             }}
                         >
-                            <Box
-                                component="img"
-                                src="/hero-illustration.png"
-                                alt="Hero Illustration"
-                                sx={{
-                                    maxWidth: '100%',
-                                    height: 'auto',
-                                    filter: 'drop-shadow(0 10px 25px rgba(0,0,0,0.2))',
-                                    transform: `translateY(${-scrollY * 0.1}px)`,
-                                    transition: 'transform 0.2s ease-out'
-                                }}
-                            />
+                            {/*<Box*/}
+                            {/*    component="img"*/}
+                            {/*    src="/hero-illustration.png"*/}
+                            {/*    alt="Hero Illustration"*/}
+                            {/*    sx={{*/}
+                            {/*        maxWidth: '100%',*/}
+                            {/*        height: 'auto',*/}
+                            {/*        filter: 'drop-shadow(0 10px 25px rgba(0,0,0,0.2))',*/}
+                            {/*        transform: `translateY(${-scrollY * 0.1}px)`,*/}
+                            {/*        transition: 'transform 0.2s ease-out'*/}
+                            {/*    }}*/}
+                            {/*/>*/}
                         </Box>
                     </Grid>
                 </Grid>
@@ -365,3 +323,4 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
 };
 
 export default HeroSection;
+

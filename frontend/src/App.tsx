@@ -2,8 +2,9 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { CssBaseline } from '@mui/material';
 import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout/Layout';
 
@@ -19,33 +20,11 @@ import DrugDetailPage from './pages/Drugs/DrugDetailPage';
 import PrescriptionListPage from './pages/Prescriptions/PrescriptionListPage';
 import PrescriptionDetailPage from './pages/Prescriptions/PrescriptionDetailPage';
 
-// Create a theme instance
-const theme = createTheme({
-    typography: {
-        fontFamily: '"Poppins", "Roboto", "Helvetica", "Arial", sans-serif',
-    },
-    palette: {
-        primary: {
-            main: '#0a6cce',
-        },
-        secondary: {
-            main: '#6a00ea',
-        },
-    },
-    components: {
-        MuiButton: {
-            styleOverrides: {
-                root: {
-                    borderRadius: '28px',
-                },
-            },
-        },
-    },
-});
+// Removed static theme definition as it's now handled by ThemeContext
 
 const App: React.FC = () => {
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider>
             <CssBaseline />
             <AuthProvider>
                 <Router>

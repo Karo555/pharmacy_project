@@ -7,6 +7,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout/Layout';
+import ErrorBoundary from './components/Error/ErrorBoundary';
 
 import Home from './pages/Home';
 import Register from './pages/Auth/Register';
@@ -28,60 +29,62 @@ const App: React.FC = () => {
         <ThemeProvider>
             <CssBaseline />
             <AuthProvider>
-                <Router>
-                    <Layout>
-                        <Routes>
-                            {/* Public routes */}
-                            <Route path="/" element={<Home />} />
-                            <Route path="/register" element={<Register />} />
-                            <Route path="/login" element={<Login />} />
-                            <Route path="/search" element={<SearchResults />} />
+                <ErrorBoundary>
+                    <Router>
+                        <Layout>
+                            <Routes>
+                                {/* Public routes */}
+                                <Route path="/" element={<Home />} />
+                                <Route path="/register" element={<Register />} />
+                                <Route path="/login" element={<Login />} />
+                                <Route path="/search" element={<SearchResults />} />
 
-                            {/* Drug catalog (public) */}
-                            <Route path="/drugs" element={<DrugListPage />} />
-                            <Route path="/drugs/:id" element={<DrugDetailPage />} />
+                                {/* Drug catalog (public) */}
+                                <Route path="/drugs" element={<DrugListPage />} />
+                                <Route path="/drugs/:id" element={<DrugDetailPage />} />
 
-                            {/* Prescriptions (requires login) */}
-                            <Route
-                                path="/prescriptions"
-                                element={
-                                    <ProtectedRoute>
-                                        <PrescriptionListPage />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/prescriptions/:id"
-                                element={
-                                    <ProtectedRoute>
-                                        <PrescriptionDetailPage />
-                                    </ProtectedRoute>
-                                }
-                            />
+                                {/* Prescriptions (requires login) */}
+                                <Route
+                                    path="/prescriptions"
+                                    element={
+                                        <ProtectedRoute>
+                                            <PrescriptionListPage />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/prescriptions/:id"
+                                    element={
+                                        <ProtectedRoute>
+                                            <PrescriptionDetailPage />
+                                        </ProtectedRoute>
+                                    }
+                                />
 
-                            {/* Other protected routes */}
-                            <Route
-                                path="/profile"
-                                element={
-                                    <ProtectedRoute>
-                                        <Profile />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/dashboard"
-                                element={
-                                    <ProtectedRoute>
-                                        <Dashboard />
-                                    </ProtectedRoute>
-                                }
-                            />
+                                {/* Other protected routes */}
+                                <Route
+                                    path="/profile"
+                                    element={
+                                        <ProtectedRoute>
+                                            <Profile />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/dashboard"
+                                    element={
+                                        <ProtectedRoute>
+                                            <Dashboard />
+                                        </ProtectedRoute>
+                                    }
+                                />
 
-                            {/* Fallback - 404 Not Found */}
-                            <Route path="*" element={<NotFound />} />
-                        </Routes>
-                    </Layout>
-                </Router>
+                                {/* Fallback - 404 Not Found */}
+                                <Route path="*" element={<NotFound />} />
+                            </Routes>
+                        </Layout>
+                    </Router>
+                </ErrorBoundary>
             </AuthProvider>
         </ThemeProvider>
     );

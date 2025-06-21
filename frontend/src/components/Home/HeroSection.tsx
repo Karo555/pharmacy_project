@@ -4,6 +4,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SearchIcon from '@mui/icons-material/Search';
 import { motion } from 'framer-motion';
+import TrueFocus from './TrueFocus';
 import '../../styles/globals.css';
 
 interface HeroProps {
@@ -144,15 +145,15 @@ const HeroSection: React.FC<HeroProps> = ({ scrollY }) => {
                                     mb: { xs: 3, md: 4 }
                                 }}
                             >
-                                Your health,{' '}
-                                <Box
-                                    component="span"
-                                    sx={{
-                                        position: 'relative',
-                                    }}
-                                >
-                                    our priority
-                                </Box>
+                                <TrueFocus
+                                    sentence="Your health, our priority"
+                                    manualMode={false}
+                                    blurAmount={5}
+                                    borderColor="#ffffff"
+                                    glowColor="rgba(255, 255, 255, 0.6)"
+                                    animationDuration={2}
+                                    pauseBetweenAnimations={1}
+                                />
                             </Typography>
                         </Box>
 

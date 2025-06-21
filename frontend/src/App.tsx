@@ -1,6 +1,6 @@
 // src/App.tsx
 
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
 import { AuthProvider } from './contexts/AuthContext';
@@ -8,21 +8,28 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout/Layout';
 import ErrorBoundary from './components/Error/ErrorBoundary';
+import Spinner from './components/ui/Spinner';
 
+// Eagerly loaded home page for better initial load experience
 import Home from './pages/Home';
-import Register from './pages/Auth/Register';
-import Login from './pages/Auth/Login';
-import Profile from './pages/Dashboard/Profile';
-import Dashboard from './pages/Dashboard/Dashboard';
-import SearchResults from './pages/SearchResults';
-import NotFound from './pages/NotFound';
 
-import DrugListPage from './pages/Drugs/DrugListPage';
-import DrugDetailPage from './pages/Drugs/DrugDetailPage';
-import PrescriptionListPage from './pages/Prescriptions/PrescriptionListPage';
-import PrescriptionDetailPage from './pages/Prescriptions/PrescriptionDetailPage';
+// Lazy load all other pages
+const Register = lazy(() => import(/* webpackPrefetch: true */ './pages/Auth/Register'));
+const Login = lazy(() => import(/* webpackPrefetch: true */ './pages/Auth/Login'));
+const Profile = lazy(() => import('./pages/Dashboard/Profile'));
+const Dashboard = lazy(() => import('./pages/Dashboard/Dashboard'));
+const SearchResults = lazy(() => import('./pages/SearchResults'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
-// Removed static theme definition as it's now handled by ThemeContext
+const DrugListPage = lazy(() => import(/* webpackPrefetch: true */ './pages/Drugs/DrugListPage'));
+const DrugDetailPage = lazy(() => import('./pages/Drugs/DrugDetailPage'));
+const PrescriptionListPage = lazy(() => import('./pages/Prescriptions/PrescriptionListPage'));
+const PrescriptionDetailPage = lazy(() => import('./pages/Prescriptions/PrescriptionDetailPage'));
+
+// Loading fallback for Suspense
+const SuspenseFallback = () => (
+  <Spinner fullScreen text="Loading..." transparent size={50} />
+);
 
 const App: React.FC = () => {
     return (
@@ -32,56 +39,60 @@ const App: React.FC = () => {
                 <ErrorBoundary>
                     <Router>
                         <Layout>
-                            <Routes>
-                                {/* Public routes */}
-                                <Route path="/" element={<Home />} />
-                                <Route path="/register" element={<Register />} />
-                                <Route path="/login" element={<Login />} />
-                                <Route path="/search" element={<SearchResults />} />
+                            <ErrorBoundary>
+                                <Suspense fallback={<SuspenseFallback />}>
+                                    <Routes>
+                                        {/* Public routes */}
+                                        <Route path="/" element={<Home />} />
+                                        <Route path="/register" element={<Register />} />
+                                        <Route path="/login" element={<Login />} />
+                                        <Route path="/search" element={<SearchResults />} />
 
-                                {/* Drug catalog (public) */}
-                                <Route path="/drugs" element={<DrugListPage />} />
-                                <Route path="/drugs/:id" element={<DrugDetailPage />} />
+                                        {/* Drug catalog (public) */}
+                                        <Route path="/drugs" element={<DrugListPage />} />
+                                        <Route path="/drugs/:id" element={<DrugDetailPage />} />
 
-                                {/* Prescriptions (requires login) */}
-                                <Route
-                                    path="/prescriptions"
-                                    element={
-                                        <ProtectedRoute>
-                                            <PrescriptionListPage />
-                                        </ProtectedRoute>
-                                    }
-                                />
-                                <Route
-                                    path="/prescriptions/:id"
-                                    element={
-                                        <ProtectedRoute>
-                                            <PrescriptionDetailPage />
-                                        </ProtectedRoute>
-                                    }
-                                />
+                                        {/* Prescriptions (requires login) */}
+                                        <Route
+                                            path="/prescriptions"
+                                            element={
+                                                <ProtectedRoute>
+                                                    <PrescriptionListPage />
+                                                </ProtectedRoute>
+                                            }
+                                        />
+                                        <Route
+                                            path="/prescriptions/:id"
+                                            element={
+                                                <ProtectedRoute>
+                                                    <PrescriptionDetailPage />
+                                                </ProtectedRoute>
+                                            }
+                                        />
 
-                                {/* Other protected routes */}
-                                <Route
-                                    path="/profile"
-                                    element={
-                                        <ProtectedRoute>
-                                            <Profile />
-                                        </ProtectedRoute>
-                                    }
-                                />
-                                <Route
-                                    path="/dashboard"
-                                    element={
-                                        <ProtectedRoute>
-                                            <Dashboard />
-                                        </ProtectedRoute>
-                                    }
-                                />
+                                        {/* Other protected routes */}
+                                        <Route
+                                            path="/profile"
+                                            element={
+                                                <ProtectedRoute>
+                                                    <Profile />
+                                                </ProtectedRoute>
+                                            }
+                                        />
+                                        <Route
+                                            path="/dashboard"
+                                            element={
+                                                <ProtectedRoute>
+                                                    <Dashboard />
+                                                </ProtectedRoute>
+                                            }
+                                        />
 
-                                {/* Fallback - 404 Not Found */}
-                                <Route path="*" element={<NotFound />} />
-                            </Routes>
+                                        {/* Fallback - 404 Not Found */}
+                                        <Route path="*" element={<NotFound />} />
+                                    </Routes>
+                                </Suspense>
+                            </ErrorBoundary>
                         </Layout>
                     </Router>
                 </ErrorBoundary>

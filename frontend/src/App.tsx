@@ -5,6 +5,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { CssBaseline } from '@mui/material';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { CounterProvider } from './contexts/CounterContext';
+import { Provider as ReduxProvider } from 'react-redux';
+import { store } from './store/redux/store';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout/Layout';
 import ErrorBoundary from './components/Error/ErrorBoundary';
@@ -20,6 +23,7 @@ const Profile = lazy(() => import('./pages/Dashboard/Profile'));
 const Dashboard = lazy(() => import('./pages/Dashboard/Dashboard'));
 const SearchResults = lazy(() => import('./pages/SearchResults'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const StateManagementDemo = lazy(() => import('./pages/StateManagementDemo'));
 
 const DrugListPage = lazy(() => import(/* webpackPrefetch: true */ './pages/Drugs/DrugListPage'));
 const DrugDetailPage = lazy(() => import('./pages/Drugs/DrugDetailPage'));
@@ -33,71 +37,76 @@ const SuspenseFallback = () => (
 
 const App: React.FC = () => {
     return (
-        <ThemeProvider>
-            <CssBaseline />
-            <AuthProvider>
-                <ErrorBoundary>
-                    <Router>
-                        <Layout>
-                            <ErrorBoundary>
-                                <Suspense fallback={<SuspenseFallback />}>
-                                    <Routes>
-                                        {/* Public routes */}
-                                        <Route path="/" element={<Home />} />
-                                        <Route path="/register" element={<Register />} />
-                                        <Route path="/login" element={<Login />} />
-                                        <Route path="/search" element={<SearchResults />} />
+        <ReduxProvider store={store}>
+            <ThemeProvider>
+                <CssBaseline />
+                <AuthProvider>
+                    <CounterProvider>
+                        <ErrorBoundary>
+                            <Router>
+                                <Layout>
+                                    <ErrorBoundary>
+                                        <Suspense fallback={<SuspenseFallback />}>
+                                            <Routes>
+                                                {/* Public routes */}
+                                                <Route path="/" element={<Home />} />
+                                                <Route path="/register" element={<Register />} />
+                                                <Route path="/login" element={<Login />} />
+                                                <Route path="/search" element={<SearchResults />} />
+                                                <Route path="/state-demo" element={<StateManagementDemo />} />
 
-                                        {/* Drug catalog (public) */}
-                                        <Route path="/drugs" element={<DrugListPage />} />
-                                        <Route path="/drugs/:id" element={<DrugDetailPage />} />
+                                                {/* Drug catalog (public) */}
+                                                <Route path="/drugs" element={<DrugListPage />} />
+                                                <Route path="/drugs/:id" element={<DrugDetailPage />} />
 
-                                        {/* Prescriptions (requires login) */}
-                                        <Route
-                                            path="/prescriptions"
-                                            element={
-                                                <ProtectedRoute>
-                                                    <PrescriptionListPage />
-                                                </ProtectedRoute>
-                                            }
-                                        />
-                                        <Route
-                                            path="/prescriptions/:id"
-                                            element={
-                                                <ProtectedRoute>
-                                                    <PrescriptionDetailPage />
-                                                </ProtectedRoute>
-                                            }
-                                        />
+                                                {/* Prescriptions (requires login) */}
+                                                <Route
+                                                    path="/prescriptions"
+                                                    element={
+                                                        <ProtectedRoute>
+                                                            <PrescriptionListPage />
+                                                        </ProtectedRoute>
+                                                    }
+                                                />
+                                                <Route
+                                                    path="/prescriptions/:id"
+                                                    element={
+                                                        <ProtectedRoute>
+                                                            <PrescriptionDetailPage />
+                                                        </ProtectedRoute>
+                                                    }
+                                                />
 
-                                        {/* Other protected routes */}
-                                        <Route
-                                            path="/profile"
-                                            element={
-                                                <ProtectedRoute>
-                                                    <Profile />
-                                                </ProtectedRoute>
-                                            }
-                                        />
-                                        <Route
-                                            path="/dashboard"
-                                            element={
-                                                <ProtectedRoute>
-                                                    <Dashboard />
-                                                </ProtectedRoute>
-                                            }
-                                        />
+                                                {/* Other protected routes */}
+                                                <Route
+                                                    path="/profile"
+                                                    element={
+                                                        <ProtectedRoute>
+                                                            <Profile />
+                                                        </ProtectedRoute>
+                                                    }
+                                                />
+                                                <Route
+                                                    path="/dashboard"
+                                                    element={
+                                                        <ProtectedRoute>
+                                                            <Dashboard />
+                                                        </ProtectedRoute>
+                                                    }
+                                                />
 
-                                        {/* Fallback - 404 Not Found */}
-                                        <Route path="*" element={<NotFound />} />
-                                    </Routes>
-                                </Suspense>
-                            </ErrorBoundary>
-                        </Layout>
-                    </Router>
-                </ErrorBoundary>
-            </AuthProvider>
-        </ThemeProvider>
+                                                {/* Fallback - 404 Not Found */}
+                                                <Route path="*" element={<NotFound />} />
+                                            </Routes>
+                                        </Suspense>
+                                    </ErrorBoundary>
+                                </Layout>
+                            </Router>
+                        </ErrorBoundary>
+                    </CounterProvider>
+                </AuthProvider>
+            </ThemeProvider>
+        </ReduxProvider>
     );
 };
 

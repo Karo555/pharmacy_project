@@ -14,6 +14,7 @@ import Login from './pages/Auth/Login';
 import Profile from './pages/Dashboard/Profile';
 import Dashboard from './pages/Dashboard/Dashboard';
 import SearchResults from './pages/SearchResults';
+import NotFound from './pages/NotFound';
 
 import DrugListPage from './pages/Drugs/DrugListPage';
 import DrugDetailPage from './pages/Drugs/DrugDetailPage';
@@ -76,8 +77,8 @@ const App: React.FC = () => {
                                 }
                             />
 
-                            {/* Fallback */}
-                            <Route path="*" element={<Navigate to="/" replace />} />
+                            {/* Fallback - 404 Not Found */}
+                            <Route path="*" element={<NotFound />} />
                         </Routes>
                     </Layout>
                 </Router>

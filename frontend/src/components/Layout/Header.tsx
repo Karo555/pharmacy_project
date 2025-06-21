@@ -11,12 +11,17 @@ import {
     Avatar,
     Menu,
     MenuItem,
+    Tooltip,
 } from '@mui/material';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import useThemeMode from '../../hooks/useThemeMode';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 const Header: React.FC = () => {
     const { token, logout } = useAuth();
+    const { isDarkMode, toggleTheme } = useThemeMode();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -42,6 +47,13 @@ const Header: React.FC = () => {
                 </Typography>
 
                 <Box className="flex items-center">
+                    {/* Theme toggle button */}
+                    <Tooltip title={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}>
+                        <IconButton color="inherit" onClick={toggleTheme} sx={{ mr: 1 }}>
+                            {isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+                        </IconButton>
+                    </Tooltip>
+
                     {!token ? (
                         <>
                             <Button component={NavLink} to="/login" color="inherit" className="nav-link text-white">

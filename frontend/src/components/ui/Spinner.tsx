@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import '../../styles/globals.css';
+import useThemeMode from '../../hooks/useThemeMode';
 
 interface SpinnerProps {
   size?: number;
@@ -13,12 +14,17 @@ interface SpinnerProps {
 
 const Spinner: React.FC<SpinnerProps> = ({
   size = 40,
-  color = 'var(--color-primary)',
+  color,
   thickness = 4,
   text,
   fullScreen = false,
   transparent = false,
 }) => {
+  const { isDarkMode, themeColors } = useThemeMode();
+
+  // Use theme-aware color if none provided
+  const spinnerColor = color || 'var(--color-primary)';
+
   const containerStyles = {
     display: 'flex',
     flexDirection: 'column' as const,
@@ -32,7 +38,12 @@ const Spinner: React.FC<SpinnerProps> = ({
       right: 0,
       bottom: 0,
       zIndex: 9999,
-      backgroundColor: transparent ? 'rgba(255,255,255,0.7)' : 'var(--color-background)',
+      backgroundColor: transparent
+        ? isDarkMode
+          ? 'rgba(0,0,0,0.7)'
+          : 'rgba(255,255,255,0.7)'
+        : themeColors.backgroundPrimary,
+      transition: 'background-color 0.3s ease',
     }),
   };
 
@@ -41,13 +52,16 @@ const Spinner: React.FC<SpinnerProps> = ({
       <CircularProgress
         size={size}
         thickness={thickness}
-        sx={{ color }}
+        sx={{ color: spinnerColor }}
       />
       {text && (
         <Typography
           variant="body2"
-          className="text-center mt-2 text-gray"
-          sx={{ color: 'var(--color-text-light)' }}
+          className="text-center mt-2"
+          sx={{
+            color: themeColors.textSecondary,
+            marginTop: 2,
+          }}
         >
           {text}
         </Typography>

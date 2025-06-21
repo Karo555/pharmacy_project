@@ -6,13 +6,14 @@ import {
   IconButton,
   Paper,
   Fade,
-  useTheme
+  useTheme as useMuiTheme
 } from '@mui/material';
 import {
   Search as SearchIcon,
   Clear as ClearIcon
 } from '@mui/icons-material';
 import '../../styles/globals.css';
+import useThemeMode from '../../hooks/useThemeMode';
 
 interface SearchBarProps {
   placeholder?: string;
@@ -37,7 +38,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState(initialValue);
   const [isTyping, setIsTyping] = useState(false);
-  const theme = useTheme();
+  const muiTheme = useMuiTheme();
+  const { themeColors, isDarkMode } = useThemeMode();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const prevSearchTermRef = useRef<string>(initialValue);
 
@@ -87,6 +89,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       sx={{
         width: fullWidth ? '100%' : 'auto',
         transition: 'all 0.3s ease',
+        backgroundColor: themeColors.backgroundSecondary,
         '&:hover': {
           boxShadow: 3,
         },
@@ -124,8 +127,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
           ) : null,
           sx: {
             paddingY: 0.5,
+            color: themeColors.textPrimary,
             '& .MuiOutlinedInput-notchedOutline': {
               border: 'none',
+            },
+            '& .MuiInputBase-input::placeholder': {
+              color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+              opacity: 1,
             },
           }
         }}
@@ -143,9 +151,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
             height: '2px',
             width: '100%',
             background: `linear-gradient(90deg, 
-              ${theme.palette.primary.main} 0%, 
-              ${theme.palette.secondary.main} 50%, 
-              ${theme.palette.primary.main} 100%)`,
+              ${muiTheme.palette.primary.main} 0%, 
+              ${muiTheme.palette.secondary.main} 50%, 
+              ${muiTheme.palette.primary.main} 100%)`,
             backgroundSize: '200% 100%',
             animation: 'loading 1.5s infinite',
             '@keyframes loading': {

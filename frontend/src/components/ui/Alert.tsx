@@ -3,6 +3,7 @@ import { Alert as MuiAlert, AlertTitle, Snackbar, Box, IconButton } from '@mui/m
 import { Close as CloseIcon } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../../styles/globals.css';
+import useThemeMode from '../../hooks/useThemeMode';
 
 export type AlertType = 'success' | 'error' | 'warning' | 'info';
 
@@ -28,6 +29,7 @@ const Alert: React.FC<AlertProps> = ({
   isStatic = false,
 }) => {
   const [open, setOpen] = useState(true);
+  const { isDarkMode, themeColors } = useThemeMode();
 
   useEffect(() => {
     if (!isStatic && !isSnackbar && autoHideDuration > 0) {
@@ -77,7 +79,8 @@ const Alert: React.FC<AlertProps> = ({
             display: showIcon ? 'flex' : 'none',
           },
           bgcolor: getBackgroundColor(),
-          color: 'white'
+          color: 'white',
+          boxShadow: isDarkMode ? '0 4px 12px rgba(0, 0, 0, 0.3)' : '0 4px 12px rgba(0, 0, 0, 0.1)'
         }}
         action={
           <IconButton
@@ -104,6 +107,12 @@ const Alert: React.FC<AlertProps> = ({
         autoHideDuration={autoHideDuration}
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        sx={{
+          '& .MuiSnackbarContent-root': {
+            backgroundColor: themeColors.backgroundSecondary,
+            color: themeColors.textPrimary
+          }
+        }}
       >
         {alertContent}
       </Snackbar>

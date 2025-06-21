@@ -2,6 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: background-color var(--transition-normal) var(--transition-ease);
 }
 
 /* Base styling for all nav links */
@@ -11,6 +12,7 @@
     color: inherit;
     font-weight: 500;
     position: relative;
+    transition: color var(--transition-normal) var(--transition-ease);
 }
 
 /* Underline indicator when active */
@@ -22,11 +24,77 @@
     right: 0;
     height: 2px;
     background-color: currentColor;
+    transition: background-color var(--transition-normal) var(--transition-ease);
 }
 
 /* Avatar button spacing */
 .avatar-button {
     margin-left: 1rem;
+    transition: all var(--transition-normal) var(--transition-ease);
+}
+
+/* Hamburger menu button */
+.hamburger-button {
+    transition: all var(--transition-normal) var(--transition-ease);
+}
+
+/* Mobile menu styling */
+.mobile-menu {
+    padding: 1rem;
+}
+
+.mobile-menu .MuiListItem-root {
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 0.25rem;
+    transition: background-color var(--transition-normal) var(--transition-ease);
+}
+
+.mobile-menu .MuiListItem-button:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Dark mode styling for mobile menu */
+.dark-mode .mobile-menu .MuiListItem-button:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Theme-specific header styling */
+[data-theme="dark"] .MuiAppBar-root {
+    background-color: var(--color-gray-900);
+    color: var(--color-text);
+    box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .nav-link {
+    color: var(--color-gray-200);
+}
+
+[data-theme="dark"] .nav-link.active {
+    color: var(--color-primary-light);
+}
+
+/* Theme toggle button animation */
+.MuiIconButton-root.theme-toggle {
+    position: relative;
+    overflow: hidden;
+}
+
+.MuiIconButton-root.theme-toggle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.3s ease-out;
+}
+
+.MuiIconButton-root.theme-toggle:hover::after {
+    transform: translate(-50%, -50%) scale(1.5);
 }
 
 /* src/components/Layout/Header.css */
@@ -36,6 +104,7 @@
     color: inherit;
     font-weight: 500;
     position: relative;
+    transition: color var(--transition-normal) var(--transition-ease);
 }
 
 .nav-buttons > a.active::after {
@@ -46,8 +115,16 @@
     right: 0;
     height: 2px;
     background-color: currentColor;
+    transition: background-color var(--transition-normal) var(--transition-ease);
 }
 
-.avatar-button {
-    margin-left: 1rem;
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .nav-link {
+        margin-left: 0.5rem;
+    }
+
+    .avatar-button {
+        margin-left: 0.5rem;
+    }
 }
